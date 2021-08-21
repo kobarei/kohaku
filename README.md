@@ -1,4 +1,4 @@
-# Quality Management Tool Kohaku
+# WebRTC Stats Collector Kohaku
 
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/shiguredo/kohaku.svg)](https://github.com/shiguredo/kohaku)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -13,9 +13,9 @@ Please read https://github.com/shiguredo/oss/blob/master/README.en.md before use
 
 利用前に https://github.com/shiguredo/oss をお読みください。
 
-## Quality Management Tool Kohaku について
+## WebRTC Stats Collector Kohaku について
 
-[時雨堂 Quality Management Tool Kohaku 開発ログ](https://gist.github.com/voluntas/f162f7f513ef83051e46dc405cad6a04)
+[時雨堂 WebRTC Stats Collector Kohaku 開発ログ](https://gist.github.com/voluntas/f162f7f513ef83051e46dc405cad6a04)
 
 ## ライセンス
 
