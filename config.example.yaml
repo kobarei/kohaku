@@ -1,4 +1,4 @@
-collector_port: 3030
+collector_port: 5890
 
 postgres_host: 192.0.2.10
 postgres_port: 5432
