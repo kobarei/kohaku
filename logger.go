@@ -16,7 +16,7 @@ var (
 	// megabytes
 	logRotateMaxSize    = 200
 	logRotateMaxBackups = 7
-	//days
+	// days
 	logRotateMaxAge = 30
 )
 

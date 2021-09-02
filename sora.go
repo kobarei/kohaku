@@ -14,11 +14,17 @@ type SoraStatsExporter struct {
 	Version   string    `json:"version"`
 	Timestamp time.Time `json:"timestamp" validate:"required"`
 
+	// TODO(v): required にする
+	Role string `json:"role"`
+
 	ChannelID    string `json:"channel_id" validate:"required"`
 	ClientID     string `json:"client_id" validate:"required"`
 	ConnectionID string `json:"connection_id" validate:"required"`
 
-	// TODO(v): multistream や simulcast などを突っ込む
+	// TODO(v): required にする
+	Multistream bool `json:"multistream"`
+	Simulcast   bool `json:"simulcast"`
+	Spotlight   bool `json:"spotlight"`
 
 	Stats []json.RawMessage `json:"stats" validate:"required"`
 }
