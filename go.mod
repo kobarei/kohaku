@@ -3,16 +3,16 @@ module github.com/shiguredo/kohaku
 go 1.17
 
 require (
-	github.com/doug-martin/goqu/v9 v9.15.1
+	github.com/doug-martin/goqu/v9 v9.16.0
 	github.com/gin-gonic/gin v1.7.4
 	github.com/goccy/go-yaml v1.9.2
 	github.com/jackc/pgx/v4 v4.13.0
 	github.com/mattn/go-isatty v0.0.13 // indirect
-	github.com/rs/zerolog v1.23.0
+	github.com/rs/zerolog v1.24.0
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
-	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d
-	golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf // indirect
+	golang.org/x/net v0.0.0-20210825183410-e898025ed96a
+	golang.org/x/sys v0.0.0-20210831042530-f4d43177bf5e // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gopkg.in/yaml.v2 v2.4.0 // indirect
