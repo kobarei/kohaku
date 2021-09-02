@@ -3,6 +3,8 @@
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/shiguredo/kohaku.svg)](https://github.com/shiguredo/kohaku)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+**この製品は絶賛開発中です**
+
 ## About Shiguredo's open source software
 
 We will not respond to PRs or issues that have not been discussed on Discord. Also, Discord is only available in Japanese.
