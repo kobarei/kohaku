@@ -9,6 +9,7 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
+// TODO(v): リファクタリング
 func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error {
 	rtc := &RTC{
 		Time:         exporter.Timestamp,

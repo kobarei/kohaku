@@ -6,7 +6,7 @@ import (
 )
 
 // type は PeerConnection / SoraConnection
-// type: peer-connection / type: sora-connection
+// type: connection.remote / type: connection.sora
 type SoraStatsExporter struct {
 	Type string `json:"type" validate:"required"`
 
@@ -17,6 +17,8 @@ type SoraStatsExporter struct {
 	ChannelID    string `json:"channel_id" validate:"required"`
 	ClientID     string `json:"client_id" validate:"required"`
 	ConnectionID string `json:"connection_id" validate:"required"`
+
+	// TODO(v): multistream や simulcast などを突っ込む
 
 	Stats []json.RawMessage `json:"stats" validate:"required"`
 }
