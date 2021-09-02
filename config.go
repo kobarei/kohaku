@@ -30,11 +30,14 @@ type KohakuConfig struct {
 	PostgresDbname   string `yaml:"postgres_dbaname"`
 	PostgresSslmode  string `yaml:"postgres_sslmode"`
 
-	Http2CertFilePath         string `yaml:"http2_cert_file_path"`
-	Http2KeyFilePath          string `yaml:"http2_key_file_path"`
-	Http2H2c                  bool   `yaml:"http2_h2c"`
-	Http2MaxConcurrentStreams int    `yaml:"http2_max_concurrent_streams"`
-	Http2IdelTimeout          int    `yaml:"http2_idel_timeout"`
+	// TODO(v): 名前検討
+	Http2CertFilePath string `yaml:"http2_cert_file_path"`
+	// TODO(v): 名前検討
+	Http2KeyFilePath string `yaml:"http2_key_file_path"`
+
+	Http2H2c                  bool `yaml:"http2_h2c"`
+	Http2MaxConcurrentStreams int  `yaml:"http2_max_concurrent_streams"`
+	Http2IdelTimeout          int  `yaml:"http2_idel_timeout"`
 }
 
 // LoadConfigFromFlags 起動パラメータから設定ファイルを読み込みます
