@@ -50,9 +50,15 @@ func pgxPoolMiddleware(pool *pgxpool.Pool) gin.HandlerFunc {
 func main() {
 	r := gin.New()
 
-	// TODO(v): YAML で外に出す
-	var connStr = "postgres://postgres:password@127.0.0.1:5432/kohaku?sslmode=disable"
-	pool, err := pgxpool.Connect(context.Background(), connStr)
+	var connStr = kohaku.Config.PostgresURL
+	config, err := pgxpool.ParseConfig(connStr)
+	if err != nil {
+		// TODO(v): エラーメッセージを修正する
+		fmt.Fprintf(os.Stderr, "Unable to parse url: %v\n", err)
+		os.Exit(1)
+	}
+
+	pool, err := pgxpool.ConnectConfig(context.Background(), config)
 	if err != nil {
 		// TODO(v): エラーメッセージを修正する
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)

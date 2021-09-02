@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	ConfigFilePath = flag.String("c", "./config.yaml", "kohaku 設定ファイルへのパス(yaml)")
+	ConfigFilePath = flag.String("c", "../config.yaml", "kohaku 設定ファイルへのパス(yaml)")
 	Config         *KohakuConfig
 )
 
@@ -23,12 +23,7 @@ type KohakuConfig struct {
 
 	CollectorPort int `yaml:"collector_port"`
 
-	PostgresHost     string `yaml:"postgres_host"`
-	PostgresPort     int    `yaml:"postgres_port"`
-	PostgresUser     string `yaml:"postgres_user"`
-	PostgresPassword string `yaml:"postgres_password"`
-	PostgresDbname   string `yaml:"postgres_dbaname"`
-	PostgresSslmode  string `yaml:"postgres_sslmode"`
+	PostgresURL string `yaml:"postgres_url"`
 
 	// TODO(v): 名前検討
 	Http2CertFilePath string `yaml:"http2_cert_file_path"`

@@ -1,12 +1,9 @@
 collector_port: 5890
 
-postgres_host: 192.0.2.10
-postgres_port: 5432
-postgres_user: postgres
-postgres_password: password
-postgres_dbname: kohaku
-postgres_sslmode: disable
+postgres_url: postgres://postgres:password@127.0.0.1:5432/kohaku&sslmode=disable
 
+http2_cert_file_path: ""
+http2_key_file_path: ""
 http2_h2c: true
 http2_max_concurrent_streams: 250
 http2_idle_timeout: 60
