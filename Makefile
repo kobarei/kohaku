@@ -1,2 +1,2 @@
 all:
-	go build -o kohaku cmd/kohaku/main.go
+	go build -o bin/kohaku cmd/kohaku/main.go
