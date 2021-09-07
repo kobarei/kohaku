@@ -1,6 +1,6 @@
 collector_port: 5890
 
-postgres_url: postgres://postgres:password@127.0.0.1:5432/kohaku&sslmode=disable
+postgres_url: postgres://postgres:password@127.0.0.1:5432/kohaku?sslmode=disable
 
 http2_cert_file_path: ""
 http2_key_file_path: ""
