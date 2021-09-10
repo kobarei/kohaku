@@ -98,9 +98,17 @@ func main() {
 		Handler: h2c.NewHandler(r, h2s),
 	}
 
-	// &tls.Config{NextProtos: []string{"h2"}}
-	// s.ListenAndServeTls("crt", "key")
-	if err := s.ListenAndServe(); err != http.ErrServerClosed {
-		log.Fatal(err)
+	http2H2c := kohaku.Config.Http2H2c
+
+	if http2H2c {
+		if err := s.ListenAndServe(); err != http.ErrServerClosed {
+			log.Fatal(err)
+		}
+	} else {
+		http2CertFilePath := kohaku.Config.Http2CertFilePath
+		http2KeyFilePath := kohaku.Config.Http2KeyFilePath
+		if err := s.ListenAndServeTLS(http2CertFilePath, http2KeyFilePath); err != http.ErrServerClosed {
+			log.Fatal(err)
+		}
 	}
 }
