@@ -7,3 +7,8 @@ http2_key_file_path: ""
 http2_h2c: true
 http2_max_concurrent_streams: 250
 http2_idle_timeout: 60
+
+log_dir: .
+log_name: kohaku.log
+log_debug: true
+log_stdout: true
