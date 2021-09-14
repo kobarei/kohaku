@@ -1,12 +1,17 @@
 package kohaku
 
 import (
+	"context"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"os/exec"
 	"strings"
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -14,7 +19,7 @@ import (
 
 var (
 	collectorTypeCodecJSON = `{
-    "type": "connection.peer",
+    "type": "connection.remote",
     "channel_id": "sora",
     "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
     "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
@@ -31,7 +36,7 @@ var (
   }`
 
 	collectorTypeOutboundRTPJSON = `{
-    "type": "connection.peer",
+    "type": "connection.remote",
     "channel_id": "sora",
     "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
     "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
@@ -73,6 +78,71 @@ var (
   }`
 )
 
+const (
+	connStr     = "postgres://postgres:password@127.0.0.1:5432/%s?sslmode=disable"
+	dbName      = "kohaku"
+	sqlFilePath = "script/timescaledb.sql"
+)
+
+var (
+	pool          *pgxpool.Pool
+	postgresDBURL = fmt.Sprintf(connStr, "postgres")
+	kohakuDBURL   = fmt.Sprintf(connStr, dbName)
+	dropDBSQL     = fmt.Sprintf("DROP DATABASE IF EXISTS %s", dbName)
+	createDBSQL   = fmt.Sprintf("CREATE DATABASE %s", dbName)
+)
+
+func createTable() error {
+	return exec.Command("psql", "-d", dbName, "-f", sqlFilePath).Run()
+}
+
+func TestMain(m *testing.M) {
+	// DB の削除、作成、Table の作成
+	postgresDBConfig, err := pgxpool.ParseConfig(postgresDBURL)
+	if err != nil {
+		panic(err)
+	}
+	postgresDBPool, err := pgxpool.ConnectConfig(context.Background(), postgresDBConfig)
+	if err != nil {
+		panic(err)
+	}
+	defer postgresDBPool.Close()
+
+	_, err = postgresDBPool.Exec(context.Background(), dropDBSQL)
+	if err != nil {
+		panic(err)
+	}
+	_, err = postgresDBPool.Exec(context.Background(), createDBSQL)
+	if err != nil {
+		panic(err)
+	}
+
+	config, err := pgxpool.ParseConfig(kohakuDBURL)
+	if err != nil {
+		panic(err)
+	}
+	pool, err = pgxpool.ConnectConfig(context.Background(), config)
+	if err != nil {
+		panic(err)
+	}
+
+	// TODO: pool を使用する
+	if err := createTable(); err != nil {
+		panic(err)
+	}
+
+	status := m.Run()
+
+	// DB の削除
+	pool.Close()
+	_, err = postgresDBPool.Exec(context.Background(), dropDBSQL)
+	if err != nil {
+		panic(err)
+	}
+
+	os.Exit(status)
+}
+
 func TestTypeOutboundRTPCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeCodecJSON))
@@ -80,10 +150,11 @@ func TestTypeOutboundRTPCollector(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
+	c.Set("pool", pool)
 
 	// Assertions
 	Collector(c)
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 }
 
 func TestTypeCodecCollector(t *testing.T) {
@@ -93,8 +164,9 @@ func TestTypeCodecCollector(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
+	c.Set("pool", pool)
 
 	// Assertions
 	Collector(c)
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 }
