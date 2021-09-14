@@ -80,7 +80,7 @@ var (
 
 const (
 	connStr     = "postgres://postgres:password@127.0.0.1:5432/%s?sslmode=disable"
-	dbName      = "kohaku"
+	dbName      = "kohakutest"
 	sqlFilePath = "script/timescaledb.sql"
 )
 
