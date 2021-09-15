@@ -47,7 +47,7 @@ func LoadConfigFromFlags(configPath *string) error {
 	return nil
 }
 
-// LoadConfig 設定ファイルのパスからファイルを読み込み、設定値をバインドした AyameLaboConfig を返します
+// LoadConfig 設定ファイルのパスからファイルを読み込み、設定値をバインドした KohakuConfig を返します
 func LoadConfig(configPath string) (*KohakuConfig, error) {
 	buf, err := ioutil.ReadFile(configPath)
 	if err != nil {
@@ -55,7 +55,7 @@ func LoadConfig(configPath string) (*KohakuConfig, error) {
 	}
 	var config KohakuConfig
 	if err := yaml.Unmarshal(buf, &config); err != nil {
-		return nil, fmt.Errorf("AyameLaboConfig bind error: %s", err)
+		return nil, fmt.Errorf("KohakuConfig bind error: %s", err)
 	}
 	return &config, nil
 }
