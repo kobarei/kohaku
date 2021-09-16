@@ -47,7 +47,7 @@ func pgxPoolMiddleware(pool *pgxpool.Pool) gin.HandlerFunc {
 	}
 }
 
-func openDB(ctx context.Context, connStr string) (*pgxpool.Pool, error) {
+func NewDB(ctx context.Context, connStr string) (*pgxpool.Pool, error) {
 	config, err := pgxpool.ParseConfig(connStr)
 	if err != nil {
 		// TODO(v): エラーメッセージを修正する
@@ -71,7 +71,13 @@ func openDB(ctx context.Context, connStr string) (*pgxpool.Pool, error) {
 	return pool, nil
 }
 
-func NewServer(c *kohaku.KohakuConfig, pool *pgxpool.Pool) http.Server {
+type Server struct {
+	config *kohaku.KohakuConfig
+	pool   *pgxpool.Pool
+	http.Server
+}
+
+func NewServer(c *kohaku.KohakuConfig, pool *pgxpool.Pool) *Server {
 	r := gin.New()
 
 	// TODO(v): カスタムコンテキストに Pool を渡すかたちでいいのかどうか確認する
@@ -94,16 +100,20 @@ func NewServer(c *kohaku.KohakuConfig, pool *pgxpool.Pool) http.Server {
 		IdleTimeout:          600 * time.Second,
 	}
 
-	s := http.Server{
-		Addr: fmt.Sprintf(":%d", c.CollectorPort),
-		// TODO(v): YAML で h2c と h2 を切り替えられるようにする
-		Handler: h2c.NewHandler(r, h2s),
+	s := &Server{
+		config: c,
+		pool:   pool,
+		Server: http.Server{
+			Addr: fmt.Sprintf(":%d", c.CollectorPort),
+			// TODO(v): YAML で h2c と h2 を切り替えられるようにする
+			Handler: h2c.NewHandler(r, h2s),
+		},
 	}
 
 	return s
 }
 
-func ListenAndServe(c *kohaku.KohakuConfig, s http.Server) error {
+func (s *Server) Start(c *kohaku.KohakuConfig) error {
 	http2H2c := c.Http2H2c
 
 	if http2H2c {
@@ -123,7 +133,7 @@ func ListenAndServe(c *kohaku.KohakuConfig, s http.Server) error {
 
 func main() {
 	var connStr = kohaku.Config.PostgresURL
-	pool, err := openDB(context.Background(), connStr)
+	pool, err := NewDB(context.Background(), connStr)
 	if err != nil {
 		// TODO: 共通化できるのであればエラーメッセージはここで出力する
 		os.Exit(1)
@@ -132,7 +142,7 @@ func main() {
 
 	s := NewServer(kohaku.Config, pool)
 
-	if err := ListenAndServe(kohaku.Config, s); err != nil {
+	if err := s.Start(kohaku.Config); err != nil {
 		log.Fatal(err)
 	}
 }
