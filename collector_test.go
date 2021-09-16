@@ -90,6 +90,7 @@ var (
 	kohakuDBURL   = fmt.Sprintf(connStr, dbName)
 	dropDBSQL     = fmt.Sprintf("DROP DATABASE IF EXISTS %s", dbName)
 	createDBSQL   = fmt.Sprintf("CREATE DATABASE %s", dbName)
+	server        *Server
 )
 
 func createTable() error {
@@ -131,6 +132,8 @@ func TestMain(m *testing.M) {
 		panic(err)
 	}
 
+	server = NewServer(&KohakuConfig{}, pool)
+
 	status := m.Run()
 
 	// DB の削除
@@ -150,10 +153,9 @@ func TestTypeOutboundRTPCollector(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
-	c.Set("pool", pool)
 
 	// Assertions
-	Collector(c)
+	server.Collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 }
 
@@ -164,9 +166,8 @@ func TestTypeCodecCollector(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
-	c.Set("pool", pool)
 
 	// Assertions
-	Collector(c)
+	server.Collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 }

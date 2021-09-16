@@ -18,25 +18,12 @@ type Server struct {
 	http.Server
 }
 
-func pgxPoolMiddleware(pool *pgxpool.Pool) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Set("pool", pool)
-		c.Next()
-	}
-}
-
 func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	r := gin.New()
-
-	// TODO(v): カスタムコンテキストに Pool を渡すかたちでいいのかどうか確認する
-	r.Use(pgxPoolMiddleware(pool))
 
 	// TODO(v): zerolog に切り替える
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
-
-	// 統計情報を突っ込むところ
-	r.POST("/collector", Collector)
 
 	// TODO(v): ヘルスチェック用の /status みたいなのあった方がいい
 	// TODO(v): こいつ自身の統計情報を /stats でとれた方がいい
@@ -57,6 +44,9 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 			Handler: h2c.NewHandler(r, h2s),
 		},
 	}
+
+	// 統計情報を突っ込むところ
+	r.POST("/collector", s.Collector)
 
 	return s
 }
