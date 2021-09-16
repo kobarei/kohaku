@@ -47,30 +47,40 @@ func pgxPoolMiddleware(pool *pgxpool.Pool) gin.HandlerFunc {
 	}
 }
 
-func main() {
-	r := gin.New()
-
-	var connStr = kohaku.Config.PostgresURL
+func openDB(ctx context.Context, connStr string) (*pgxpool.Pool, error) {
 	config, err := pgxpool.ParseConfig(connStr)
 	if err != nil {
 		// TODO(v): エラーメッセージを修正する
 		fmt.Fprintf(os.Stderr, "Unable to parse url: %v\n", err)
-		os.Exit(1)
+		return nil, err
 	}
 
-	pool, err := pgxpool.ConnectConfig(context.Background(), config)
+	pool, err := pgxpool.ConnectConfig(ctx, config)
 	if err != nil {
 		// TODO(v): エラーメッセージを修正する
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
+		return nil, err
 	}
-	defer pool.Close()
 
 	if err := pool.Ping(context.Background()); err != nil {
 		// TODO(v): エラーメッセージを修正する
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		return nil, err
+	}
+
+	return pool, nil
+}
+
+func main() {
+	r := gin.New()
+
+	var connStr = kohaku.Config.PostgresURL
+	pool, err := openDB(context.Background(), connStr)
+	if err != nil {
+		// TODO: 共通化できるのであればエラーメッセージはここで出力する
 		os.Exit(1)
 	}
+	defer pool.Close()
 
 	// TODO(v): カスタムコンテキストに Pool を渡すかたちでいいのかどうか確認する
 	r.Use(pgxPoolMiddleware(pool))
