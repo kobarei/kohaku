@@ -71,7 +71,7 @@ func openDB(ctx context.Context, connStr string) (*pgxpool.Pool, error) {
 	return pool, nil
 }
 
-func NewServer(config *kohaku.KohakuConfig, pool *pgxpool.Pool) http.Server {
+func NewServer(c *kohaku.KohakuConfig, pool *pgxpool.Pool) http.Server {
 	r := gin.New()
 
 	// TODO(v): カスタムコンテキストに Pool を渡すかたちでいいのかどうか確認する
@@ -95,7 +95,7 @@ func NewServer(config *kohaku.KohakuConfig, pool *pgxpool.Pool) http.Server {
 	}
 
 	s := http.Server{
-		Addr: fmt.Sprintf(":%d", config.CollectorPort),
+		Addr: fmt.Sprintf(":%d", c.CollectorPort),
 		// TODO(v): YAML で h2c と h2 を切り替えられるようにする
 		Handler: h2c.NewHandler(r, h2s),
 	}
@@ -103,16 +103,16 @@ func NewServer(config *kohaku.KohakuConfig, pool *pgxpool.Pool) http.Server {
 	return s
 }
 
-func ListenAndServe(config *kohaku.KohakuConfig, s http.Server) error {
-	http2H2c := config.Http2H2c
+func ListenAndServe(c *kohaku.KohakuConfig, s http.Server) error {
+	http2H2c := c.Http2H2c
 
 	if http2H2c {
 		if err := s.ListenAndServe(); err != http.ErrServerClosed {
 			return err
 		}
 	} else {
-		http2CertFilePath := config.Http2CertFilePath
-		http2KeyFilePath := config.Http2KeyFilePath
+		http2CertFilePath := c.Http2CertFilePath
+		http2KeyFilePath := c.Http2KeyFilePath
 		if err := s.ListenAndServeTLS(http2CertFilePath, http2KeyFilePath); err != http.ErrServerClosed {
 			return err
 		}
