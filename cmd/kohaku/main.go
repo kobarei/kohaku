@@ -71,16 +71,8 @@ func openDB(ctx context.Context, connStr string) (*pgxpool.Pool, error) {
 	return pool, nil
 }
 
-func main() {
+func NewServer(config *kohaku.KohakuConfig, pool *pgxpool.Pool) http.Server {
 	r := gin.New()
-
-	var connStr = kohaku.Config.PostgresURL
-	pool, err := openDB(context.Background(), connStr)
-	if err != nil {
-		// TODO: 共通化できるのであればエラーメッセージはここで出力する
-		os.Exit(1)
-	}
-	defer pool.Close()
 
 	// TODO(v): カスタムコンテキストに Pool を渡すかたちでいいのかどうか確認する
 	r.Use(pgxPoolMiddleware(pool))
@@ -103,22 +95,44 @@ func main() {
 	}
 
 	s := http.Server{
-		Addr: fmt.Sprintf(":%d", kohaku.Config.CollectorPort),
+		Addr: fmt.Sprintf(":%d", config.CollectorPort),
 		// TODO(v): YAML で h2c と h2 を切り替えられるようにする
 		Handler: h2c.NewHandler(r, h2s),
 	}
 
-	http2H2c := kohaku.Config.Http2H2c
+	return s
+}
+
+func ListenAndServe(config *kohaku.KohakuConfig, s http.Server) error {
+	http2H2c := config.Http2H2c
 
 	if http2H2c {
 		if err := s.ListenAndServe(); err != http.ErrServerClosed {
-			log.Fatal(err)
+			return err
 		}
 	} else {
-		http2CertFilePath := kohaku.Config.Http2CertFilePath
-		http2KeyFilePath := kohaku.Config.Http2KeyFilePath
+		http2CertFilePath := config.Http2CertFilePath
+		http2KeyFilePath := config.Http2KeyFilePath
 		if err := s.ListenAndServeTLS(http2CertFilePath, http2KeyFilePath); err != http.ErrServerClosed {
-			log.Fatal(err)
+			return err
 		}
+	}
+
+	return nil
+}
+
+func main() {
+	var connStr = kohaku.Config.PostgresURL
+	pool, err := openDB(context.Background(), connStr)
+	if err != nil {
+		// TODO: 共通化できるのであればエラーメッセージはここで出力する
+		os.Exit(1)
+	}
+	defer pool.Close()
+
+	s := NewServer(kohaku.Config, pool)
+
+	if err := ListenAndServe(kohaku.Config, s); err != nil {
+		log.Fatal(err)
 	}
 }
