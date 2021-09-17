@@ -32,7 +32,7 @@ type KohakuConfig struct {
 
 	Http2H2c                  bool `yaml:"http2_h2c"`
 	Http2MaxConcurrentStreams int  `yaml:"http2_max_concurrent_streams"`
-	Http2IdelTimeout          int  `yaml:"http2_idel_timeout"`
+	Http2IdleTimeout          int  `yaml:"http2_idel_timeout"`
 }
 
 // LoadConfigFromFlags 起動パラメータから設定ファイルを読み込みます
