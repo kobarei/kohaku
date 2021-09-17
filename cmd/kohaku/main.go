@@ -22,21 +22,15 @@ import (
 func NewDB(ctx context.Context, connStr string) (*pgxpool.Pool, error) {
 	config, err := pgxpool.ParseConfig(connStr)
 	if err != nil {
-		// TODO(v): エラーメッセージを修正する
-		fmt.Fprintf(os.Stderr, "Unable to parse url: %v\n", err)
 		return nil, err
 	}
 
 	pool, err := pgxpool.ConnectConfig(ctx, config)
 	if err != nil {
-		// TODO(v): エラーメッセージを修正する
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		return nil, err
 	}
 
 	if err := pool.Ping(context.Background()); err != nil {
-		// TODO(v): エラーメッセージを修正する
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		return nil, err
 	}
 
@@ -62,7 +56,8 @@ func main() {
 	var connStr = kohaku.Config.PostgresURL
 	pool, err := NewDB(context.Background(), connStr)
 	if err != nil {
-		// TODO: 共通化できるのであればエラーメッセージはここで出力する
+		// TODO: エラーメッセージを修正する
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
 	}
 	defer pool.Close()
