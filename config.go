@@ -30,9 +30,9 @@ type KohakuConfig struct {
 	// TODO(v): 名前検討
 	Http2KeyFilePath string `yaml:"http2_key_file_path"`
 
-	Http2H2c                  bool `yaml:"http2_h2c"`
-	Http2MaxConcurrentStreams int  `yaml:"http2_max_concurrent_streams"`
-	Http2IdleTimeout          int  `yaml:"http2_idel_timeout"`
+	Http2H2c                  bool   `yaml:"http2_h2c"`
+	Http2MaxConcurrentStreams uint32 `yaml:"http2_max_concurrent_streams"`
+	Http2IdleTimeout          uint32 `yaml:"http2_idel_timeout"`
 }
 
 // LoadConfigFromFlags 起動パラメータから設定ファイルを読み込みます
