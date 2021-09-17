@@ -28,11 +28,10 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	// TODO(v): ヘルスチェック用の /status みたいなのあった方がいい
 	// TODO(v): こいつ自身の統計情報を /stats でとれた方がいい
 
-	// TODO(v): HTTP/2 の設定は YAML へ
 	h2s := &http2.Server{
-		MaxConcurrentStreams: 250,
-		MaxReadFrameSize:     1048576,
-		IdleTimeout:          600 * time.Second,
+		MaxConcurrentStreams: c.Http2MaxConcurrentStreams,
+		MaxReadFrameSize:     c.Http2MaxReadFrameSize,
+		IdleTimeout:          time.Duration(c.Http2IdleTimeout) * time.Second,
 	}
 
 	s := &Server{
