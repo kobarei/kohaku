@@ -32,6 +32,7 @@ type KohakuConfig struct {
 
 	Http2H2c                  bool   `yaml:"http2_h2c"`
 	Http2MaxConcurrentStreams uint32 `yaml:"http2_max_concurrent_streams"`
+	Http2MaxReadFrameSize     uint32 `yaml:"http2_max_read_frame_size"`
 	Http2IdleTimeout          uint32 `yaml:"http2_idel_timeout"`
 }
 
