@@ -14,8 +14,7 @@ type SoraStatsExporter struct {
 	Version   string    `json:"version"`
 	Timestamp time.Time `json:"timestamp" validate:"required"`
 
-	// TODO(v): required にする
-	Role string `json:"role"`
+	Role string `json:"role" validate:"required"`
 
 	ChannelID    string `json:"channel_id" validate:"required"`
 	ClientID     string `json:"client_id" validate:"required"`

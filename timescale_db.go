@@ -11,6 +11,8 @@ type SoraConnections struct {
 	ClientID     string `db:"sora_client_id"`
 	ConnectionID string `db:"sora_connection_id"`
 
+	Role string `db:"sora_role"`
+
 	Label   string `db:"sora_label"`
 	Version string `db:"sora_version"`
 }

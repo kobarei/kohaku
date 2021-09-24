@@ -11,7 +11,6 @@ import (
 
 // TODO(v): リファクタリング
 func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error {
-	ctx := context.Background()
 	sq := goqu.Select("sora_channel_id").
 		From("sora_connections").
 		Where(goqu.Ex{
@@ -27,22 +26,24 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 			"sora_channel_id",
 			"sora_client_id",
 			"sora_connection_id",
+			"sora_role",
 			"sora_label",
 			"sora_version",
 		).
 		FromQuery(
 			goqu.Select(
-				goqu.L("?, ?, ?, ?, ?, ?",
+				goqu.L("?, ?, ?, ?, ?, ?, ?",
 					exporter.Timestamp,
 					exporter.ChannelID,
 					exporter.ClientID,
 					exporter.ConnectionID,
+					exporter.Role,
 					exporter.Label,
 					exporter.Version,
 				),
 			).Where(le))
 	insertSQL, _, _ := ds.ToSQL()
-	if _, err := pool.Exec(ctx, insertSQL); err != nil {
+	if _, err := pool.Exec(context.Background(), insertSQL); err != nil {
 		return err
 	}
 

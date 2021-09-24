@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS sora_connections (
     sora_client_id character(255) NOT NULL,
     sora_connection_id character(27) NOT NULL,
 
+    sora_role character(8) NOT NULL,
+
     sora_version character(255) NOT NULL,
     sora_label character(255) NOT NULL
 );
