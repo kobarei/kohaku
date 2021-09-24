@@ -11,14 +11,44 @@ import (
 
 // TODO(v): リファクタリング
 func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error {
+	ctx := context.Background()
+	sq := goqu.Select("sora_channel_id").
+		From("sora_connections").
+		Where(goqu.Ex{
+			"sora_channel_id":    exporter.ChannelID,
+			"sora_client_id":     exporter.ClientID,
+			"sora_connection_id": exporter.ConnectionID,
+		})
+	le := goqu.L("NOT EXISTS ?", sq)
+
+	ds := goqu.Insert("sora_connections").
+		Cols(
+			"time",
+			"sora_channel_id",
+			"sora_client_id",
+			"sora_connection_id",
+			"sora_label",
+			"sora_version",
+		).
+		FromQuery(
+			goqu.Select(
+				goqu.L("?, ?, ?, ?, ?, ?",
+					exporter.Timestamp,
+					exporter.ChannelID,
+					exporter.ClientID,
+					exporter.ConnectionID,
+					exporter.Label,
+					exporter.Version,
+				),
+			).Where(le))
+	insertSQL, _, _ := ds.ToSQL()
+	if _, err := pool.Exec(ctx, insertSQL); err != nil {
+		return err
+	}
+
 	rtc := &RTC{
 		Time:         exporter.Timestamp,
-		ChannelID:    exporter.ChannelID,
-		ClientID:     exporter.ClientID,
 		ConnectionID: exporter.ConnectionID,
-
-		Label:   exporter.Label,
-		Version: exporter.Version,
 	}
 
 	for _, v := range exporter.Stats {

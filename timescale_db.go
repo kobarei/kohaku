@@ -4,7 +4,7 @@ import "time"
 
 // FIXME(v): 名前はすべて仮です
 
-type RTC struct {
+type SoraConnections struct {
 	Time time.Time `db:"time"`
 
 	ChannelID    string `db:"sora_channel_id"`
@@ -13,6 +13,12 @@ type RTC struct {
 
 	Label   string `db:"sora_label"`
 	Version string `db:"sora_version"`
+}
+
+type RTC struct {
+	Time time.Time `db:"time"`
+
+	ConnectionID string `db:"sora_connection_id"`
 }
 
 type RTCCodec struct {
