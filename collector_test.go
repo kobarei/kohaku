@@ -19,6 +19,7 @@ import (
 
 var (
 	collectorTypeCodecJSON = `{
+    "role": "sendrecv",
     "type": "connection.remote",
     "channel_id": "sora",
     "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
@@ -32,10 +33,13 @@ var (
       "mimeType": "video/VP9",
       "clockRate": 90000,
       "sdpFmtpLine": "profile-id=0"
-    }]
+    }],
+    "timestamp":"2021-09-24T08:15:31.854427Z",
+    "version":"2021.2-canary.23"}
   }`
 
 	collectorTypeOutboundRTPJSON = `{
+    "role": "sendrecv",
     "type": "connection.remote",
     "channel_id": "sora",
     "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
@@ -74,8 +78,224 @@ var (
       "pliCount": 0,
       "nackCount": 0,
       "qpSum": 40927
-    }]
+    }],
+    "timestamp":"2021-09-24T08:15:31.854427Z",
+    "version":"2021.2-canary.23"}
   }`
+
+	collectorTypeMediaSourceJSON = `{
+    "channel_id":"sora",
+    "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
+    "label":"WebRTC.SFU.Sora",
+    "stats":[{
+      "id":"RTCAudioSource_3",
+      "kind":"audio",
+      "timestamp":1.63247133184561206055e+12,
+      "type":"media-source",
+      "audioLevel":2.13629566331980345895e-03,
+      "echoReturnLoss":-30,
+      "echoReturnLossEnhancement":1.75512030720710754395e-01,
+      "totalAudioEnergy":4.43774538826569622503e-05,
+      "totalSamplesDuration":1.00599999999998299671e+01,
+      "trackIdentifier":"e6763fb2-0f7a-46f2-af0d-bdde1fcc1ee7"
+    },{
+      "height":480,
+      "id":"RTCVideoSource_4",
+      "kind":"video",
+      "timestamp":1.63247133184561206055e+12,
+      "type":"media-source",
+      "width":640,
+      "frames":284,
+      "framesPerSecond":30,
+      "trackIdentifier":"9d2bc9fd-361e-4a74-9030-ee2212aadfee"
+    }],
+    "timestamp":"2021-09-24T08:15:31.854427Z",
+    "type":"connection.remote",
+    "version":"2021.2-canary.23"
+  }
+`
+
+	collectorTypeDataChannelJSON = `{
+    "channel_id":"sora",
+    "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
+    "label":"WebRTC.SFU.Sora",
+    "stats":[{
+    },{
+      "id":"RTCDataChannel_10",
+      "label":"stats",
+      "protocol":"",
+      "state":"open",
+      "timestamp":1.63247133184561206055e+12,
+      "type":"data-channel",
+      "bytesReceived":56,
+      "bytesSent":2853,
+      "dataChannelIdentifier":8,
+      "messagesReceived":2,
+      "messagesSent":1
+    },{
+      "id":"RTCDataChannel_6",
+      "label":"signaling",
+      "protocol":"",
+      "state":"open",
+      "timestamp":1.63247133184561206055e+12,
+      "type":"data-channel",
+      "bytesReceived":0,
+      "bytesSent":0,
+      "dataChannelIdentifier":0,
+      "messagesReceived":0,
+      "messagesSent":0
+    },{
+      "id":"RTCDataChannel_7",
+      "label":"notify",
+      "protocol":"",
+      "state":"open",
+      "timestamp":1.63247133184561206055e+12,
+      "type":"data-channel",
+      "bytesReceived":64,
+      "bytesSent":0,
+      "dataChannelIdentifier":2,
+      "messagesReceived":1,
+      "messagesSent":0
+    },{
+      "id":"RTCDataChannel_8",
+      "label":"push",
+      "protocol":"",
+      "state":"open",
+      "timestamp":1.63247133184561206055e+12,
+      "type":"data-channel",
+      "bytesReceived":0,
+      "bytesSent":0,
+      "dataChannelIdentifier":4,
+      "messagesReceived":0,
+      "messagesSent":0
+    },{
+      "id":"RTCDataChannel_9",
+      "label":"e2ee",
+      "protocol":"",
+      "state":"open",
+      "timestamp":1.63247133184561206055e+12,
+      "type":"data-channel",
+      "bytesReceived":0,
+      "bytesSent":0,
+      "dataChannelIdentifier":6,
+      "messagesReceived":0,
+      "messagesSent":0
+    }],
+    "timestamp":"2021-09-24T08:15:31.854427Z",
+    "type":"connection.remote",
+    "version":"2021.2-canary.23"
+  }
+`
+
+	collectorTypeCandidatePairJSON = `{
+    "channel_id":"sora",
+    "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
+    "label":"WebRTC.SFU.Sora",
+    "stats":[{
+      "id":"RTCIceCandidatePair_zNnR\/QQb_SwzcXtlY",
+      "priority":179616219446525440,
+      "state":"succeeded",
+      "timestamp":1.63247133184561206055e+12,
+      "type":"candidate-pair",
+      "writable":true,
+      "availableOutgoingBitrate":500000,
+      "bytesReceived":3437,
+      "bytesSent":670907,
+      "consentRequestsSent":7,
+      "currentRoundTripTime":1.00000000000000002082e-03,
+      "localCandidateId":"RTCIceCandidate_zNnR\/QQb",
+      "nominated":true,
+      "remoteCandidateId":"RTCIceCandidate_SwzcXtlY",
+      "requestsReceived":9,
+      "requestsSent":1,
+      "responsesReceived":8,
+      "responsesSent":9,
+      "totalRoundTripTime":5.00000000000000010408e-03,
+      "transportId":"RTCTransport_data_1"
+    }],
+    "timestamp":"2021-09-24T08:15:31.854427Z",
+    "type":"connection.remote",
+    "version":"2021.2-canary.23"
+  }
+`
+
+	collectorTypeRemoteInboundJSON = `{
+    "channel_id":"sora",
+    "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
+    "label":"WebRTC.SFU.Sora",
+    "stats":[{
+      "fractionLost":0,
+      "id":"RTCRemoteInboundRtpAudioStream_1073653878",
+      "kind":"audio",
+      "ssrc":1073653878,
+      "timestamp":1.63247133183873803711e+12,
+      "type":"remote-inbound-rtp",
+      "codecId":"RTCCodec_audio_Z4hWio_Outbound_109",
+      "jitter":2.91666666666666690808e-04,
+      "localId":"RTCOutboundRTPAudioStream_1073653878",
+      "packetsLost":0,
+      "roundTripTime":1.00000000000000002082e-03,
+      "roundTripTimeMeasurements":2,
+      "totalRoundTripTime":2.00000000000000004163e-03,
+      "transportId":"RTCTransport_data_1"
+    },{
+      "fractionLost":0,
+      "id":"RTCRemoteInboundRtpVideoStream_1597059872",
+      "kind":"video",
+      "ssrc":1597059872,
+      "timestamp":1.63247133144896899414e+12,
+      "type":"remote-inbound-rtp",
+      "codecId":"RTCCodec_video_Xn86YA_Outbound_120",
+      "jitter":2.34444444444444500403e-03,
+      "localId":"RTCOutboundRTPVideoStream_1597059872",
+      "packetsLost":0,
+      "roundTripTime":1.00000000000000002082e-03,
+      "roundTripTimeMeasurements":10,
+      "totalRoundTripTime":1.00000000000000002082e-02,
+      "transportId":"RTCTransport_data_1"
+    }],
+    "timestamp":"2021-09-24T08:15:31.854427Z",
+    "type":"connection.remote",
+    "version":"2021.2-canary.23"
+  }
+`
+
+	collectorTypeTransportJSON = `{
+    "channel_id":"sora",
+    "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
+    "label":"WebRTC.SFU.Sora",
+    "stats":[{
+      "id":"RTCTransport_data_1",
+      "timestamp":1.63247133184561206055e+12,
+      "type":"transport",
+      "bytesReceived":3437,
+      "bytesSent":670907,
+      "dtlsCipher":"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+      "dtlsState":"connected",
+      "localCertificateId":"RTCCertificate_60:96:2D:B7:B6:D8:0A:15:92:45:21:4E:1B:DB:66:01:CC:44:65:D2:43:44:31:15:E4:09:D0:64:58:A2:BF:84",
+      "packetsReceived":34,
+      "packetsSent":1105,
+      "remoteCertificateId":"RTCCertificate_1C:64:46:83:99:7F:9C:44:8A:5B:5C:DF:07:C0:A4:2D:39:51:72:39:8B:76:B5:D2:75:0C:A4:0D:58:FF:67:69",
+      "selectedCandidatePairChanges":1,
+      "selectedCandidatePairId":"RTCIceCandidatePair_zNnR\/QQb_SwzcXtlY",
+      "srtpCipher":"AEAD_AES_128_GCM",
+      "tlsVersion":"FEFD"
+    }],
+    "timestamp":"2021-09-24T08:15:31.854427Z",
+    "type":"connection.remote",
+    "version":"2021.2-canary.23"
+  }
+`
 )
 
 const (
@@ -162,6 +382,71 @@ func TestTypeOutboundRTPCollector(t *testing.T) {
 func TestTypeCodecCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeOutboundRTPJSON))
+	req.Header.Set("content-type", "application/json")
+	rec := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(rec)
+	c.Request = req
+
+	// Assertions
+	server.Collector(c)
+	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+}
+
+func TestTypeMediaSourceCollector(t *testing.T) {
+	// Setup
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeMediaSourceJSON))
+	req.Header.Set("content-type", "application/json")
+	rec := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(rec)
+	c.Request = req
+
+	// Assertions
+	server.Collector(c)
+	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+}
+
+func TestTypeDataChannelCollector(t *testing.T) {
+	// Setup
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeDataChannelJSON))
+	req.Header.Set("content-type", "application/json")
+	rec := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(rec)
+	c.Request = req
+
+	// Assertions
+	server.Collector(c)
+	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+}
+
+func TestTypeCandidatePairCollector(t *testing.T) {
+	// Setup
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeCandidatePairJSON))
+	req.Header.Set("content-type", "application/json")
+	rec := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(rec)
+	c.Request = req
+
+	// Assertions
+	server.Collector(c)
+	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+}
+
+func TestTypeRemoteInboundCollector(t *testing.T) {
+	// Setup
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeRemoteInboundJSON))
+	req.Header.Set("content-type", "application/json")
+	rec := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(rec)
+	c.Request = req
+
+	// Assertions
+	server.Collector(c)
+	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+}
+
+func TestTypeTransportCollector(t *testing.T) {
+	// Setup
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeTransportJSON))
 	req.Header.Set("content-type", "application/json")
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
