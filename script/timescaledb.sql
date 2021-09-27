@@ -8,14 +8,14 @@ DROP TABLE IF EXISTS sora_connections;
 CREATE TABLE IF NOT EXISTS sora_connections (
     time timestamptz NOT NULL,
 
-    sora_channel_id character(255) NOT NULL,
-    sora_client_id character(255) NOT NULL,
+    sora_channel_id varchar(255) NOT NULL,
+    sora_client_id varchar(255) NOT NULL,
     sora_connection_id character(27) NOT NULL,
 
     sora_role character(8) NOT NULL,
 
-    sora_version character(255) NOT NULL,
-    sora_label character(255) NOT NULL
+    sora_version varchar(255) NOT NULL,
+    sora_label varchar(255) NOT NULL
 );
 
 SELECT create_hypertable('sora_connections', 'time');
@@ -27,17 +27,17 @@ CREATE TABLE IF NOT EXISTS rtc_codec_stats (
     sora_connection_id character(27) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
-    stats_type character(255) NOT NULL,
-    stats_id character(255) NOT NULL,
+    stats_type varchar(255) NOT NULL,
+    stats_id varchar(255) NOT NULL,
 
     payload_type bigint NOT NULL,
-    codec_type character(255) NULL,
-    transport_id character(255) NOT NULL,
+    codec_type varchar(255) NULL,
+    transport_id varchar(255) NOT NULL,
     -- 仕様と現実が違う問題がありそう
-    mime_type character(255) NOT NULL,
+    mime_type varchar(255) NOT NULL,
     clock_rate bigint NULL,
     channels bigint NULL,
-    sdp_fmtp_line character(255) NULL
+    sdp_fmtp_line varchar(255) NULL
 );
 SELECT create_hypertable('rtc_codec_stats', 'time');
 
@@ -49,13 +49,13 @@ CREATE TABLE IF NOT EXISTS rtc_inbound_rtp_stream_stats (
     sora_connection_id character(27) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
-    stats_type character(255) NOT NULL,
-    stats_id character(255) NOT NULL,
+    stats_type varchar(255) NOT NULL,
+    stats_id varchar(255) NOT NULL,
 
     ssrc bigint NOT NULL,
-    kind character(255) NOT NULL,
-    transport_id character(255) NULL,
-    codec_id character(255) NULL,
+    kind varchar(255) NOT NULL,
+    transport_id varchar(255) NULL,
+    codec_id varchar(255) NULL,
 
     packets_received numeric NULL,
     packets_lost bigint NULL,
@@ -74,8 +74,8 @@ CREATE TABLE IF NOT EXISTS rtc_inbound_rtp_stream_stats (
     partial_frames_lost bigint NULL,
     full_frames_lost bigint NULL,
 
-    receiver_id character(255) NOT NULL,
-    remote_id character(255) NULL,
+    receiver_id varchar(255) NOT NULL,
+    remote_id varchar(255) NULL,
     frames_decoded bigint NULL,
     key_frames_decoded bigint NULL,
     frame_width bigint NULL,
@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS rtc_inbound_rtp_stream_stats (
     total_audio_energy double precision NULL,
     total_samples_duration double precision NULL,
     frames_received bigint NULL,
-    decoder_implementation character(255) NULL
+    decoder_implementation varchar(255) NULL
 );
 SELECT create_hypertable('rtc_inbound_rtp_stream_stats', 'time');
 
@@ -128,13 +128,13 @@ CREATE TABLE IF NOT EXISTS rtc_remote_inbound_rtp_stream_stats (
     sora_connection_id character(27) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
-    stats_type character(255) NOT NULL,
-    stats_id character(255) NOT NULL,
+    stats_type varchar(255) NOT NULL,
+    stats_id varchar(255) NOT NULL,
 
     ssrc bigint NOT NULL,
-    kind character(255) NOT NULL,
-    transport_id character(255) NULL,
-    codec_id character(255) NULL,
+    kind varchar(255) NOT NULL,
+    transport_id varchar(255) NULL,
+    codec_id varchar(255) NULL,
 
     packets_received numeric NULL,
     packets_lost bigint NULL,
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS rtc_remote_inbound_rtp_stream_stats (
     partial_frames_lost bigint NULL,
     full_frames_lost bigint NULL,
 
-    local_id character(255) NULL,
+    local_id varchar(255) NULL,
     round_trip_time double precision NULL,
     total_round_trip_time double precision NULL,
     fraction_lost double precision NULL,
@@ -170,24 +170,24 @@ CREATE TABLE IF NOT EXISTS rtc_outbound_rtp_stream_stats (
     sora_connection_id character(27) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
-    stats_type character(255) NOT NULL,
-    stats_id character(255) NOT NULL,
+    stats_type varchar(255) NOT NULL,
+    stats_id varchar(255) NOT NULL,
 
     -- RTCRtpStreamStats
     ssrc bigint NOT NULL,
-    kind character(255) NOT NULL,
-    transport_id character(255) NULL,
-    codec_id character(255) NULL,
+    kind varchar(255) NOT NULL,
+    transport_id varchar(255) NULL,
+    codec_id varchar(255) NULL,
 
     -- RTCSentRtpStreamStats
     packets_sent numeric NULL,
     bytes_sent numeric NULL,
 
     rtx_ssrc bigint NULL,
-    media_source_id character(255) NULL,
-    sender_id character(255) NULL,
-    remote_id character(255) NULL,
-    rid character(255) NULL,
+    media_source_id varchar(255) NULL,
+    sender_id varchar(255) NULL,
+    remote_id varchar(255) NULL,
+    rid varchar(255) NULL,
     last_packet_sent_timestamp double precision NULL,
     header_bytes_sent numeric NULL,
     packets_discarded_on_send bigint NULL,
@@ -220,7 +220,7 @@ CREATE TABLE IF NOT EXISTS rtc_outbound_rtp_stream_stats (
     fir_count bigint NULL,
     pli_count bigint NULL,
     sli_count bigint NULL,
-    encoder_implementation character(255) NULL
+    encoder_implementation varchar(255) NULL
 );
 SELECT create_hypertable('rtc_outbound_rtp_stream_stats', 'time');
 
@@ -231,20 +231,20 @@ CREATE TABLE IF NOT EXISTS rtc_remote_outbound_rtp_stream_stats (
     sora_connection_id character(27) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
-    stats_type character(255) NOT NULL,
-    stats_id character(255) NOT NULL,
+    stats_type varchar(255) NOT NULL,
+    stats_id varchar(255) NOT NULL,
 
     -- RTCRtpStreamStats
     ssrc bigint NOT NULL,
-    kind character(255) NOT NULL,
-    transport_id character(255) NULL,
-    codec_id character(255) NULL,
+    kind varchar(255) NOT NULL,
+    transport_id varchar(255) NULL,
+    codec_id varchar(255) NULL,
 
     -- RTCSentRtpStreamStats
     packets_sent numeric NULL,
     bytes_sent numeric NULL,
 
-    local_id character(255) NULL,
+    local_id varchar(255) NULL,
     remote_timestamp double precision NULL,
     reports_sent numeric NULL,
     round_trip_time double precision NULL,
@@ -260,11 +260,11 @@ CREATE TABLE IF NOT EXISTS rtc_audio_source_stats (
     sora_connection_id character(27) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
-    stats_type character(255) NOT NULL,
-    stats_id character(255) NOT NULL,
+    stats_type varchar(255) NOT NULL,
+    stats_id varchar(255) NOT NULL,
 
-    track_identifier character(255) NULL,
-    kind character(255) NULL,
+    track_identifier varchar(255) NULL,
+    kind varchar(255) NULL,
     relayed_source boolean NULL,
 
     audio_level double precision NULL,
@@ -282,11 +282,11 @@ CREATE TABLE IF NOT EXISTS rtc_video_source_stats (
     sora_connection_id character(27) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
-    stats_type character(255) NOT NULL,
-    stats_id character(255) NOT NULL,
+    stats_type varchar(255) NOT NULL,
+    stats_id varchar(255) NOT NULL,
 
-    track_identifier character(255) NULL,
-    kind character(255) NULL,
+    track_identifier varchar(255) NULL,
+    kind varchar(255) NULL,
     relayed_source boolean NULL,
 
     width bigint NULL,
@@ -305,13 +305,13 @@ CREATE TABLE IF NOT EXISTS rtc_data_channel_stats (
     sora_connection_id character(27) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
-    stats_type character(255) NOT NULL,
-    stats_id character(255) NOT NULL,
+    stats_type varchar(255) NOT NULL,
+    stats_id varchar(255) NOT NULL,
 
-    label character(255) NULL,
-    protocol character(255) NULL,
+    label varchar(255) NULL,
+    protocol varchar(255) NULL,
     data_channel_identifier integer NULL,
-    state character(255) NULL,
+    state varchar(255) NULL,
     messages_sent bigint NULL,
     bytes_sent numeric NULL,
     messages_received bigint NULL,
@@ -327,25 +327,25 @@ CREATE TABLE IF NOT EXISTS rtc_transport_stats (
     sora_connection_id character(27) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
-    stats_type character(255) NOT NULL,
-    stats_id character(255) NOT NULL,
+    stats_type varchar(255) NOT NULL,
+    stats_id varchar(255) NOT NULL,
 
     packets_sent numeric NULL,
     packets_received numeric NULL,
     bytes_sent numeric NULL,
     bytes_received numeric NULL,
     rtcp_transport_stats_id character(255) NULL,
-    ice_role character(255) NULL,
-    ice_local_username_fragment character(255) NULL,
-    dtls_state character(255) NULL,
-    ice_state character(255) NULL,
+    ice_role varchar(255) NULL,
+    ice_local_username_fragment varchar(255) NULL,
+    dtls_state varchar(255) NULL,
+    ice_state varchar(255) NULL,
     selected_candidate_pair_id character(255) NULL,
-    local_certificate_id character(255) NULL,
-    remote_certificate_id character(255) NULL,
-    tls_version character(255) NULL,
-    dtls_cipher character(255) NULL,
-    srtp_cipher character(255) NULL,
-    tls_group character(255) NULL,
+    local_certificate_id varchar(255) NULL,
+    remote_certificate_id varchar(255) NULL,
+    tls_version varchar(255) NULL,
+    dtls_cipher varchar(255) NULL,
+    srtp_cipher varchar(255) NULL,
+    tls_group varchar(255) NULL,
     selected_candidate_pair_changes bigint NULL
 );
 SELECT create_hypertable('rtc_transport_stats', 'time');
@@ -358,13 +358,13 @@ CREATE TABLE IF NOT EXISTS rtc_ice_candidate_pair_stats (
     sora_connection_id character(27) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
-    stats_type character(255) NOT NULL,
-    stats_id character(255) NOT NULL,
+    stats_type varchar(255) NOT NULL,
+    stats_id varchar(255) NOT NULL,
 
-    transport_id character(255) NOT NULL,
-    local_candidate_id character(255) NOT NULL,
-    remote_candidate_id character(255) NOT NULL,
-    state character(255) NOT NULL,
+    transport_id varchar(255) NOT NULL,
+    local_candidate_id varchar(255) NOT NULL,
+    remote_candidate_id varchar(255) NOT NULL,
+    state varchar(255) NOT NULL,
     nominated boolean NULL,
     packets_sent numeric NULL,
     packets_received numeric NULL,
@@ -403,16 +403,16 @@ CREATE TABLE IF NOT EXISTS rtc_ice_candidate_stats (
     sora_connection_id character(27) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
-    stats_type character(255) NOT NULL,
-    stats_id character(255) NOT NULL,
+    stats_type varchar(255) NOT NULL,
+    stats_id varchar(255) NOT NULL,
 
-    transport_id character(255) NOT NULL,
-    address character(255) NULL,
+    transport_id varchar(255) NOT NULL,
+    address varchar(255) NULL,
     port integer NULL,
-    protocol character(255) NULL,
-    candidate_type character(255) NOT NULL,
+    protocol varchar(255) NULL,
+    candidate_type varchar(255) NOT NULL,
     priority integer NULL,
-    url character(255) NULL,
-    relay_protocol character(255) NULL
+    url varchar(255) NULL,
+    relay_protocol varchar(255) NULL
 );
 SELECT create_hypertable('rtc_ice_candidate_stats', 'time');
