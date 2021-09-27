@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS sora_connections (
 
     sora_channel_id varchar(255) NOT NULL,
     sora_client_id varchar(255) NOT NULL,
-    sora_connection_id character(27) NOT NULL,
+    sora_connection_id character(26) NOT NULL,
 
     sora_role character(8) NOT NULL,
 
@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS rtc_codec_stats;
 CREATE TABLE IF NOT EXISTS rtc_codec_stats (
     time timestamptz NOT NULL,
 
-    sora_connection_id character(27) NOT NULL,
+    sora_connection_id character(26) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
     stats_type varchar(255) NOT NULL,
@@ -46,7 +46,7 @@ DROP TABLE IF EXISTS rtc_inbound_rtp_stream_stats;
 CREATE TABLE IF NOT EXISTS rtc_inbound_rtp_stream_stats (
     time timestamptz NOT NULL,
 
-    sora_connection_id character(27) NOT NULL,
+    sora_connection_id character(26) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
     stats_type varchar(255) NOT NULL,
@@ -125,7 +125,7 @@ DROP TABLE IF EXISTS rtc_remote_inbound_rtp_stream_stats;
 CREATE TABLE IF NOT EXISTS rtc_remote_inbound_rtp_stream_stats (
     time timestamptz NOT NULL,
 
-    sora_connection_id character(27) NOT NULL,
+    sora_connection_id character(26) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
     stats_type varchar(255) NOT NULL,
@@ -167,7 +167,7 @@ DROP TABLE IF EXISTS rtc_outbound_rtp_stream_stats;
 CREATE TABLE IF NOT EXISTS rtc_outbound_rtp_stream_stats (
     time timestamptz NOT NULL,
 
-    sora_connection_id character(27) NOT NULL,
+    sora_connection_id character(26) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
     stats_type varchar(255) NOT NULL,
@@ -228,7 +228,7 @@ DROP TABLE IF EXISTS rtc_remote_outbound_rtp_stream_stats;
 CREATE TABLE IF NOT EXISTS rtc_remote_outbound_rtp_stream_stats (
     time timestamptz NOT NULL,
 
-    sora_connection_id character(27) NOT NULL,
+    sora_connection_id character(26) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
     stats_type varchar(255) NOT NULL,
@@ -257,7 +257,7 @@ DROP TABLE IF EXISTS rtc_audio_source_stats;
 CREATE TABLE IF NOT EXISTS rtc_audio_source_stats (
     time timestamptz NOT NULL,
 
-    sora_connection_id character(27) NOT NULL,
+    sora_connection_id character(26) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
     stats_type varchar(255) NOT NULL,
@@ -279,7 +279,7 @@ DROP TABLE IF EXISTS rtc_video_source_stats;
 CREATE TABLE IF NOT EXISTS rtc_video_source_stats (
     time timestamptz NOT NULL,
 
-    sora_connection_id character(27) NOT NULL,
+    sora_connection_id character(26) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
     stats_type varchar(255) NOT NULL,
@@ -302,7 +302,7 @@ DROP TABLE IF EXISTS rtc_data_channel_stats;
 CREATE TABLE IF NOT EXISTS rtc_data_channel_stats (
     time timestamptz NOT NULL,
 
-    sora_connection_id character(27) NOT NULL,
+    sora_connection_id character(26) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
     stats_type varchar(255) NOT NULL,
@@ -324,7 +324,7 @@ DROP TABLE IF EXISTS rtc_transport_stats;
 CREATE TABLE IF NOT EXISTS rtc_transport_stats (
     time timestamptz NOT NULL,
 
-    sora_connection_id character(27) NOT NULL,
+    sora_connection_id character(26) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
     stats_type varchar(255) NOT NULL,
@@ -355,7 +355,7 @@ DROP TABLE IF EXISTS rtc_ice_candidate_pair_stats;
 CREATE TABLE IF NOT EXISTS rtc_ice_candidate_pair_stats (
     time timestamptz NOT NULL,
 
-    sora_connection_id character(27) NOT NULL,
+    sora_connection_id character(26) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
     stats_type varchar(255) NOT NULL,
@@ -400,7 +400,7 @@ DROP TABLE IF EXISTS rtc_ice_candidate_stats;
 CREATE TABLE IF NOT EXISTS rtc_ice_candidate_stats (
     time timestamptz NOT NULL,
 
-    sora_connection_id character(27) NOT NULL,
+    sora_connection_id character(26) NOT NULL,
 
     stats_timestamp double precision NOT NULL,
     stats_type varchar(255) NOT NULL,
