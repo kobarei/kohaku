@@ -225,7 +225,7 @@ var (
   }
 `
 
-	collectorTypeRemoteInboundJSON = `{
+	collectorTypeRemoteInboundRTPJSON = `{
     "channel_id":"sora",
     "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
     "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
@@ -302,6 +302,10 @@ const (
 	connStr     = "postgres://postgres:password@127.0.0.1:5432/%s?sslmode=disable"
 	dbName      = "kohakutest"
 	sqlFilePath = "script/timescaledb.sql"
+
+	channelID    = "sora"
+	connectionID = "KB0DR2FWT13C70S0NYS11P04C0"
+	clientID     = "KB0DR2FWT13C70S0NYS11P04C0"
 )
 
 var (
@@ -315,6 +319,18 @@ var (
 
 func createTable() error {
 	return exec.Command("psql", "-d", dbName, "-f", sqlFilePath).Run()
+}
+
+func getStatsType(table, connectionID string) (*string, error) {
+	selectSQL := fmt.Sprintf("SELECT stats_type FROM %s WHERE sora_connection_id=$1", table)
+	row := pool.QueryRow(context.Background(), selectSQL, connectionID)
+
+	var statsType string
+	if err := row.Scan(&statsType); err != nil {
+		return nil, err
+	}
+
+	return &statsType, nil
 }
 
 func TestMain(m *testing.M) {
@@ -337,7 +353,6 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		panic(err)
 	}
-
 	config, err := pgxpool.ParseConfig(kohakuDBURL)
 	if err != nil {
 		panic(err)
@@ -368,19 +383,6 @@ func TestMain(m *testing.M) {
 
 func TestTypeOutboundRTPCollector(t *testing.T) {
 	// Setup
-	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeCodecJSON))
-	req.Header.Set("content-type", "application/json")
-	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
-
-	// Assertions
-	server.Collector(c)
-	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
-}
-
-func TestTypeCodecCollector(t *testing.T) {
-	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeOutboundRTPJSON))
 	req.Header.Set("content-type", "application/json")
 	rec := httptest.NewRecorder()
@@ -390,6 +392,31 @@ func TestTypeCodecCollector(t *testing.T) {
 	// Assertions
 	server.Collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+
+	statsType, err := getStatsType("rtc_outbound_rtp_stream_stats", "2QB23E50YD6FKEFG9GW2TX86RC")
+	if err != nil {
+		panic(err)
+	}
+	assert.Equal(t, "outbound-rtp", *statsType)
+}
+
+func TestTypeCodecCollector(t *testing.T) {
+	// Setup
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeCodecJSON))
+	req.Header.Set("content-type", "application/json")
+	rec := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(rec)
+	c.Request = req
+
+	// Assertions
+	server.Collector(c)
+	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+
+	statsType, err := getStatsType("rtc_codec_stats", "2QB23E50YD6FKEFG9GW2TX86RC")
+	if err != nil {
+		panic(err)
+	}
+	assert.Equal(t, "codec", *statsType)
 }
 
 func TestTypeMediaSourceCollector(t *testing.T) {
@@ -403,6 +430,12 @@ func TestTypeMediaSourceCollector(t *testing.T) {
 	// Assertions
 	server.Collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+
+	statsType, err := getStatsType("rtc_audio_source_stats", connectionID)
+	if err != nil {
+		panic(err)
+	}
+	assert.Equal(t, "media-source", *statsType)
 }
 
 func TestTypeDataChannelCollector(t *testing.T) {
@@ -416,6 +449,12 @@ func TestTypeDataChannelCollector(t *testing.T) {
 	// Assertions
 	server.Collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+
+	statsType, err := getStatsType("rtc_data_channel_stats", connectionID)
+	if err != nil {
+		panic(err)
+	}
+	assert.Equal(t, "data-channel", *statsType)
 }
 
 func TestTypeCandidatePairCollector(t *testing.T) {
@@ -429,11 +468,17 @@ func TestTypeCandidatePairCollector(t *testing.T) {
 	// Assertions
 	server.Collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+
+	statsType, err := getStatsType("rtc_ice_candidate_pair_stats", connectionID)
+	if err != nil {
+		panic(err)
+	}
+	assert.Equal(t, "candidate-pair", *statsType)
 }
 
-func TestTypeRemoteInboundCollector(t *testing.T) {
+func TestTypeRemoteInboundRTPCollector(t *testing.T) {
 	// Setup
-	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeRemoteInboundJSON))
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeRemoteInboundRTPJSON))
 	req.Header.Set("content-type", "application/json")
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
@@ -442,6 +487,12 @@ func TestTypeRemoteInboundCollector(t *testing.T) {
 	// Assertions
 	server.Collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+
+	statsType, err := getStatsType("rtc_remote_inbound_rtp_stream_stats", connectionID)
+	if err != nil {
+		panic(err)
+	}
+	assert.Equal(t, "remote-inbound-rtp", *statsType)
 }
 
 func TestTypeTransportCollector(t *testing.T) {
@@ -455,4 +506,10 @@ func TestTypeTransportCollector(t *testing.T) {
 	// Assertions
 	server.Collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+
+	statsType, err := getStatsType("rtc_transport_stats", connectionID)
+	if err != nil {
+		panic(err)
+	}
+	assert.Equal(t, "transport", *statsType)
 }
