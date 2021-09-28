@@ -309,12 +309,13 @@ const (
 )
 
 var (
-	pool          *pgxpool.Pool
-	postgresDBURL = fmt.Sprintf(connStr, "postgres")
-	kohakuDBURL   = fmt.Sprintf(connStr, dbName)
-	dropDBSQL     = fmt.Sprintf("DROP DATABASE IF EXISTS %s", dbName)
-	createDBSQL   = fmt.Sprintf("CREATE DATABASE %s", dbName)
-	server        *Server
+	pool               *pgxpool.Pool
+	postgresDBURL      = fmt.Sprintf(connStr, "postgres")
+	kohakuDBURL        = fmt.Sprintf(connStr, dbName)
+	dropDBSQL          = fmt.Sprintf("DROP DATABASE IF EXISTS %s", dbName)
+	createDBSQL        = fmt.Sprintf("CREATE DATABASE %s", dbName)
+	createExtensionSQL = fmt.Sprintf("CREATE EXTENSION IF NOT EXISTS timescaledb")
+	server             *Server
 )
 
 func createTable() error {
@@ -358,6 +359,11 @@ func TestMain(m *testing.M) {
 		panic(err)
 	}
 	pool, err = pgxpool.ConnectConfig(context.Background(), config)
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = pool.Exec(context.Background(), createExtensionSQL)
 	if err != nil {
 		panic(err)
 	}
