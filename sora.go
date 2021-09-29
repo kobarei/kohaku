@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+// TODO: validator 処理の追加
+
 // type は PeerConnection / SoraConnection
 // type: connection.remote / type: connection.sora
 type SoraStatsExporter struct {
@@ -14,11 +16,12 @@ type SoraStatsExporter struct {
 	Version   string    `json:"version"`
 	Timestamp time.Time `json:"timestamp" binding:"required"`
 
-	Role string `json:"role" binding:"required"`
+	// TODO: binding:"required,len=8" を追加する
+	Role string `json:"role"`
 
 	ChannelID    string `json:"channel_id" binding:"required"`
 	ClientID     string `json:"client_id" binding:"required"`
-	ConnectionID string `json:"connection_id" binding:"required"`
+	ConnectionID string `json:"connection_id" binding:"required,len=26"`
 
 	// TODO(v): required にする
 	Multistream bool `json:"multistream"`
