@@ -3,6 +3,7 @@ package kohaku
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -298,6 +299,28 @@ var (
 `
 )
 
+var (
+	invalidConnectionIDLengthJSON = `{
+    "role": "sendrecv",
+    "type": "connection.remote",
+    "channel_id": "sora",
+    "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
+    "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC===",
+    "stats": [{
+      "id": "RTCCodec_video_V04mIx_Inbound_120",
+      "timestamp": 1628869622194.298,
+      "type": "codec",
+      "transportId": "RTCTransport_data_1",
+      "payloadType": 120,
+      "mimeType": "video/VP9",
+      "clockRate": 90000,
+      "sdpFmtpLine": "profile-id=0"
+    }],
+    "timestamp":"2021-09-24T08:15:31.854427Z",
+    "version":"2021.2-canary.23"}
+  }`
+)
+
 const (
 	connStr     = "postgres://postgres:password@127.0.0.1:5432/%s?sslmode=disable"
 	dbName      = "kohakutest"
@@ -518,4 +541,25 @@ func TestTypeTransportCollector(t *testing.T) {
 		panic(err)
 	}
 	assert.Equal(t, "transport", *statsType)
+}
+
+func TestInvalidConnectionIDLength(t *testing.T) {
+	// Setup
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(invalidConnectionIDLengthJSON))
+	req.Header.Set("content-type", "application/json")
+	rec := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(rec)
+	c.Request = req
+
+	// Assertions
+	server.Collector(c)
+	resp := rec.Result()
+
+	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	assert.NotEmpty(t, body)
 }
