@@ -24,6 +24,7 @@ Please read https://github.com/shiguredo/oss/blob/master/README.en.md before use
 Apache License 2.0
 
 ```
+Copyright 2021, Hiroshi Yoshida （Original Author)
 Copyright 2021, Shiguredo Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
