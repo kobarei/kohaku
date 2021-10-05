@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS sora_connections (
     sora_client_id varchar(255) NOT NULL,
     sora_connection_id character(26) NOT NULL,
 
+    sora_session_id character(26) NOT NULL,
+
     sora_role character(8) NOT NULL,
 
     sora_version varchar(255) NOT NULL,

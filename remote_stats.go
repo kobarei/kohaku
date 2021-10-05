@@ -17,6 +17,7 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 			"sora_channel_id":    exporter.ChannelID,
 			"sora_client_id":     exporter.ClientID,
 			"sora_connection_id": exporter.ConnectionID,
+			"sora_session_id":    exporter.SessionID,
 		})
 	le := goqu.L("NOT EXISTS ?", sq)
 
@@ -26,17 +27,19 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 			"sora_channel_id",
 			"sora_client_id",
 			"sora_connection_id",
+			"sora_session_id",
 			"sora_role",
 			"sora_label",
 			"sora_version",
 		).
 		FromQuery(
 			goqu.Select(
-				goqu.L("?, ?, ?, ?, ?, ?, ?",
+				goqu.L("?, ?, ?, ?, ?, ?, ?, ?",
 					exporter.Timestamp,
 					exporter.ChannelID,
 					exporter.ClientID,
 					exporter.ConnectionID,
+					exporter.SessionID,
 					exporter.Role,
 					exporter.Label,
 					exporter.Version,

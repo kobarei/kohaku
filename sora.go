@@ -23,6 +23,8 @@ type SoraStatsExporter struct {
 	ClientID     string `json:"client_id" binding:"required"`
 	ConnectionID string `json:"connection_id" binding:"required,len=26"`
 
+	SessionID string `json:"session_id" binding:"required,len=26"`
+
 	// TODO(v): required にする
 	Multistream bool `json:"multistream"`
 	Simulcast   bool `json:"simulcast"`
