@@ -39,3 +39,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+## 優先実装
+
+優先実装とは Sora のライセンスを契約頂いているお客様限定で Momo の実装予定機能を有償にて前倒しで実装することです。
+
+### 優先実装が可能な機能一覧
+
+**詳細は Discord やメールなどでお気軽にお問い合わせください**
+
+- AWS Timestream 対応
