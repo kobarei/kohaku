@@ -25,6 +25,7 @@ var (
     "channel_id": "sora",
     "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
     "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
+    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
     "stats": [{
       "id": "RTCCodec_video_V04mIx_Inbound_120",
       "timestamp": 1628869622194.298,
@@ -45,6 +46,7 @@ var (
     "channel_id": "sora",
     "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
     "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
+    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
     "stats": [{
       "id": "RTCOutboundRTPVideoStream_1028062523",
       "timestamp": 1628927446077.817,
@@ -88,6 +90,7 @@ var (
     "channel_id":"sora",
     "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
     "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
     "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
     "label":"WebRTC.SFU.Sora",
     "stats":[{
@@ -122,6 +125,7 @@ var (
     "channel_id":"sora",
     "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
     "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
     "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
     "label":"WebRTC.SFU.Sora",
     "stats":[{
@@ -196,6 +200,7 @@ var (
     "channel_id":"sora",
     "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
     "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
     "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
     "label":"WebRTC.SFU.Sora",
     "stats":[{
@@ -230,6 +235,7 @@ var (
     "channel_id":"sora",
     "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
     "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
     "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
     "label":"WebRTC.SFU.Sora",
     "stats":[{
@@ -273,6 +279,7 @@ var (
     "channel_id":"sora",
     "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
     "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
+    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
     "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
     "label":"WebRTC.SFU.Sora",
     "stats":[{
@@ -306,6 +313,28 @@ var (
     "channel_id": "sora",
     "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
     "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC===",
+    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
+    "stats": [{
+      "id": "RTCCodec_video_V04mIx_Inbound_120",
+      "timestamp": 1628869622194.298,
+      "type": "codec",
+      "transportId": "RTCTransport_data_1",
+      "payloadType": 120,
+      "mimeType": "video/VP9",
+      "clockRate": 90000,
+      "sdpFmtpLine": "profile-id=0"
+    }],
+    "timestamp":"2021-09-24T08:15:31.854427Z",
+    "version":"2021.2-canary.23"}
+  }`
+
+	unexpectedTypeJSON = `{
+    "role": "sendrecv",
+    "type": "connection.unexpected_type",
+    "channel_id": "sora",
+    "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
+    "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
+    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
     "stats": [{
       "id": "RTCCodec_video_V04mIx_Inbound_120",
       "timestamp": 1628869622194.298,
@@ -562,4 +591,25 @@ func TestInvalidConnectionIDLength(t *testing.T) {
 		panic(err)
 	}
 	assert.NotEmpty(t, body)
+}
+
+func TestUnexpectedType(t *testing.T) {
+	// Setup
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(unexpectedTypeJSON))
+	req.Header.Set("content-type", "application/json")
+	rec := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(rec)
+	c.Request = req
+
+	// Assertions
+	server.Collector(c)
+	resp := rec.Result()
+
+	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	assert.Empty(t, body)
 }
