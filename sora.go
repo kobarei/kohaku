@@ -16,14 +16,12 @@ type SoraStatsExporter struct {
 	Version   string    `json:"version"`
 	Timestamp time.Time `json:"timestamp" binding:"required"`
 
-	// TODO: binding:"required,len=8" を追加する
-	Role string `json:"role"`
+	Role string `json:"role" binding:"required,len=8"`
 
 	ChannelID    string `json:"channel_id" binding:"required"`
+	SessionID    string `json:"session_id" binding:"required,len=26"`
 	ClientID     string `json:"client_id" binding:"required"`
 	ConnectionID string `json:"connection_id" binding:"required,len=26"`
-
-	SessionID string `json:"session_id" binding:"required,len=26"`
 
 	// TODO(v): required にする
 	Multistream bool `json:"multistream"`
