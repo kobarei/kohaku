@@ -1,18 +1,13 @@
 -- https://www.w3.org/TR/webrtc-stats/#dom-rtcstats
--- https://docs.timescale.com/timescaledb/latest/how-to-guides/write-data/insert/#insert
--- https://www.postgresql.jp/document/12/html/datatype-character.html
--- https://www.postgresql.jp/document/12/html/datatype-datetime.html
--- https://www.postgresql.jp/document/12/html/datatype-numeric.html
 
 DROP TABLE IF EXISTS sora_connections;
 CREATE TABLE IF NOT EXISTS sora_connections (
     time timestamptz NOT NULL,
 
     sora_channel_id varchar(255) NOT NULL,
+    sora_session_id character(26) NOT NULL,
     sora_client_id varchar(255) NOT NULL,
     sora_connection_id character(26) NOT NULL,
-
-    sora_session_id character(26) NOT NULL,
 
     sora_role character(8) NOT NULL,
 
