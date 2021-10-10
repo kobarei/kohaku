@@ -2,6 +2,7 @@
 
 DROP TABLE IF EXISTS sora_connections;
 CREATE TABLE IF NOT EXISTS sora_connections (
+    -- TODO(v): time やめる
     time timestamptz NOT NULL,
 
     sora_channel_id varchar(255) NOT NULL,
