@@ -31,13 +31,13 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 			"sora_role",
 			"sora_multistream",
 			"sora_simulcast",
-			"sora_spotliht",
+			"sora_spotlight",
 			"sora_label",
 			"sora_version",
 		).
 		FromQuery(
 			goqu.Select(
-				goqu.L("?, ?, ?, ?, ?, ?, ?, ?",
+				goqu.L("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?",
 					exporter.Timestamp,
 					exporter.ChannelID,
 					exporter.ClientID,

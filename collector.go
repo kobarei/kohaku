@@ -1,7 +1,6 @@
 package kohaku
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -17,9 +16,6 @@ func (s *Server) Collector(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	fmt.Println(exporter.Multistream)
-	fmt.Println(exporter.Simulcast)
-	fmt.Println(exporter.Spotlight)
 
 	// exporter.Type の conection.remote にのみ対応する
 	// TODO(v): 将来的には conneciton.sora やそれ以外にも対応していく
