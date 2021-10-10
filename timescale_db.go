@@ -9,9 +9,14 @@ type SoraConnections struct {
 
 	ChannelID    string `db:"sora_channel_id"`
 	ClientID     string `db:"sora_client_id"`
+	SessionID    string `db:"sora_session_id"`
 	ConnectionID string `db:"sora_connection_id"`
 
 	Role string `db:"sora_role"`
+
+	Multistream bool `db:"sora_multistream"`
+	Simulcast   bool `db:"sora_simulcast"`
+	Spotlight   bool `db:"sora_spotlight"`
 
 	Label   string `db:"sora_label"`
 	Version string `db:"sora_version"`
