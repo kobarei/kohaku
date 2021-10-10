@@ -23,10 +23,9 @@ type SoraStatsExporter struct {
 	ClientID     string `json:"client_id" binding:"required"`
 	ConnectionID string `json:"connection_id" binding:"required,len=26"`
 
-	// TODO(v): required にする
-	Multistream bool `json:"multistream"`
-	Simulcast   bool `json:"simulcast"`
-	Spotlight   bool `json:"spotlight"`
+	Multistream bool `json:"multistream" binding:"required"`
+	Simulcast   bool `json:"simulcast" binding:"required"`
+	Spotlight   bool `json:"spotlight" binding:"required"`
 
 	Stats []json.RawMessage `json:"stats" binding:"required"`
 }

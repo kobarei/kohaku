@@ -11,6 +11,10 @@ CREATE TABLE IF NOT EXISTS sora_connections (
 
     sora_role character(8) NOT NULL,
 
+    sora_multistream boolean NOT NULL,
+    sora_simulcast boolean NOT NULL,
+    sora_spotlight boolean NOT NULL,
+
     sora_version varchar(255) NOT NULL,
     sora_label varchar(255) NOT NULL
 );
