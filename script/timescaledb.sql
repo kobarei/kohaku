@@ -2,7 +2,7 @@
 
 DROP TABLE IF EXISTS sora_connections;
 CREATE TABLE IF NOT EXISTS sora_connections (
-    -- TODO: pk モデルに変更する?
+    -- TODO(v): time やめる
     time timestamptz NOT NULL,
 
     sora_channel_id varchar(255) NOT NULL,
@@ -12,11 +12,10 @@ CREATE TABLE IF NOT EXISTS sora_connections (
 
     sora_role character(8) NOT NULL,
 
-    -- TODO: 追加情報
-    -- simulcast: boolean
-    -- multisteream: boolean
-    -- spotlight: boolean
-    -- TODO: audio? video?
+    sora_multistream boolean NOT NULL,
+    sora_simulcast boolean NOT NULL,
+    sora_spotlight boolean NOT NULL,
+    -- TODO(v): audio? video?
 
     sora_version varchar(255) NOT NULL,
     sora_label varchar(255) NOT NULL
