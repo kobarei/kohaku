@@ -18,8 +18,10 @@ type SoraStatsExporter struct {
 
 	Role string `json:"role" binding:"required,len=8"`
 
-	ChannelID    string `json:"channel_id" binding:"required"`
-	SessionID    string `json:"session_id" binding:"required,len=26"`
+	// TODO(v): 最大 255 バイト
+	ChannelID string `json:"channel_id" binding:"required"`
+	SessionID string `json:"session_id" binding:"required,len=26"`
+	// TODO(v): 最大 255 バイト
 	ClientID     string `json:"client_id" binding:"required"`
 	ConnectionID string `json:"connection_id" binding:"required,len=26"`
 

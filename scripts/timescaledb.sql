@@ -15,11 +15,11 @@ CREATE TABLE IF NOT EXISTS sora_connections (
     sora_multistream boolean NOT NULL,
     sora_simulcast boolean NOT NULL,
     sora_spotlight boolean NOT NULL,
+    -- TODO(v): audio? video?
 
     sora_version varchar(255) NOT NULL,
     sora_label varchar(255) NOT NULL
 );
-
 SELECT create_hypertable('sora_connections', 'time');
 
 DROP TABLE IF EXISTS rtc_codec_stats;
@@ -42,7 +42,11 @@ CREATE TABLE IF NOT EXISTS rtc_codec_stats (
     sdp_fmtp_line varchar(255) NULL
 );
 SELECT create_hypertable('rtc_codec_stats', 'time');
-
+ALTER TABLE rtc_codec_stats SET (
+    timescaledb.compress,
+    timescaledb.compress_segmentby = 'sora_connection_id'
+);
+SELECT add_compression_policy('rtc_codec_stats', INTERVAL '7 days');
 
 DROP TABLE IF EXISTS rtc_inbound_rtp_stream_stats;
 CREATE TABLE IF NOT EXISTS rtc_inbound_rtp_stream_stats (
@@ -122,6 +126,11 @@ CREATE TABLE IF NOT EXISTS rtc_inbound_rtp_stream_stats (
     decoder_implementation varchar(255) NULL
 );
 SELECT create_hypertable('rtc_inbound_rtp_stream_stats', 'time');
+ALTER TABLE rtc_inbound_rtp_stream_stats SET (
+    timescaledb.compress,
+    timescaledb.compress_segmentby = 'sora_connection_id'
+);
+SELECT add_compression_policy('rtc_inbound_rtp_stream_stats', INTERVAL '7 days');
 
 DROP TABLE IF EXISTS rtc_remote_inbound_rtp_stream_stats;
 CREATE TABLE IF NOT EXISTS rtc_remote_inbound_rtp_stream_stats (
@@ -163,7 +172,11 @@ CREATE TABLE IF NOT EXISTS rtc_remote_inbound_rtp_stream_stats (
     round_trip_time_measurements numeric NULL
 );
 SELECT create_hypertable('rtc_remote_inbound_rtp_stream_stats', 'time');
-
+ALTER TABLE rtc_remote_inbound_rtp_stream_stats SET (
+    timescaledb.compress,
+    timescaledb.compress_segmentby = 'sora_connection_id'
+);
+SELECT add_compression_policy('rtc_remote_inbound_rtp_stream_stats', INTERVAL '7 days');
 
 DROP TABLE IF EXISTS rtc_outbound_rtp_stream_stats;
 CREATE TABLE IF NOT EXISTS rtc_outbound_rtp_stream_stats (
@@ -225,6 +238,11 @@ CREATE TABLE IF NOT EXISTS rtc_outbound_rtp_stream_stats (
     encoder_implementation varchar(255) NULL
 );
 SELECT create_hypertable('rtc_outbound_rtp_stream_stats', 'time');
+ALTER TABLE rtc_outbound_rtp_stream_stats SET (
+    timescaledb.compress,
+    timescaledb.compress_segmentby = 'sora_connection_id'
+);
+SELECT add_compression_policy('rtc_outbound_rtp_stream_stats', INTERVAL '7 days');
 
 DROP TABLE IF EXISTS rtc_remote_outbound_rtp_stream_stats;
 CREATE TABLE IF NOT EXISTS rtc_remote_outbound_rtp_stream_stats (
@@ -254,6 +272,11 @@ CREATE TABLE IF NOT EXISTS rtc_remote_outbound_rtp_stream_stats (
     round_trip_time_measurements numeric NULL
 );
 SELECT create_hypertable('rtc_remote_outbound_rtp_stream_stats', 'time');
+ALTER TABLE rtc_remote_outbound_rtp_stream_stats SET (
+    timescaledb.compress,
+    timescaledb.compress_segmentby = 'sora_connection_id'
+);
+SELECT add_compression_policy('rtc_remote_outbound_rtp_stream_stats', INTERVAL '7 days');
 
 DROP TABLE IF EXISTS rtc_audio_source_stats;
 CREATE TABLE IF NOT EXISTS rtc_audio_source_stats (
@@ -276,6 +299,11 @@ CREATE TABLE IF NOT EXISTS rtc_audio_source_stats (
     echo_return_loss_enhancement double precision NULL
 );
 SELECT create_hypertable('rtc_audio_source_stats', 'time');
+ALTER TABLE rtc_audio_source_stats SET (
+    timescaledb.compress,
+    timescaledb.compress_segmentby = 'sora_connection_id'
+);
+SELECT add_compression_policy('rtc_audio_source_stats', INTERVAL '7 days');
 
 DROP TABLE IF EXISTS rtc_video_source_stats;
 CREATE TABLE IF NOT EXISTS rtc_video_source_stats (
@@ -298,7 +326,11 @@ CREATE TABLE IF NOT EXISTS rtc_video_source_stats (
     frames_per_second double precision NULL
 );
 SELECT create_hypertable('rtc_video_source_stats', 'time');
-
+ALTER TABLE rtc_video_source_stats SET (
+    timescaledb.compress,
+    timescaledb.compress_segmentby = 'sora_connection_id'
+);
+SELECT add_compression_policy('rtc_video_source_stats', INTERVAL '7 days');
 
 DROP TABLE IF EXISTS rtc_data_channel_stats;
 CREATE TABLE IF NOT EXISTS rtc_data_channel_stats (
@@ -320,7 +352,11 @@ CREATE TABLE IF NOT EXISTS rtc_data_channel_stats (
     bytes_received numeric NULL
 );
 SELECT create_hypertable('rtc_data_channel_stats', 'time');
-
+ALTER TABLE rtc_data_channel_stats SET (
+    timescaledb.compress,
+    timescaledb.compress_segmentby = 'sora_connection_id'
+);
+SELECT add_compression_policy('rtc_data_channel_stats', INTERVAL '7 days');
 
 DROP TABLE IF EXISTS rtc_transport_stats;
 CREATE TABLE IF NOT EXISTS rtc_transport_stats (
@@ -351,7 +387,11 @@ CREATE TABLE IF NOT EXISTS rtc_transport_stats (
     selected_candidate_pair_changes bigint NULL
 );
 SELECT create_hypertable('rtc_transport_stats', 'time');
-
+ALTER TABLE rtc_transport_stats SET (
+    timescaledb.compress,
+    timescaledb.compress_segmentby = 'sora_connection_id'
+);
+SELECT add_compression_policy('rtc_transport_stats', INTERVAL '7 days');
 
 DROP TABLE IF EXISTS rtc_ice_candidate_pair_stats;
 CREATE TABLE IF NOT EXISTS rtc_ice_candidate_pair_stats (
@@ -397,6 +437,11 @@ CREATE TABLE IF NOT EXISTS rtc_ice_candidate_pair_stats (
     response_bytes_sent numeric NULL
 );
 SELECT create_hypertable('rtc_ice_candidate_pair_stats', 'time');
+ALTER TABLE rtc_ice_candidate_pair_stats SET (
+    timescaledb.compress,
+    timescaledb.compress_segmentby = 'sora_connection_id'
+);
+SELECT add_compression_policy('rtc_ice_candidate_pair_stats', INTERVAL '7 days');
 
 DROP TABLE IF EXISTS rtc_ice_candidate_stats;
 CREATE TABLE IF NOT EXISTS rtc_ice_candidate_stats (
@@ -418,3 +463,8 @@ CREATE TABLE IF NOT EXISTS rtc_ice_candidate_stats (
     relay_protocol varchar(255) NULL
 );
 SELECT create_hypertable('rtc_ice_candidate_stats', 'time');
+ALTER TABLE rtc_ice_candidate_stats SET (
+    timescaledb.compress,
+    timescaledb.compress_segmentby = 'sora_connection_id'
+);
+SELECT add_compression_policy('rtc_ice_candidate_stats', INTERVAL '7 days');
