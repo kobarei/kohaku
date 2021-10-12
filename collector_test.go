@@ -36,6 +36,9 @@ var (
       "clockRate": 90000,
       "sdpFmtpLine": "profile-id=0"
     }],
+    "multistream": false,
+    "spotlight": false,
+    "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
     "version":"2021.2-canary.23"}
   }`
@@ -82,11 +85,15 @@ var (
       "nackCount": 0,
       "qpSum": 40927
     }],
+    "multistream": false,
+    "spotlight": false,
+    "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
     "version":"2021.2-canary.23"}
   }`
 
 	collectorTypeMediaSourceJSON = `{
+    "role": "sendrecv",
     "channel_id":"sora",
     "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
     "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
@@ -115,6 +122,9 @@ var (
       "framesPerSecond":30,
       "trackIdentifier":"9d2bc9fd-361e-4a74-9030-ee2212aadfee"
     }],
+    "multistream": false,
+    "spotlight": false,
+    "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
     "type":"connection.remote",
     "version":"2021.2-canary.23"
@@ -122,6 +132,7 @@ var (
 `
 
 	collectorTypeDataChannelJSON = `{
+    "role": "sendrecv",
     "channel_id":"sora",
     "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
     "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
@@ -190,6 +201,9 @@ var (
       "messagesReceived":0,
       "messagesSent":0
     }],
+    "multistream": false,
+    "spotlight": false,
+    "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
     "type":"connection.remote",
     "version":"2021.2-canary.23"
@@ -197,6 +211,7 @@ var (
 `
 
 	collectorTypeCandidatePairJSON = `{
+    "role": "sendrecv",
     "channel_id":"sora",
     "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
     "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
@@ -225,6 +240,9 @@ var (
       "totalRoundTripTime":5.00000000000000010408e-03,
       "transportId":"RTCTransport_data_1"
     }],
+    "multistream": false,
+    "spotlight": false,
+    "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
     "type":"connection.remote",
     "version":"2021.2-canary.23"
@@ -232,6 +250,7 @@ var (
 `
 
 	collectorTypeRemoteInboundRTPJSON = `{
+    "role": "sendrecv",
     "channel_id":"sora",
     "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
     "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
@@ -269,6 +288,9 @@ var (
       "totalRoundTripTime":1.00000000000000002082e-02,
       "transportId":"RTCTransport_data_1"
     }],
+    "multistream": false,
+    "spotlight": false,
+    "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
     "type":"connection.remote",
     "version":"2021.2-canary.23"
@@ -276,6 +298,7 @@ var (
 `
 
 	collectorTypeTransportJSON = `{
+    "role": "sendrecv",
     "channel_id":"sora",
     "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
     "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
@@ -299,6 +322,9 @@ var (
       "srtpCipher":"AEAD_AES_128_GCM",
       "tlsVersion":"FEFD"
     }],
+    "multistream": false,
+    "spotlight": false,
+    "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
     "type":"connection.remote",
     "version":"2021.2-canary.23"
@@ -324,6 +350,9 @@ var (
       "clockRate": 90000,
       "sdpFmtpLine": "profile-id=0"
     }],
+    "multistream": false,
+    "spotlight": false,
+    "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
     "version":"2021.2-canary.23"}
   }`
@@ -345,7 +374,33 @@ var (
       "clockRate": 90000,
       "sdpFmtpLine": "profile-id=0"
     }],
+    "multistream": false,
+    "spotlight": false,
+    "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
+    "version":"2021.2-canary.23"}
+  }`
+
+	missingTimestampJSON = `{
+    "role": "sendrecv",
+    "type": "connection.unexpected_type",
+    "channel_id": "sora",
+    "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
+    "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
+    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
+    "stats": [{
+      "id": "RTCCodec_video_V04mIx_Inbound_120",
+      "timestamp": 1628869622194.298,
+      "type": "codec",
+      "transportId": "RTCTransport_data_1",
+      "payloadType": 120,
+      "mimeType": "video/VP9",
+      "clockRate": 90000,
+      "sdpFmtpLine": "profile-id=0"
+    }],
+    "multistream": false,
+    "spotlight": false,
+    "simulcast": false,
     "version":"2021.2-canary.23"}
   }`
 )
@@ -353,7 +408,7 @@ var (
 const (
 	connStr     = "postgres://postgres:password@127.0.0.1:5432/%s?sslmode=disable"
 	dbName      = "kohakutest"
-	sqlFilePath = "script/timescaledb.sql"
+	sqlFilePath = "scripts/timescaledb.sql"
 
 	channelID    = "sora"
 	connectionID = "KB0DR2FWT13C70S0NYS11P04C0"
@@ -612,4 +667,25 @@ func TestUnexpectedType(t *testing.T) {
 		panic(err)
 	}
 	assert.Empty(t, body)
+}
+
+func TestMissingTimestamp(t *testing.T) {
+	// Setup
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(missingTimestampJSON))
+	req.Header.Set("content-type", "application/json")
+	rec := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(rec)
+	c.Request = req
+
+	// Assertions
+	server.Collector(c)
+	resp := rec.Result()
+
+	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	assert.Equal(t, "{\"error\":\"Key: 'SoraStatsExporter.Timestamp' Error:Field validation for 'Timestamp' failed on the 'required' tag\"}", string(body))
 }

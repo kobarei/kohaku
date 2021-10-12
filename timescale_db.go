@@ -23,7 +23,7 @@ type SoraConnections struct {
 }
 
 type RTC struct {
-	Time time.Time `db:"time"`
+	Time *time.Time `db:"time"`
 
 	ConnectionID string `db:"sora_connection_id"`
 }
