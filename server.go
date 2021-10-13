@@ -10,6 +10,9 @@ import (
 
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
+
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-playground/validator/v10"
 )
 
 type Server struct {
@@ -46,6 +49,12 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 
 	// 統計情報を突っ込むところ
 	r.POST("/collector", s.Collector)
+
+	// Custom Validation Functions の登録
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		// TODO: タグ名を変更する
+		v.RegisterValidation("maxb", MaximumNumberOfBytesFunc)
+	}
 
 	return s
 }

@@ -403,6 +403,30 @@ var (
     "simulcast": false,
     "version":"2021.2-canary.23"}
   }`
+
+	invalidChannelIDLengthJSON = `{
+    "role": "sendrecv",
+    "type": "connection.remote",
+    "channel_id": "2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX",
+    "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
+    "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
+    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
+    "stats": [{
+      "id": "RTCCodec_video_V04mIx_Inbound_120",
+      "timestamp": 1628869622194.298,
+      "type": "codec",
+      "transportId": "RTCTransport_data_1",
+      "payloadType": 120,
+      "mimeType": "video/VP9",
+      "clockRate": 90000,
+      "sdpFmtpLine": "profile-id=0"
+    }],
+    "multistream": false,
+    "spotlight": false,
+    "simulcast": false,
+    "timestamp":"2021-09-24T08:15:31.854427Z",
+    "version":"2021.2-canary.23"}
+  }`
 )
 
 const (
@@ -687,5 +711,26 @@ func TestMissingTimestamp(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	assert.Equal(t, "{\"error\":\"Key: 'SoraStatsExporter.Timestamp' Error:Field validation for 'Timestamp' failed on the 'required' tag\"}", string(body))
+	assert.Equal(t, `{"error":"Key: 'SoraStatsExporter.Timestamp' Error:Field validation for 'Timestamp' failed on the 'required' tag"}`, string(body))
+}
+
+func TestInvalidChannelIDLength(t *testing.T) {
+	// Setup
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(invalidChannelIDLengthJSON))
+	req.Header.Set("content-type", "application/json")
+	rec := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(rec)
+	c.Request = req
+
+	// Assertions
+	server.Collector(c)
+	resp := rec.Result()
+
+	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	assert.Equal(t, `{"error":"Key: 'SoraStatsExporter.ChannelID' Error:Field validation for 'ChannelID' failed on the 'maxb' tag"}`, string(body))
 }
