@@ -92,6 +92,15 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 				return err
 			}
 
+			if s.PerDscpPacketsReceived != nil {
+				// record は一旦文字列として扱う
+				perDscpPacketsReceived, err := json.Marshal(s.PerDscpPacketsReceived)
+				if err != nil {
+					return err
+				}
+				s.PerDscpPacketsReceived = string(perDscpPacketsReceived)
+			}
+
 			ds := goqu.Insert("rtc_inbound_rtp_stream_stats").Rows(
 				RTCInboundRtpStream{
 					RTC:                      *rtc,
@@ -108,6 +117,24 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 			if err := json.Unmarshal(v, &s); err != nil {
 				return err
 			}
+
+			// record は一旦文字列として扱う
+			if s.Kind == "video" {
+				qualityLimitationDurations, err := json.Marshal(s.QualityLimitationDurations)
+				if err != nil {
+					return err
+				}
+				s.QualityLimitationDurations = string(qualityLimitationDurations)
+
+				if s.PerDscpPacketsSent != nil {
+					perDscpPacketsSent, err := json.Marshal(s.PerDscpPacketsSent)
+					if err != nil {
+						return err
+					}
+					s.PerDscpPacketsSent = string(perDscpPacketsSent)
+				}
+			}
+
 			ds := goqu.Insert("rtc_outbound_rtp_stream_stats").Rows(
 				RTCOutboundRtpStream{
 					RTC:                       *rtc,
