@@ -78,7 +78,7 @@ type RTCInboundRtpStreamStats struct {
 	FecPacketsDiscarded         uint64  `json:"fecPacketsDiscarded" db:"fec_packets_discarded"`                   // unsigned long long   fecPacketsDiscarded;
 	BytesReceived               uint64  `json:"bytesReceived" db:"bytes_received"`                                // unsigned long long   bytesReceived;
 	PacketsFailedDecryption     uint64  `json:"packetsFailedDecryption" db:"packets_failed_decryption"`           // unsigned long long   packetsFailedDecryption;
-	ApacketsDuplicated          uint64  `json:"packetsDuplicated" db:"packets_duplicated"`                        // unsigned long long   packetsDuplicated;
+	PacketsDuplicated           uint64  `json:"packetsDuplicated" db:"packets_duplicated"`                        // unsigned long long   packetsDuplicated;
 	// TODO(v): 特殊型
 	PerDscpPacketsReceived         interface{} `json:"perDscpPacketsReceived" db:"per_dscp_packets_received"`                 // record<USVString, unsigned long long> perDscpPacketsReceived;
 	NackCount                      uint32      `json:"nackCount" db:"nack_count"`                                             // unsigned long        nackCount;
