@@ -1,7 +1,10 @@
 package kohaku
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -45,6 +48,26 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 			// TODO(v): YAML で h2c と h2 を切り替えられるようにする
 			Handler: h2c.NewHandler(r, h2s),
 		},
+	}
+
+	http2H2c := c.Http2H2c
+	if !http2H2c {
+		if c.Http2ClientCACertFilePath != "" {
+			clientCAPath := c.Http2ClientCACertFilePath
+			clientCA, err := ioutil.ReadFile(clientCAPath)
+			if err != nil {
+				panic(err)
+			}
+
+			certPool := x509.NewCertPool()
+			_ = certPool.AppendCertsFromPEM(clientCA)
+
+			tlsConfig := &tls.Config{
+				ClientAuth: tls.RequireAndVerifyClientCert,
+				ClientCAs:  certPool,
+			}
+			s.Server.TLSConfig = tlsConfig
+		}
 	}
 
 	// 統計情報を突っ込むところ

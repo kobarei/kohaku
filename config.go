@@ -29,6 +29,8 @@ type KohakuConfig struct {
 	Http2CertFilePath string `yaml:"http2_cert_file_path"`
 	// TODO(v): 名前検討
 	Http2KeyFilePath string `yaml:"http2_key_file_path"`
+	// TODO: 名前検討
+	Http2ClientCACertFilePath string `yaml:"http2_client_ca_cert_file_path"`
 
 	Http2H2c                  bool   `yaml:"http2_h2c"`
 	Http2MaxConcurrentStreams uint32 `yaml:"http2_max_concurrent_streams"`

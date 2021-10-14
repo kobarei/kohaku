@@ -4,6 +4,7 @@ postgres_url: postgres://postgres:password@127.0.0.1:5432/kohaku?sslmode=disable
 
 http2_cert_file_path: ""
 http2_key_file_path: ""
+http2_client_ca_cert_file_path: ""
 http2_h2c: true
 http2_max_concurrent_streams: 250
 http2_max_read_frame_size: 1048576
