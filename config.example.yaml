@@ -1,5 +1,6 @@
 collector_port: 5890
 
+# TODO(v): timescaledb_url に変更検討
 postgres_url: postgres://postgres:password@127.0.0.1:5432/kohaku?sslmode=disable
 
 # TODO(v): let's encrypt リスペクトで設定名を以下に変更する
