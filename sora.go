@@ -19,6 +19,8 @@ type SoraStatsExporter struct {
 	Version   string     `json:"version"`
 	Timestamp *time.Time `json:"timestamp" binding:"required"`
 
+	// TODO(v): NodeName string `json:"node_name"`
+
 	Role string `json:"role" binding:"required,len=8"`
 
 	ChannelID    string `json:"channel_id" binding:"required,maxb=255"`
