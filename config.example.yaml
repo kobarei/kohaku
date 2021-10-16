@@ -2,9 +2,15 @@ collector_port: 5890
 
 postgres_url: postgres://postgres:password@127.0.0.1:5432/kohaku?sslmode=disable
 
+# TODO(v): let's encrypt リスペクトで設定名を以下に変更する
+# pem なのは前提とする
+# http2_fullchain_file: ""
 http2_cert_file_path: ""
+# http2_privkey_file: ""
 http2_key_file_path: ""
+# http2_verify_cacert_path: "dir"
 http2_client_ca_cert_file_path: ""
+# TOOD(v): デフォルトは h2c: false にする
 http2_h2c: true
 http2_max_concurrent_streams: 250
 http2_max_read_frame_size: 1048576
