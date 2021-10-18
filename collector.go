@@ -1,6 +1,7 @@
 package kohaku
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,6 +10,14 @@ import (
 
 // TODO: ログレベル、ログメッセージを変更する
 func (s *Server) Collector(c *gin.Context) {
+	if c.Request.Proto != "HTTP/2.0" {
+		err := fmt.Errorf("UNSUPPORTED-HTTP-VERSION: %s", c.Request.Proto)
+		log.Warn().Msg(err.Error())
+		// TODO: 505 を返すかの検討
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	// TODO(v): validator 処理
 	exporter := new(SoraStatsExporter)
 	if err := c.Bind(exporter); err != nil {
