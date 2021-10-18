@@ -522,6 +522,7 @@ func TestTypeOutboundRTPCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeOutboundRTPJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
@@ -541,6 +542,7 @@ func TestTypeCodecCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeCodecJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
@@ -560,6 +562,7 @@ func TestTypeMediaSourceCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeMediaSourceJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
@@ -579,6 +582,7 @@ func TestTypeDataChannelCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeDataChannelJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
@@ -598,6 +602,7 @@ func TestTypeCandidatePairCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeCandidatePairJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
@@ -617,6 +622,7 @@ func TestTypeRemoteInboundRTPCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeRemoteInboundRTPJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
@@ -636,6 +642,7 @@ func TestTypeTransportCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeTransportJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
@@ -655,6 +662,7 @@ func TestInvalidConnectionIDLength(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(invalidConnectionIDLengthJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
@@ -676,6 +684,7 @@ func TestUnexpectedType(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(unexpectedTypeJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
@@ -697,6 +706,7 @@ func TestMissingTimestamp(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(missingTimestampJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
@@ -718,6 +728,7 @@ func TestInvalidChannelIDLength(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(invalidChannelIDLengthJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
