@@ -15,8 +15,7 @@ var (
 )
 
 type KohakuConfig struct {
-	Debug bool `yaml:"debug"`
-
+	LogDebug  bool   `yaml:"log_debug"`
 	LogDir    string `yaml:"log_dir"`
 	LogName   string `yaml:"log_name"`
 	LogStdout bool   `yaml:"log_stdout"`

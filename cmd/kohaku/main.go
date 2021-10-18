@@ -44,7 +44,7 @@ func init() {
 	if err := kohaku.LoadConfigFromFlags(kohaku.ConfigFilePath); err != nil {
 		log.Fatalf("config file read error: %s", err)
 	}
-	err := kohaku.InitLogger(kohaku.Config.LogDir, kohaku.Config.LogName, kohaku.Config.Debug, kohaku.Config.LogStdout)
+	err := kohaku.InitLogger(kohaku.Config.LogDir, kohaku.Config.LogName, kohaku.Config.LogDebug, kohaku.Config.LogStdout)
 	if err != nil {
 		log.Fatalf("logger building failed. %s", err)
 	}
