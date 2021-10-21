@@ -31,6 +31,16 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
+	r.Use(
+		func(c *gin.Context) {
+			if c.Request.Proto != "HTTP/2.0" {
+				err := fmt.Errorf("UNSUPPORTED-HTTP-VERSION: %s", c.Request.Proto)
+				// TODO: 505 を返すかの検討
+				c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			}
+		},
+	)
+
 	// TODO(v): ヘルスチェック用の /status みたいなのあった方がいい
 	// TODO(v): こいつ自身の統計情報を /stats でとれた方がいい
 
