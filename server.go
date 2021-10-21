@@ -31,17 +31,8 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	r.Use(
-		func(c *gin.Context) {
-			if c.Request.Proto != "HTTP/2.0" {
-				err := fmt.Errorf("UNSUPPORTED-HTTP-VERSION: %s", c.Request.Proto)
-				// TODO: 505 を返すかの検討
-				c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			}
-		},
-	)
+	r.Use(validateHttpVersion())
 
-	// TODO(v): ヘルスチェック用の /status みたいなのあった方がいい
 	// TODO(v): こいつ自身の統計情報を /stats でとれた方がいい
 
 	h2s := &http2.Server{
@@ -54,8 +45,7 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 		config: c,
 		pool:   pool,
 		Server: http.Server{
-			Addr: fmt.Sprintf(":%d", c.CollectorPort),
-			// TODO(v): YAML で h2c と h2 を切り替えられるようにする
+			Addr:    fmt.Sprintf(":%d", c.CollectorPort),
 			Handler: h2c.NewHandler(r, h2s),
 		},
 	}
@@ -110,4 +100,14 @@ func (s *Server) Start(c *KohakuConfig) error {
 	}
 
 	return nil
+}
+
+func validateHttpVersion() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if c.Request.Proto != "HTTP/2.0" {
+			err := fmt.Errorf("UNSUPPORTED-HTTP-VERSION: %s", c.Request.Proto)
+			// TODO: 505 を返すかの検討
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
+	}
 }
