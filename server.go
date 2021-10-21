@@ -82,6 +82,8 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 
 	// 統計情報を突っ込むところ
 	r.POST("/collector", s.Collector)
+	// ヘルスチェック
+	r.POST("/status", s.Status)
 
 	// Custom Validation Functions の登録
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
