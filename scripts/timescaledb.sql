@@ -80,7 +80,8 @@ CREATE TABLE IF NOT EXISTS rtc_inbound_rtp_stream_stats (
     partial_frames_lost bigint NULL,
     full_frames_lost bigint NULL,
 
-    receiver_id varchar(255) NOT NULL,
+    -- required だが inbound-rtp に含まれていないため NULL を許容する
+    receiver_id varchar(255) NULL,
     remote_id varchar(255) NULL,
     frames_decoded bigint NULL,
     key_frames_decoded bigint NULL,
