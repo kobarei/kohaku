@@ -140,7 +140,6 @@ var (
     "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
     "label":"WebRTC.SFU.Sora",
     "stats":[{
-    },{
       "id":"RTCDataChannel_10",
       "label":"stats",
       "protocol":"",
