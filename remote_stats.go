@@ -68,7 +68,7 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 		}
 
 		// その後 type をみて struct をさらに別途デコードする
-		switch stats.Type {
+		switch *stats.Type {
 		case "codec":
 			s := new(RTCCodecStats)
 			if err := json.Unmarshal(v, &s); err != nil {
@@ -119,7 +119,7 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 			}
 
 			// record は一旦文字列として扱う
-			if s.Kind == "video" {
+			if *s.Kind == "video" {
 				qualityLimitationDurations, err := json.Marshal(s.QualityLimitationDurations)
 				if err != nil {
 					return err
@@ -184,7 +184,7 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 			if err := json.Unmarshal(v, &s); err != nil {
 				return err
 			}
-			switch s.Kind {
+			switch *s.Kind {
 			case "audio":
 				s := new(RTCAudioSourceStats)
 				if err := json.Unmarshal(v, &s); err != nil {
@@ -262,7 +262,7 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 			if err := json.Unmarshal(v, &s); err != nil {
 				return err
 			}
-			switch s.Kind {
+			switch *s.Kind {
 			case "audio":
 				s := new(RTCAudioSenderStats)
 				if err := json.Unmarshal(v, &s); err != nil {
@@ -280,7 +280,7 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 			if err := json.Unmarshal(v, &s); err != nil {
 				return err
 			}
-			switch s.Kind {
+			switch *s.Kind {
 			case "audio":
 				s := new(RTCAudioReceiverStats)
 				if err := json.Unmarshal(v, &s); err != nil {
