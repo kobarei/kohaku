@@ -16,6 +16,9 @@ import (
 
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
 type Server struct {
@@ -27,8 +30,7 @@ type Server struct {
 func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	r := gin.New()
 
-	// TODO(v): zerolog に切り替える
-	r.Use(gin.Logger())
+	r.Use(httpLogger())
 	r.Use(gin.Recovery())
 
 	r.Use(validateHttpVersion())
@@ -109,5 +111,32 @@ func validateHttpVersion() gin.HandlerFunc {
 			// TODO: 505 を返すかの検討
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		}
+	}
+}
+
+func httpLogger() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Next()
+
+		event := &zerolog.Event{}
+
+		switch c.Writer.Status() / 100 {
+		case 5:
+			event = log.Error()
+		case 4:
+			event = log.Warn()
+		default:
+			event = log.Info()
+		}
+
+		req := c.Request
+
+		event.
+			Int("status", c.Writer.Status()).
+			Str("address", req.RemoteAddr).
+			Str("method", req.Method).
+			Str("path", req.URL.Path).
+			Int64("len", req.ContentLength).
+			Msg("")
 	}
 }
