@@ -62,7 +62,10 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 			}
 
 			certPool := x509.NewCertPool()
-			_ = certPool.AppendCertsFromPEM(clientCA)
+			ok := certPool.AppendCertsFromPEM(clientCA)
+			if !ok {
+				panic("failed to append certificates")
+			}
 
 			tlsConfig := &tls.Config{
 				ClientAuth: tls.VerifyClientCertIfGiven,
