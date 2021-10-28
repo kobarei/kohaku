@@ -54,8 +54,8 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 
 	http2H2c := c.Http2H2c
 	if !http2H2c {
-		if c.Http2ClientCACertFilePath != "" {
-			clientCAPath := c.Http2ClientCACertFilePath
+		if c.Http2VerifyCacertPath != "" {
+			clientCAPath := c.Http2VerifyCacertPath
 			clientCA, err := ioutil.ReadFile(clientCAPath)
 			if err != nil {
 				panic(err)
@@ -97,9 +97,9 @@ func (s *Server) Start(c *KohakuConfig) error {
 			return err
 		}
 	} else {
-		http2CertFilePath := c.Http2CertFilePath
-		http2KeyFilePath := c.Http2KeyFilePath
-		if err := s.ListenAndServeTLS(http2CertFilePath, http2KeyFilePath); err != http.ErrServerClosed {
+		http2FullchainFile := c.Http2FullchainFile
+		http2PrivkeyFile := c.Http2PrivkeyFile
+		if err := s.ListenAndServeTLS(http2FullchainFile, http2PrivkeyFile); err != http.ErrServerClosed {
 			return err
 		}
 	}

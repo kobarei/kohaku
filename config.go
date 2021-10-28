@@ -22,14 +22,14 @@ type KohakuConfig struct {
 
 	CollectorPort int `yaml:"collector_port"`
 
-	PostgresURL string `yaml:"postgres_url"`
+	TimescaleURL string `yaml:"timescale_url"`
 
 	// TODO(v): 名前検討
-	Http2CertFilePath string `yaml:"http2_cert_file_path"`
+	Http2FullchainFile string `yaml:"http2_fullchain_file"`
 	// TODO(v): 名前検討
-	Http2KeyFilePath string `yaml:"http2_key_file_path"`
+	Http2PrivkeyFile string `yaml:"http2_privkey_file"`
 	// TODO: 名前検討
-	Http2ClientCACertFilePath string `yaml:"http2_client_ca_cert_file_path"`
+	Http2VerifyCacertPath string `yaml:"http2_verify_cacert_path"`
 
 	Http2H2c                  bool   `yaml:"http2_h2c"`
 	Http2MaxConcurrentStreams uint32 `yaml:"http2_max_concurrent_streams"`

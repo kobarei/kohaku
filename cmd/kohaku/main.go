@@ -53,7 +53,7 @@ func init() {
 }
 
 func main() {
-	var connStr = kohaku.Config.PostgresURL
+	var connStr = kohaku.Config.TimescaleURL
 	pool, err := NewDB(context.Background(), connStr)
 	if err != nil {
 		// TODO: エラーメッセージを修正する
