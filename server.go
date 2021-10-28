@@ -118,16 +118,7 @@ func httpLogger() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 
-		event := &zerolog.Event{}
-
-		switch c.Writer.Status() / 100 {
-		case 5:
-			event = log.Error()
-		case 4:
-			event = log.Warn()
-		default:
-			event = log.Info()
-		}
+		event := logEvent(c.Writer.Status())
 
 		req := c.Request
 
@@ -139,4 +130,19 @@ func httpLogger() gin.HandlerFunc {
 			Int64("len", req.ContentLength).
 			Msg("")
 	}
+}
+
+func logEvent(status int) *zerolog.Event {
+	var event *zerolog.Event
+
+	switch status / 100 {
+	case 5:
+		event = log.Error()
+	case 4:
+		event = log.Warn()
+	default:
+		event = log.Info()
+	}
+
+	return event
 }
