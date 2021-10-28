@@ -12,7 +12,7 @@ func (s *Server) Collector(c *gin.Context) {
 	// TODO(v): validator 処理
 	exporter := new(SoraStatsExporter)
 	if err := c.Bind(exporter); err != nil {
-		log.Warn().Msg(err.Error())
+		log.Debug().Msg(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
