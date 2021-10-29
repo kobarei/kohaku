@@ -19,11 +19,9 @@
 - bit_depth
 
 
-#### rtc_video_source_stats
+#### rtc_audio_source_stats
 
 - relayed_source
-- echo_return_loss
-- echo_return_loss_enhancement
 
 
 #### rtc_ice_candidate_pair_stats
