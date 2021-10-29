@@ -282,3 +282,5 @@
 #### rtc_data_channel_stats
 
 - data_channel_identifier
+
+    - 代わりに data_channel_id が送信されてきている
