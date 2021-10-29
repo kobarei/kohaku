@@ -4,28 +4,29 @@
 ## 統計情報に含まれない項目
 
 - 動作を確認した現時点では、次の項目はブラウザから送信されてきませんでしたので注意してください
-- 確認ブラウザ: Google Chrome 95
+
+### 確認ブラウザ: Google Chrome 95
 
 
-### rtc_codec_stats
+#### rtc_codec_stats
 
 - codec_type
 
 
-### rtc_video_source_stats
+#### rtc_video_source_stats
 
 - relayed_source
 - bit_depth
 
 
-### rtc_video_source_stats
+#### rtc_video_source_stats
 
 - relayed_source
 - echo_return_loss
 - echo_return_loss_enhancement
 
 
-### rtc_ice_candidate_pair_stats
+#### rtc_ice_candidate_pair_stats
 
 - pakcets_sent
 - pakcets_received
@@ -45,12 +46,12 @@
 - response_bytes_sent
 
 
-### rtc_ice_candidate_stats
+#### rtc_ice_candidate_stats
 
 - url
 
 
-### rtc_inbound_rtp_stream_stats
+#### rtc_inbound_rtp_stream_stats
 
 - packets_repaired
 - burst_packets_lost
@@ -78,7 +79,7 @@
 - samples_decoded_with_celt
 
 
-### rtc_outbound_rtp_stream_stats
+#### rtc_outbound_rtp_stream_stats
 
 - rtx_ssrc
 - sender_id
@@ -99,7 +100,7 @@
 - sli_count
 
 
-### rtc_remote_inbound_rtp_stream_stats
+#### rtc_remote_inbound_rtp_stream_stats
 
 - packets_received
 - packets_discarded
@@ -118,15 +119,24 @@
 - reports_received
 
 
-### rtc_remote_outbound_rtp_stream_stats
+#### rtc_remote_outbound_rtp_stream_stats
 
 - round_trip_time
 
 
-### rtc_transport_stats
+#### rtc_transport_stats
 
 - rtcp_transport_stats_id
 - ice_role
 - ice_local_username_fragment
 - ice_state
 - tls_group
+
+
+### 確認ブラウザ: Safari 15.1
+
+
+#### rtc_codec_stats
+
+- codec_type
+- transport_id
