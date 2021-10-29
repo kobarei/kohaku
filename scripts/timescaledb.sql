@@ -34,7 +34,9 @@ CREATE TABLE IF NOT EXISTS rtc_codec_stats (
 
     payload_type bigint NOT NULL,
     codec_type varchar(255) NULL,
-    transport_id varchar(255) NOT NULL,
+
+    -- required だが Safari では codec に含まれていないため NULL を許容する
+    transport_id varchar(255) NULL,
     -- 仕様と現実が違う問題がありそう
     mime_type varchar(255) NOT NULL,
     clock_rate bigint NULL,
