@@ -11,48 +11,7 @@ import (
 
 // TODO(v): リファクタリング
 func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error {
-	sq := goqu.Select("sora_channel_id").
-		From("sora_connections").
-		Where(goqu.Ex{
-			"sora_channel_id":    exporter.ChannelID,
-			"sora_client_id":     exporter.ClientID,
-			"sora_connection_id": exporter.ConnectionID,
-			"sora_session_id":    exporter.SessionID,
-		})
-	le := goqu.L("NOT EXISTS ?", sq)
-
-	ds := goqu.Insert("sora_connections").
-		Cols(
-			"time",
-			"sora_channel_id",
-			"sora_client_id",
-			"sora_connection_id",
-			"sora_session_id",
-			"sora_role",
-			"sora_multistream",
-			"sora_simulcast",
-			"sora_spotlight",
-			"sora_label",
-			"sora_version",
-		).
-		FromQuery(
-			goqu.Select(
-				goqu.L("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?",
-					exporter.Timestamp,
-					exporter.ChannelID,
-					exporter.ClientID,
-					exporter.ConnectionID,
-					exporter.SessionID,
-					exporter.Role,
-					exporter.Multistream,
-					exporter.Simulcast,
-					exporter.Spotlight,
-					exporter.Label,
-					exporter.Version,
-				),
-			).Where(le))
-	insertSQL, _, _ := ds.ToSQL()
-	if _, err := pool.Exec(context.Background(), insertSQL); err != nil {
+	if err := InsertSoraConnections(context.Background(), pool, exporter); err != nil {
 		return err
 	}
 
@@ -360,5 +319,54 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 		}
 
 	}
+	return nil
+}
+
+func InsertSoraConnections(ctx context.Context, pool *pgxpool.Pool, exporter SoraStatsExporter) error {
+	sq := goqu.Select("sora_channel_id").
+		From("sora_connections").
+		Where(goqu.Ex{
+			"sora_channel_id":    exporter.ChannelID,
+			"sora_client_id":     exporter.ClientID,
+			"sora_connection_id": exporter.ConnectionID,
+			"sora_session_id":    exporter.SessionID,
+		})
+	le := goqu.L("NOT EXISTS ?", sq)
+
+	ds := goqu.Insert("sora_connections").
+		Cols(
+			"time",
+			"sora_channel_id",
+			"sora_client_id",
+			"sora_connection_id",
+			"sora_session_id",
+			"sora_role",
+			"sora_multistream",
+			"sora_simulcast",
+			"sora_spotlight",
+			"sora_label",
+			"sora_version",
+		).
+		FromQuery(
+			goqu.Select(
+				goqu.L("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?",
+					exporter.Timestamp,
+					exporter.ChannelID,
+					exporter.ClientID,
+					exporter.ConnectionID,
+					exporter.SessionID,
+					exporter.Role,
+					exporter.Multistream,
+					exporter.Simulcast,
+					exporter.Spotlight,
+					exporter.Label,
+					exporter.Version,
+				),
+			).Where(le))
+	insertSQL, _, _ := ds.ToSQL()
+	if _, err := pool.Exec(ctx, insertSQL); err != nil {
+		return err
+	}
+
 	return nil
 }
