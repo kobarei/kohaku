@@ -15,11 +15,11 @@ import (
 type SoraStatsExporter struct {
 	Type string `json:"type" binding:"required"`
 
-	Label     string     `json:"label"`
-	Version   string     `json:"version"`
 	Timestamp *time.Time `json:"timestamp" binding:"required"`
 
-	// TODO(v): NodeName string `json:"node_name"`
+	Label    string `json:"label"`
+	Version  string `json:"version"`
+	NodeName string `json:"node_name"`
 
 	Role string `json:"role" binding:"required,len=8"`
 
