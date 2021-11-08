@@ -48,8 +48,7 @@ func init() {
 	if err != nil {
 		log.Fatalf("logger building failed. %s", err)
 	}
-	zlog.Info().
-		Msg("FinishInitProcess")
+	zlog.Info().Msg("FinishInitProcess")
 }
 
 func main() {
@@ -66,7 +65,6 @@ func main() {
 	s := kohaku.NewServer(kohaku.Config, pool)
 
 	if err := s.Start(kohaku.Config); err != nil {
-		// TODO(v): zlog を利用する
-		log.Fatal(err)
+		zlog.Fatal().Err(err).Msg("")
 	}
 }
