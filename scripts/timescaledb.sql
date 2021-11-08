@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS sora_connections (
     timestamp timestamptz NOT NULL,
 
     version varchar(255) NOT NULL,
-    label varchar(255) NOT NULL
+    label varchar(255) NOT NULL,
     node_name varchar(255) NOT NULL,
 
     multistream boolean NOT NULL,
@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS sora_connections (
 
     created_at timestamp WITHOUT TIME ZONE DEFAULT (now() AT TIME ZONE 'utc') NOT NULL
 );
-SELECT create_hypertable('sora_connections', 'time');
 
 DROP TABLE IF EXISTS rtc_codec_stats;
 CREATE TABLE IF NOT EXISTS rtc_codec_stats (
