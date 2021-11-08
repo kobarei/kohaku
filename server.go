@@ -18,7 +18,7 @@ import (
 	"github.com/go-playground/validator/v10"
 
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
+	zlog "github.com/rs/zerolog/log"
 )
 
 type Server struct {
@@ -140,11 +140,11 @@ func logEvent(status int) *zerolog.Event {
 
 	switch status / 100 {
 	case 5:
-		event = log.Error()
+		event = zlog.Error()
 	case 4:
-		event = log.Warn()
+		event = zlog.Warn()
 	default:
-		event = log.Info()
+		event = zlog.Info()
 	}
 
 	return event

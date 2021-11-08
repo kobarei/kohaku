@@ -57,6 +57,7 @@ func main() {
 	pool, err := NewDB(context.Background(), connStr)
 	if err != nil {
 		// TODO: エラーメッセージを修正する
+		// TODO(v): zlog を利用する
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
 	}
@@ -65,6 +66,7 @@ func main() {
 	s := kohaku.NewServer(kohaku.Config, pool)
 
 	if err := s.Start(kohaku.Config); err != nil {
+		// TODO(v): zlog を利用する
 		log.Fatal(err)
 	}
 }
