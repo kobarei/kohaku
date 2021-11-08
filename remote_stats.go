@@ -27,6 +27,7 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 		}
 
 		// その後 type をみて struct をさらに別途デコードする
+		// codec とかは定数かした方がいいのかもしれない
 		switch *stats.Type {
 		case "codec":
 			s := new(RTCCodecStats)
@@ -315,6 +316,7 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 				return err
 			}
 		default:
+			// TODO: return err にする
 			fmt.Println(stats.ID)
 		}
 
