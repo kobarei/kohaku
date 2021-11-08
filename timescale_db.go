@@ -5,21 +5,21 @@ import "time"
 // FIXME(v): 名前はすべて仮です
 
 type SoraConnections struct {
-	Time time.Time `db:"time"`
+	Timestamp time.Time `db:"timestamp"`
 
-	ChannelID    string `db:"sora_channel_id"`
-	ClientID     string `db:"sora_client_id"`
-	SessionID    string `db:"sora_session_id"`
-	ConnectionID string `db:"sora_connection_id"`
+	Label    string `db:"label"`
+	Version  string `db:"version"`
+	NodeName string `db:"node_name"`
 
-	Role string `db:"sora_role"`
+	Multistream bool `db:"multistream"`
+	Simulcast   bool `db:"simulcast"`
+	Spotlight   bool `db:"spotlight"`
 
-	Multistream bool `db:"sora_multistream"`
-	Simulcast   bool `db:"sora_simulcast"`
-	Spotlight   bool `db:"sora_spotlight"`
-
-	Label   string `db:"sora_label"`
-	Version string `db:"sora_version"`
+	Role         string `db:"role"`
+	ChannelID    string `db:"channel_id"`
+	SessionID    string `db:"session_id"`
+	ClientID     string `db:"client_id"`
+	ConnectionID string `db:"connection_id"`
 }
 
 type RTC struct {

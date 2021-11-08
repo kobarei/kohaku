@@ -21,16 +21,15 @@ type SoraStatsExporter struct {
 	Version  string `json:"version"`
 	NodeName string `json:"node_name"`
 
-	Role string `json:"role" binding:"required,len=8"`
+	Multistream *bool `json:"multistream" binding:"required"`
+	Simulcast   *bool `json:"simulcast" binding:"required"`
+	Spotlight   *bool `json:"spotlight" binding:"required"`
 
+	Role         string `json:"role" binding:"required,len=8"`
 	ChannelID    string `json:"channel_id" binding:"required,maxb=255"`
 	SessionID    string `json:"session_id" binding:"required,len=26"`
 	ClientID     string `json:"client_id" binding:"required,maxb=255"`
 	ConnectionID string `json:"connection_id" binding:"required,len=26"`
-
-	Multistream *bool `json:"multistream" binding:"required"`
-	Simulcast   *bool `json:"simulcast" binding:"required"`
-	Spotlight   *bool `json:"spotlight" binding:"required"`
 
 	Stats []json.RawMessage `json:"stats" binding:"required"`
 }

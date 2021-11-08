@@ -2,24 +2,28 @@
 
 DROP TABLE IF EXISTS sora_connections;
 CREATE TABLE IF NOT EXISTS sora_connections (
-    -- TODO(v): time やめる
-    time timestamptz NOT NULL,
+    id bigserial NOT NULL PRIMARY KEY,
 
-    sora_channel_id varchar(255) NOT NULL,
-    sora_session_id char(26) NOT NULL,
-    sora_client_id varchar(255) NOT NULL,
-    sora_connection_id char(26) NOT NULL,
+    -- クライアント側から送られてきたタイムスタンプ
+    timestamp timestamptz NOT NULL,
 
-    sora_version varchar(255) NOT NULL,
-    sora_label varchar(255) NOT NULL
-    sora_node_name varchar(255) NOT NULL,
+    version varchar(255) NOT NULL,
+    label varchar(255) NOT NULL
+    node_name varchar(255) NOT NULL,
 
-    sora_role char(8) NOT NULL,
+    multistream boolean NOT NULL,
+    simulcast boolean NOT NULL,
+    spotlight boolean NOT NULL,
 
-    sora_multistream boolean NOT NULL,
-    sora_simulcast boolean NOT NULL,
-    sora_spotlight boolean NOT NULL
+    role char(8) NOT NULL,
+    channel_id varchar(255) NOT NULL,
+    session_id char(26) NOT NULL,
+    client_id varchar(255) NOT NULL,
+    connection_id char(26) NOT NULL,
+
     -- TODO(v): audio? video?
+
+    created_at timestamp WITHOUT TIME ZONE DEFAULT (now() AT TIME ZONE 'utc') NOT NULL
 );
 SELECT create_hypertable('sora_connections', 'time');
 

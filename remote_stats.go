@@ -323,44 +323,53 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 }
 
 func InsertSoraConnections(ctx context.Context, pool *pgxpool.Pool, exporter SoraStatsExporter) error {
+	// ここだけでも sqlc 使いたい
 	sq := goqu.Select("sora_channel_id").
 		From("sora_connections").
 		Where(goqu.Ex{
 			"sora_channel_id":    exporter.ChannelID,
+			"sora_session_id":    exporter.SessionID,
 			"sora_client_id":     exporter.ClientID,
 			"sora_connection_id": exporter.ConnectionID,
-			"sora_session_id":    exporter.SessionID,
 		})
 	le := goqu.L("NOT EXISTS ?", sq)
 
 	ds := goqu.Insert("sora_connections").
 		Cols(
-			"time",
-			"sora_channel_id",
-			"sora_client_id",
-			"sora_connection_id",
-			"sora_session_id",
-			"sora_role",
+			"timestamp",
+
+			"sora_label",
+			"sora_version",
+			"sora_node_name",
+
 			"sora_multistream",
 			"sora_simulcast",
 			"sora_spotlight",
-			"sora_label",
-			"sora_version",
+
+			"sora_role",
+			"sora_channel_id",
+			"sora_client_id",
+			"sora_session_id",
+			"sora_connection_id",
 		).
 		FromQuery(
 			goqu.Select(
-				goqu.L("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?",
+				goqu.L("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?",
 					exporter.Timestamp,
-					exporter.ChannelID,
-					exporter.ClientID,
-					exporter.ConnectionID,
-					exporter.SessionID,
-					exporter.Role,
+
+					exporter.Label,
+					exporter.Version,
+					exporter.NodeName,
+
 					exporter.Multistream,
 					exporter.Simulcast,
 					exporter.Spotlight,
-					exporter.Label,
-					exporter.Version,
+
+					exporter.Role,
+					exporter.ChannelID,
+					exporter.ClientID,
+					exporter.SessionID,
+					exporter.ConnectionID,
 				),
 			).Where(le))
 	insertSQL, _, _ := ds.ToSQL()
