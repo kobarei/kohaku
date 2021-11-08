@@ -356,7 +356,7 @@ func InsertSoraConnections(ctx context.Context, pool *pgxpool.Pool, exporter Sor
 		).
 		FromQuery(
 			goqu.Select(
-				goqu.L("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?",
+				goqu.L("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?",
 					exporter.Timestamp,
 
 					exporter.Label,
