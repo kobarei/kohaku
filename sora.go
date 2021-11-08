@@ -17,9 +17,9 @@ type SoraStatsExporter struct {
 
 	Timestamp *time.Time `json:"timestamp" binding:"required"`
 
-	Label    string `json:"label"`
-	Version  string `json:"version"`
-	NodeName string `json:"node_name"`
+	Label    string `json:"label" binding:"required"`
+	Version  string `json:"version" binding:"required"`
+	NodeName string `json:"node_name" binding:"required"`
 
 	Multistream *bool `json:"multistream" binding:"required"`
 	Simulcast   *bool `json:"simulcast" binding:"required"`
