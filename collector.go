@@ -19,7 +19,8 @@ func (s *Server) Collector(c *gin.Context) {
 
 	// exporter.Type の conection.remote にのみ対応する
 	// TODO(v): 将来的には conneciton.sora やそれ以外にも対応していく
-	if exporter.Type == "connection.remote" {
+	switch exporter.Type {
+	case "connection.remote":
 		if err := CollectorRemoteStats(s.pool, *exporter); err != nil {
 			zlog.Warn().Err(err).Msg("")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -27,9 +28,9 @@ func (s *Server) Collector(c *gin.Context) {
 		}
 		c.Status(http.StatusNoContent)
 		return
+	default:
+		// TODO: channel_id / conneciton_id も表示する
+		zlog.Warn().Str("type", exporter.Type).Msgf("UNEXPECTED-TYPE")
+		c.Status(http.StatusBadRequest)
 	}
-
-	zlog.Warn().Str("type", exporter.Type).Msgf("UNEXPECTED-TYPE")
-
-	c.Status(http.StatusBadRequest)
 }
