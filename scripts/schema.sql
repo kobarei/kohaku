@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS sora_connections (
 
     -- TODO(v): audio? video?
 
-    created_at timestamp WITHOUT TIME ZONE DEFAULT (now() AT TIME ZONE 'utc') NOT NULL
+    created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 DROP TABLE IF EXISTS rtc_codec_stats;
