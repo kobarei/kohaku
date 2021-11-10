@@ -52,7 +52,7 @@ ALTER TABLE rtc_codec_stats SET (
     timescaledb.compress,
     timescaledb.compress_segmentby = 'sora_connection_id'
 );
-SELECT add_compression_policy('rtc_codec_stats', INTERVAL '7 days');
+SELECT add_compression_policy('rtc_codec_stats', INTERVAL '3 days');
 
 DROP TABLE IF EXISTS rtc_inbound_rtp_stream_stats;
 CREATE TABLE IF NOT EXISTS rtc_inbound_rtp_stream_stats (
@@ -138,7 +138,7 @@ ALTER TABLE rtc_inbound_rtp_stream_stats SET (
     timescaledb.compress,
     timescaledb.compress_segmentby = 'sora_connection_id'
 );
-SELECT add_compression_policy('rtc_inbound_rtp_stream_stats', INTERVAL '7 days');
+SELECT add_compression_policy('rtc_inbound_rtp_stream_stats', INTERVAL '3 days');
 
 DROP TABLE IF EXISTS rtc_remote_inbound_rtp_stream_stats;
 CREATE TABLE IF NOT EXISTS rtc_remote_inbound_rtp_stream_stats (
@@ -184,7 +184,7 @@ ALTER TABLE rtc_remote_inbound_rtp_stream_stats SET (
     timescaledb.compress,
     timescaledb.compress_segmentby = 'sora_connection_id'
 );
-SELECT add_compression_policy('rtc_remote_inbound_rtp_stream_stats', INTERVAL '7 days');
+SELECT add_compression_policy('rtc_remote_inbound_rtp_stream_stats', INTERVAL '3 days');
 
 DROP TABLE IF EXISTS rtc_outbound_rtp_stream_stats;
 CREATE TABLE IF NOT EXISTS rtc_outbound_rtp_stream_stats (
@@ -252,7 +252,7 @@ ALTER TABLE rtc_outbound_rtp_stream_stats SET (
     timescaledb.compress,
     timescaledb.compress_segmentby = 'sora_connection_id'
 );
-SELECT add_compression_policy('rtc_outbound_rtp_stream_stats', INTERVAL '7 days');
+SELECT add_compression_policy('rtc_outbound_rtp_stream_stats', INTERVAL '3 days');
 
 DROP TABLE IF EXISTS rtc_remote_outbound_rtp_stream_stats;
 CREATE TABLE IF NOT EXISTS rtc_remote_outbound_rtp_stream_stats (
@@ -286,7 +286,7 @@ ALTER TABLE rtc_remote_outbound_rtp_stream_stats SET (
     timescaledb.compress,
     timescaledb.compress_segmentby = 'sora_connection_id'
 );
-SELECT add_compression_policy('rtc_remote_outbound_rtp_stream_stats', INTERVAL '7 days');
+SELECT add_compression_policy('rtc_remote_outbound_rtp_stream_stats', INTERVAL '3 days');
 
 DROP TABLE IF EXISTS rtc_audio_source_stats;
 CREATE TABLE IF NOT EXISTS rtc_audio_source_stats (
@@ -313,7 +313,7 @@ ALTER TABLE rtc_audio_source_stats SET (
     timescaledb.compress,
     timescaledb.compress_segmentby = 'sora_connection_id'
 );
-SELECT add_compression_policy('rtc_audio_source_stats', INTERVAL '7 days');
+SELECT add_compression_policy('rtc_audio_source_stats', INTERVAL '3 days');
 
 DROP TABLE IF EXISTS rtc_video_source_stats;
 CREATE TABLE IF NOT EXISTS rtc_video_source_stats (
@@ -340,7 +340,7 @@ ALTER TABLE rtc_video_source_stats SET (
     timescaledb.compress,
     timescaledb.compress_segmentby = 'sora_connection_id'
 );
-SELECT add_compression_policy('rtc_video_source_stats', INTERVAL '7 days');
+SELECT add_compression_policy('rtc_video_source_stats', INTERVAL '3 days');
 
 DROP TABLE IF EXISTS rtc_data_channel_stats;
 CREATE TABLE IF NOT EXISTS rtc_data_channel_stats (
@@ -366,7 +366,7 @@ ALTER TABLE rtc_data_channel_stats SET (
     timescaledb.compress,
     timescaledb.compress_segmentby = 'sora_connection_id'
 );
-SELECT add_compression_policy('rtc_data_channel_stats', INTERVAL '7 days');
+SELECT add_compression_policy('rtc_data_channel_stats', INTERVAL '3 days');
 
 DROP TABLE IF EXISTS rtc_transport_stats;
 CREATE TABLE IF NOT EXISTS rtc_transport_stats (
@@ -401,7 +401,7 @@ ALTER TABLE rtc_transport_stats SET (
     timescaledb.compress,
     timescaledb.compress_segmentby = 'sora_connection_id'
 );
-SELECT add_compression_policy('rtc_transport_stats', INTERVAL '7 days');
+SELECT add_compression_policy('rtc_transport_stats', INTERVAL '3 days');
 
 DROP TABLE IF EXISTS rtc_ice_candidate_pair_stats;
 CREATE TABLE IF NOT EXISTS rtc_ice_candidate_pair_stats (
@@ -451,7 +451,7 @@ ALTER TABLE rtc_ice_candidate_pair_stats SET (
     timescaledb.compress,
     timescaledb.compress_segmentby = 'sora_connection_id'
 );
-SELECT add_compression_policy('rtc_ice_candidate_pair_stats', INTERVAL '7 days');
+SELECT add_compression_policy('rtc_ice_candidate_pair_stats', INTERVAL '3 days');
 
 DROP TABLE IF EXISTS rtc_ice_candidate_stats;
 CREATE TABLE IF NOT EXISTS rtc_ice_candidate_stats (
@@ -477,4 +477,4 @@ ALTER TABLE rtc_ice_candidate_stats SET (
     timescaledb.compress,
     timescaledb.compress_segmentby = 'sora_connection_id'
 );
-SELECT add_compression_policy('rtc_ice_candidate_stats', INTERVAL '7 days');
+SELECT add_compression_policy('rtc_ice_candidate_stats', INTERVAL '3 days');
