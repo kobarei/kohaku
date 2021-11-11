@@ -109,12 +109,6 @@ func (s *Server) Start(c *KohakuConfig) error {
 
 func validateHttpVersion() gin.HandlerFunc {
 	return func(c *gin.Context) {
-
-		// prior knowledge ではない場合
-		if upgrade, ok := c.Request.Header["Upgrade"]; ok && upgrade[0] == "h2c" {
-			return
-		}
-
 		if c.Request.Proto != "HTTP/2.0" {
 			err := fmt.Errorf("UNSUPPORTED-HTTP-VERSION: %s", c.Request.Proto)
 			// TODO: 505 を返すかの検討
