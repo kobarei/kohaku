@@ -10,8 +10,7 @@ import (
 
 // TODO: validator 処理の追加
 
-// type: connection.user-agent / type: connection.sora
-type SoraConnectionStats struct {
+type SoraStats struct {
 	Type string `json:"type" binding:"required"`
 
 	Timestamp *time.Time `json:"timestamp" binding:"required"`
@@ -19,6 +18,11 @@ type SoraConnectionStats struct {
 	Label    string `json:"label" binding:"required"`
 	Version  string `json:"version" binding:"required"`
 	NodeName string `json:"node_name" binding:"required"`
+}
+
+// type: connection.user-agent / type: connection.sora
+type SoraConnectionStats struct {
+	SoraStats
 
 	Multistream *bool `json:"multistream" binding:"required"`
 	Simulcast   *bool `json:"simulcast" binding:"required"`
@@ -31,6 +35,20 @@ type SoraConnectionStats struct {
 	ConnectionID string `json:"connection_id" binding:"required,len=26"`
 
 	Stats []json.RawMessage `json:"stats" binding:"required"`
+}
+
+type SoraNodeErlangVmMemoryStats struct {
+	SoraStats
+
+	TotalMemory        uint64 `json:"total_memory"`
+	TotalProcesses     uint64 `json:"total_processes"`
+	TotalProcessesUsed uint64 `json:"total_processes_used"`
+	TotalSystem        uint64 `json:"total_system"`
+	TotalAtom          uint64 `json:"total_atom"`
+	TotalAtomUsed      uint64 `json:"total_atom_used"`
+	TotalBinary        uint64 `json:"total_binary"`
+	TotalCode          uint64 `json:"total_code"`
+	TotalETS           uint64 `json:"total_ets"`
 }
 
 func MaximumNumberOfBytesFunc(fl validator.FieldLevel) bool {

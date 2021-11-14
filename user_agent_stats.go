@@ -9,18 +9,18 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-// TODO(v): リファクタリング
-func CollectorUserAgentStats(pool *pgxpool.Pool, exporter SoraConnectionStats) error {
-	if err := InsertSoraConnections(context.Background(), pool, exporter); err != nil {
+// TODO(v): sqlc したいが厳しそう
+func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) error {
+	if err := InsertSoraConnections(context.Background(), pool, stats); err != nil {
 		return err
 	}
 
 	rtc := &RTC{
-		Time:         exporter.Timestamp,
-		ConnectionID: exporter.ConnectionID,
+		Time:         stats.Timestamp,
+		ConnectionID: stats.ConnectionID,
 	}
 
-	for _, v := range exporter.Stats {
+	for _, v := range stats.Stats {
 		stats := new(RTCStats)
 		if err := json.Unmarshal(v, &stats); err != nil {
 			return err
@@ -324,19 +324,19 @@ func CollectorUserAgentStats(pool *pgxpool.Pool, exporter SoraConnectionStats) e
 	return nil
 }
 
-func InsertSoraConnections(ctx context.Context, pool *pgxpool.Pool, exporter SoraConnectionStats) error {
+func InsertSoraConnections(ctx context.Context, pool *pgxpool.Pool, stats SoraConnectionStats) error {
 	// ここだけでも sqlc 使いたい
 	sq := goqu.Select("channel_id").
-		From("sora_connections").
+		From("sora_connection").
 		Where(goqu.Ex{
-			"channel_id":    exporter.ChannelID,
-			"session_id":    exporter.SessionID,
-			"client_id":     exporter.ClientID,
-			"connection_id": exporter.ConnectionID,
+			"channel_id":    stats.ChannelID,
+			"session_id":    stats.SessionID,
+			"client_id":     stats.ClientID,
+			"connection_id": stats.ConnectionID,
 		})
 	le := goqu.L("NOT EXISTS ?", sq)
 
-	ds := goqu.Insert("sora_connections").
+	ds := goqu.Insert("sora_connection").
 		Cols(
 			"timestamp",
 
@@ -357,21 +357,21 @@ func InsertSoraConnections(ctx context.Context, pool *pgxpool.Pool, exporter Sor
 		FromQuery(
 			goqu.Select(
 				goqu.L("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?",
-					exporter.Timestamp,
+					stats.Timestamp,
 
-					exporter.Label,
-					exporter.Version,
-					exporter.NodeName,
+					stats.Label,
+					stats.Version,
+					stats.NodeName,
 
-					exporter.Multistream,
-					exporter.Simulcast,
-					exporter.Spotlight,
+					stats.Multistream,
+					stats.Simulcast,
+					stats.Spotlight,
 
-					exporter.Role,
-					exporter.ChannelID,
-					exporter.SessionID,
-					exporter.ClientID,
-					exporter.ConnectionID,
+					stats.Role,
+					stats.ChannelID,
+					stats.SessionID,
+					stats.ClientID,
+					stats.ConnectionID,
 				),
 			).Where(le))
 	insertSQL, _, _ := ds.ToSQL()

@@ -1,7 +1,7 @@
 -- https://www.w3.org/TR/webrtc-stats/#dom-rtcstats
 
-DROP TABLE IF EXISTS sora_connections;
-CREATE TABLE IF NOT EXISTS sora_connections (
+DROP TABLE IF EXISTS sora_connection;
+CREATE TABLE IF NOT EXISTS sora_connection (
     id bigserial NOT NULL PRIMARY KEY,
 
     -- クライアント側から送られてきたタイムスタンプ
@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS sora_connections (
 
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
+
 
 DROP TABLE IF EXISTS rtc_codec_stats;
 CREATE TABLE IF NOT EXISTS rtc_codec_stats (
@@ -478,3 +479,42 @@ ALTER TABLE rtc_ice_candidate_stats SET (
     timescaledb.compress_segmentby = 'sora_connection_id'
 );
 SELECT add_compression_policy('rtc_ice_candidate_stats', INTERVAL '3 days');
+
+DROP TABLE IF EXISTS sora_node;
+CREATE TABLE IF NOT EXISTS sora_node (
+    id bigserial NOT NULL PRIMARY KEY,
+
+    -- クライアント側から送られてきたタイムスタンプ
+    timestamp timestamptz NOT NULL,
+
+    version varchar(255) NOT NULL,
+    label varchar(255) NOT NULL,
+    node_name varchar(255) NOT NULL,
+
+    created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+DROP TABLE IF EXISTS sora_node_erlang_vm_memory_stats;
+CREATE TABLE IF NOT EXISTS sora_node_erlang_vm_memory_stats (
+    time timestamptz NOT NULL,
+
+    version varchar(255) NOT NULL,
+    label varchar(255) NOT NULL,
+    node_name varchar(255) NOT NULL,
+
+    total_memory numeric NOT NULL,
+    total_processes numeric NOT NULL,
+    total_processes_used numeric NOT NULL,
+    total_system numeric NOT NULL,
+    total_atom numeric NOT NULL,
+    total_atom_used numeric NOT NULL,
+    total_binary numeric NOT NULL,
+    total_code numeric NOT NULL,
+    total_ets numeric NOT NULL
+);
+SELECT create_hypertable('sora_node_erlang_vm_memory_stats', 'time');
+ALTER TABLE rtc_ice_candidate_stats SET (
+    timescaledb.compress,
+    timescaledb.compress_segmentby = 'node_name'
+);
+SELECT add_compression_policy('sora_node_erlang_vm_memory_stats', INTERVAL '3 days'); 
