@@ -9,19 +9,18 @@ import (
 
 // TODO: ログレベル、ログメッセージを変更する
 func (s *Server) Collector(c *gin.Context) {
-	// TODO(v): validator 処理
-	exporter := new(SoraStatsExporter)
-	if err := c.Bind(exporter); err != nil {
-		zlog.Debug().Err(err).Msg("")
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	// exporter.Type の conection.remote にのみ対応する
-	// TODO(v): 将来的には conneciton.sora やそれ以外にも対応していく
-	switch exporter.Type {
-	case "connection.remote":
-		if err := CollectorRemoteStats(s.pool, *exporter); err != nil {
+	// TODO(v): ヘッダーにて判定
+	t := c.Request.Header.Get("x-sora-stats-exporter-type")
+	switch t {
+	case "connection.user-agent":
+		// TODO(v): validator 処理
+		stats := new(SoraConnectionStats)
+		if err := c.Bind(stats); err != nil {
+			zlog.Debug().Err(err).Msg("")
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if err := CollectorUserAgentStats(s.pool, *stats); err != nil {
 			zlog.Warn().Err(err).Msg("")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -29,8 +28,7 @@ func (s *Server) Collector(c *gin.Context) {
 		c.Status(http.StatusNoContent)
 		return
 	default:
-		// TODO: channel_id / conneciton_id も表示する
-		zlog.Warn().Str("type", exporter.Type).Msgf("UNEXPECTED-TYPE")
+		zlog.Warn().Str("type", t).Msgf("UNEXPECTED-TYPE")
 		c.Status(http.StatusBadRequest)
 	}
 }

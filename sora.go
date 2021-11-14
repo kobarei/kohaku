@@ -10,9 +10,8 @@ import (
 
 // TODO: validator 処理の追加
 
-// type は PeerConnection / SoraConnection
-// type: connection.remote / type: connection.sora
-type SoraStatsExporter struct {
+// type: connection.user-agent / type: connection.sora
+type SoraConnectionStats struct {
 	Type string `json:"type" binding:"required"`
 
 	Timestamp *time.Time `json:"timestamp" binding:"required"`

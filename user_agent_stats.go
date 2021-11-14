@@ -10,7 +10,7 @@ import (
 )
 
 // TODO(v): リファクタリング
-func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error {
+func CollectorUserAgentStats(pool *pgxpool.Pool, exporter SoraConnectionStats) error {
 	if err := InsertSoraConnections(context.Background(), pool, exporter); err != nil {
 		return err
 	}
@@ -324,7 +324,7 @@ func CollectorRemoteStats(pool *pgxpool.Pool, exporter SoraStatsExporter) error 
 	return nil
 }
 
-func InsertSoraConnections(ctx context.Context, pool *pgxpool.Pool, exporter SoraStatsExporter) error {
+func InsertSoraConnections(ctx context.Context, pool *pgxpool.Pool, exporter SoraConnectionStats) error {
 	// ここだけでも sqlc 使いたい
 	sq := goqu.Select("channel_id").
 		From("sora_connections").
