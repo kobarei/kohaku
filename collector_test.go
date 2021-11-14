@@ -21,7 +21,7 @@ import (
 var (
 	collectorTypeCodecJSON = `{
     "role": "sendrecv",
-    "type": "connection.remote",
+    "type": "connection.user-agent",
     "channel_id": "sora",
     "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
     "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
@@ -45,7 +45,7 @@ var (
 
 	collectorTypeOutboundRTPJSON = `{
     "role": "sendrecv",
-    "type": "connection.remote",
+    "type": "connection.user-agent",
     "channel_id": "sora",
     "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
     "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
@@ -126,7 +126,7 @@ var (
     "spotlight": false,
     "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
-    "type":"connection.remote",
+    "type":"connection.user-agent",
     "version":"2021.2-canary.23"
   }
 `
@@ -204,7 +204,7 @@ var (
     "spotlight": false,
     "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
-    "type":"connection.remote",
+    "type":"connection.user-agent",
     "version":"2021.2-canary.23"
   }
 `
@@ -243,7 +243,7 @@ var (
     "spotlight": false,
     "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
-    "type":"connection.remote",
+    "type":"connection.user-agent",
     "version":"2021.2-canary.23"
   }
 `
@@ -291,7 +291,7 @@ var (
     "spotlight": false,
     "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
-    "type":"connection.remote",
+    "type":"connection.user-agent",
     "version":"2021.2-canary.23"
   }
 `
@@ -325,7 +325,7 @@ var (
     "spotlight": false,
     "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
-    "type":"connection.remote",
+    "type":"connection.user-agent",
     "version":"2021.2-canary.23"
   }
 `
@@ -334,7 +334,7 @@ var (
 var (
 	invalidConnectionIDLengthJSON = `{
     "role": "sendrecv",
-    "type": "connection.remote",
+    "type": "connection.user-agent",
     "channel_id": "sora",
     "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
     "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC===",
@@ -405,7 +405,7 @@ var (
 
 	invalidChannelIDLengthJSON = `{
     "role": "sendrecv",
-    "type": "connection.remote",
+    "type": "connection.user-agent",
     "channel_id": "2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX",
     "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
     "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
