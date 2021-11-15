@@ -70,16 +70,6 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 			tlsConfig := &tls.Config{
 				ClientAuth: tls.VerifyClientCertIfGiven,
 				ClientCAs:  certPool,
-				NextProtos: []string{"h2"},
-				GetConfigForClient: func(i *tls.ClientHelloInfo) (*tls.Config, error) {
-					// ALPN Extension の ProtocolNameList が h2 以外の場合はエラー
-					if (len(i.SupportedProtos) == 1) && (i.SupportedProtos[0] == "h2") {
-						return nil, nil
-					}
-					// TODO: no_application_protocol alert を返す
-					// TODO: エラーメッセージを変更する
-					return nil, fmt.Errorf("UNSUPPORTED-PROTOS: %v", i.SupportedProtos)
-				},
 			}
 			s.Server.TLSConfig = tlsConfig
 		}
