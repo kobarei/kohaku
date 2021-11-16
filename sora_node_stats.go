@@ -16,7 +16,7 @@ func CollectorSoraNodeErlangVmStats(pool *pgxpool.Pool, stats SoraNodeErlangVmSt
 	}
 
 	erlangVm := &ErlangVm{
-		Time: stats.Timestamp,
+		Time: &stats.Timestamp,
 
 		Label:    stats.Label,
 		Version:  stats.Version,

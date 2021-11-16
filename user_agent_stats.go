@@ -16,7 +16,7 @@ func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) erro
 	}
 
 	rtc := &RTC{
-		Time:         stats.Timestamp,
+		Time:         &stats.Timestamp,
 		ConnectionID: stats.ConnectionID,
 	}
 
