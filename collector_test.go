@@ -446,6 +446,31 @@ var (
     "label":"local",
     "node_name":"sora@local"
   }`
+
+	missingMultistreamJSON = `{
+    "role": "sendrecv",
+    "type": "connection.unexpected_type",
+    "channel_id": "sora",
+    "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
+    "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
+    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
+    "stats": [{
+      "id": "RTCCodec_video_V04mIx_Inbound_120",
+      "timestamp": 1628869622194.298,
+      "type": "codec",
+      "transportId": "RTCTransport_data_1",
+      "payloadType": 120,
+      "mimeType": "video/VP9",
+      "clockRate": 90000,
+      "sdpFmtpLine": "profile-id=0"
+    }],
+    "spotlight": false,
+    "simulcast": false,
+    "timestamp":"2021-09-24T08:15:31.854427Z",
+    "version":"2021.2-canary.23",
+    "label":"local",
+    "node_name":"sora@local"
+  }`
 )
 
 const (
@@ -774,4 +799,27 @@ func TestInvalidChannelIDLength(t *testing.T) {
 		panic(err)
 	}
 	assert.Equal(t, `{"error":"Key: 'SoraConnectionStats.ChannelID' Error:Field validation for 'ChannelID' failed on the 'maxb' tag"}`, string(body))
+}
+
+func TestMissingMultistream(t *testing.T) {
+	// Setup
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(missingMultistreamJSON))
+	req.Header.Set("content-type", "application/json")
+	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
+	req.Proto = "HTTP/2.0"
+	rec := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(rec)
+	c.Request = req
+
+	// Assertions
+	server.Collector(c)
+	resp := rec.Result()
+
+	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	assert.Equal(t, `{"error":"Key: 'SoraConnectionStats.Multistream' Error:Field validation for 'Multistream' failed on the 'required' tag"}`, string(body))
 }
