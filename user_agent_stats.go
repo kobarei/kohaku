@@ -6,12 +6,12 @@ import (
 	"fmt"
 
 	"github.com/doug-martin/goqu/v9"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/gin-gonic/gin"
 )
 
 // TODO(v): sqlc したいが厳しそう
-func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) error {
-	if err := InsertSoraConnections(context.Background(), pool, stats); err != nil {
+func (server *Server) CollectorUserAgentStats(c *gin.Context, stats SoraConnectionStats) error {
+	if err := server.InsertSoraConnections(c, stats); err != nil {
 		return err
 	}
 
@@ -41,7 +41,7 @@ func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) erro
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
-			_, err := pool.Exec(context.Background(), insertSQL)
+			_, err := server.pool.Exec(context.Background(), insertSQL)
 			if err != nil {
 				return err
 			}
@@ -67,7 +67,7 @@ func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) erro
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
-			_, err := pool.Exec(context.Background(), insertSQL)
+			_, err := server.pool.Exec(context.Background(), insertSQL)
 			if err != nil {
 				return err
 			}
@@ -101,7 +101,7 @@ func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) erro
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
-			_, err := pool.Exec(context.Background(), insertSQL)
+			_, err := server.pool.Exec(context.Background(), insertSQL)
 			if err != nil {
 				return err
 			}
@@ -117,7 +117,7 @@ func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) erro
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
-			_, err := pool.Exec(context.Background(), insertSQL)
+			_, err := server.pool.Exec(context.Background(), insertSQL)
 			if err != nil {
 				return err
 			}
@@ -133,7 +133,7 @@ func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) erro
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
-			_, err := pool.Exec(context.Background(), insertSQL)
+			_, err := server.pool.Exec(context.Background(), insertSQL)
 			if err != nil {
 				return err
 			}
@@ -156,7 +156,7 @@ func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) erro
 					},
 				)
 				insertSQL, _, _ := ds.ToSQL()
-				_, err := pool.Exec(context.Background(), insertSQL)
+				_, err := server.pool.Exec(context.Background(), insertSQL)
 				if err != nil {
 					return err
 				}
@@ -172,7 +172,7 @@ func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) erro
 					},
 				)
 				insertSQL, _, _ := ds.ToSQL()
-				_, err := pool.Exec(context.Background(), insertSQL)
+				_, err := server.pool.Exec(context.Background(), insertSQL)
 				if err != nil {
 					return err
 				}
@@ -199,7 +199,7 @@ func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) erro
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
-			_, err := pool.Exec(context.Background(), insertSQL)
+			_, err := server.pool.Exec(context.Background(), insertSQL)
 			if err != nil {
 				return err
 			}
@@ -263,7 +263,7 @@ func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) erro
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
-			_, err := pool.Exec(context.Background(), insertSQL)
+			_, err := server.pool.Exec(context.Background(), insertSQL)
 			if err != nil {
 				return err
 			}
@@ -284,7 +284,7 @@ func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) erro
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
-			_, err := pool.Exec(context.Background(), insertSQL)
+			_, err := server.pool.Exec(context.Background(), insertSQL)
 			if err != nil {
 				return err
 			}
@@ -300,7 +300,7 @@ func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) erro
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
-			_, err := pool.Exec(context.Background(), insertSQL)
+			_, err := server.pool.Exec(context.Background(), insertSQL)
 			if err != nil {
 				return err
 			}
@@ -323,7 +323,7 @@ func CollectorUserAgentStats(pool *pgxpool.Pool, stats SoraConnectionStats) erro
 	return nil
 }
 
-func InsertSoraConnections(ctx context.Context, pool *pgxpool.Pool, stats SoraConnectionStats) error {
+func (server *Server) InsertSoraConnections(ctx context.Context, stats SoraConnectionStats) error {
 	// ここだけでも sqlc 使いたい
 	sq := goqu.Select("channel_id").
 		From("sora_connection").
@@ -374,7 +374,7 @@ func InsertSoraConnections(ctx context.Context, pool *pgxpool.Pool, stats SoraCo
 				),
 			).Where(le))
 	insertSQL, _, _ := ds.ToSQL()
-	if _, err := pool.Exec(ctx, insertSQL); err != nil {
+	if _, err := server.pool.Exec(ctx, insertSQL); err != nil {
 		return err
 	}
 
