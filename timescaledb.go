@@ -2,7 +2,7 @@ package kohaku
 
 import "time"
 
-// FIXME(v): 名前はすべて仮です
+// 使ってない
 type SoraNode struct {
 	Timestamp time.Time `db:"timestamp"`
 
@@ -11,6 +11,7 @@ type SoraNode struct {
 	NodeName string `db:"node_name"`
 }
 
+// 使ってない
 type SoraConnection struct {
 	SoraNode
 
@@ -25,18 +26,17 @@ type SoraConnection struct {
 	ConnectionID string `db:"connection_id"`
 }
 
-type SoraNodeErlangVM struct {
-	SoraNode
+type ErlangVm struct {
+	Time *time.Time `db:"time"`
 
-	TotalMemory        uint64 `db:"total_memory"`
-	TotalProcesses     uint64 `db:"total_processes"`
-	TotalProcessesUsed uint64 `db:"total_processes_used"`
-	TotalSystem        uint64 `db:"total_system"`
-	TotalAtom          uint64 `db:"total_atom"`
-	TotalAtomUsed      uint64 `db:"total_atom_used"`
-	TotalBinary        uint64 `db:"total_binary"`
-	TotalCode          uint64 `db:"total_code"`
-	TotalETS           uint64 `db:"total_ets"`
+	Label    string `db:"sora_label"`
+	Version  string `db:"sora_version"`
+	NodeName string `db:"sora_node_name"`
+}
+
+type ErlangVmMemory struct {
+	ErlangVm
+	ErlangVmMemoryStats
 }
 
 type RTC struct {

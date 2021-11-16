@@ -1,5 +1,21 @@
 -- https://www.w3.org/TR/webrtc-stats/#dom-rtcstats
 
+CREATE EXTENSION IF NOT EXISTS timescaledb;
+
+DROP TABLE IF EXISTS sora_node;
+CREATE TABLE IF NOT EXISTS sora_node (
+    id bigserial NOT NULL PRIMARY KEY,
+
+    -- クライアント側から送られてきたタイムスタンプ
+    timestamp timestamptz NOT NULL,
+
+    version varchar(255) NOT NULL,
+    label varchar(255) NOT NULL,
+    node_name varchar(255) NOT NULL,
+
+    created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
 DROP TABLE IF EXISTS sora_connection;
 CREATE TABLE IF NOT EXISTS sora_connection (
     id bigserial NOT NULL PRIMARY KEY,
@@ -25,7 +41,6 @@ CREATE TABLE IF NOT EXISTS sora_connection (
 
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
-
 
 DROP TABLE IF EXISTS rtc_codec_stats;
 CREATE TABLE IF NOT EXISTS rtc_codec_stats (
@@ -480,41 +495,29 @@ ALTER TABLE rtc_ice_candidate_stats SET (
 );
 SELECT add_compression_policy('rtc_ice_candidate_stats', INTERVAL '3 days');
 
-DROP TABLE IF EXISTS sora_node;
-CREATE TABLE IF NOT EXISTS sora_node (
-    id bigserial NOT NULL PRIMARY KEY,
-
-    -- クライアント側から送られてきたタイムスタンプ
-    timestamp timestamptz NOT NULL,
-
-    version varchar(255) NOT NULL,
-    label varchar(255) NOT NULL,
-    node_name varchar(255) NOT NULL,
-
-    created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
-DROP TABLE IF EXISTS sora_node_erlang_vm_memory_stats;
-CREATE TABLE IF NOT EXISTS sora_node_erlang_vm_memory_stats (
+DROP TABLE IF EXISTS erlang_vm_memory_stats;
+CREATE TABLE IF NOT EXISTS erlang_vm_memory_stats (
     time timestamptz NOT NULL,
 
-    version varchar(255) NOT NULL,
-    label varchar(255) NOT NULL,
-    node_name varchar(255) NOT NULL,
+    sora_version varchar(255) NOT NULL,
+    sora_label varchar(255) NOT NULL,
+    sora_node_name varchar(255) NOT NULL,
 
-    total_memory numeric NOT NULL,
-    total_processes numeric NOT NULL,
-    total_processes_used numeric NOT NULL,
-    total_system numeric NOT NULL,
-    total_atom numeric NOT NULL,
-    total_atom_used numeric NOT NULL,
-    total_binary numeric NOT NULL,
-    total_code numeric NOT NULL,
-    total_ets numeric NOT NULL
+    stats_type varchar(255) NOT NULL,
+
+    type_total numeric NOT NULL,
+    type_processes numeric NOT NULL,
+    type_processes_used numeric NOT NULL,
+    type_system numeric NOT NULL,
+    type_atom numeric NOT NULL,
+    type_atom_used numeric NOT NULL,
+    type_binary numeric NOT NULL,
+    type_code numeric NOT NULL,
+    type_ets numeric NOT NULL
 );
-SELECT create_hypertable('sora_node_erlang_vm_memory_stats', 'time');
-ALTER TABLE rtc_ice_candidate_stats SET (
+SELECT create_hypertable('erlang_vm_memory_stats', 'time');
+ALTER TABLE erlang_vm_memory_stats SET (
     timescaledb.compress,
-    timescaledb.compress_segmentby = 'node_name'
+    timescaledb.compress_segmentby = 'sora_label'
 );
-SELECT add_compression_policy('sora_node_erlang_vm_memory_stats', INTERVAL '3 days'); 
+SELECT add_compression_policy('erlang_vm_memory_stats', INTERVAL '3 days'); 
