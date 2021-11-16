@@ -58,7 +58,6 @@ func (s *Server) CollectorSoraNodeErlangVmStats(c *gin.Context, stats SoraNodeEr
 }
 
 func (s *Server) InsertSoraNode(ctx context.Context, stats SoraNodeErlangVmStats) error {
-	// TODO: db.New 毎回していいのか？
 	if err := s.query.InsertSoraNode(ctx, db.InsertSoraNodeParams{
 		Timestamp: *stats.Timestamp,
 		Label:     stats.Label,
