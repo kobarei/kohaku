@@ -40,7 +40,9 @@ var (
     "spotlight": false,
     "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
-    "version":"2021.2-canary.23"}
+    "version":"2021.2-canary.23",
+    "label":"local",
+    "node_name":"sora@local"
   }`
 
 	collectorTypeOutboundRTPJSON = `{
@@ -89,7 +91,9 @@ var (
     "spotlight": false,
     "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
-    "version":"2021.2-canary.23"}
+    "version":"2021.2-canary.23",
+    "label":"local",
+    "node_name":"sora@local"
   }`
 
 	collectorTypeMediaSourceJSON = `{
@@ -127,7 +131,9 @@ var (
     "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
     "type":"connection.user-agent",
-    "version":"2021.2-canary.23"
+    "version":"2021.2-canary.23",
+    "label":"local",
+    "node_name":"sora@local"
   }
 `
 
@@ -205,7 +211,9 @@ var (
     "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
     "type":"connection.user-agent",
-    "version":"2021.2-canary.23"
+    "version":"2021.2-canary.23",
+    "label":"local",
+    "node_name":"sora@local"
   }
 `
 
@@ -244,7 +252,9 @@ var (
     "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
     "type":"connection.user-agent",
-    "version":"2021.2-canary.23"
+    "version":"2021.2-canary.23",
+    "label":"local",
+    "node_name":"sora@local"
   }
 `
 
@@ -292,7 +302,9 @@ var (
     "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
     "type":"connection.user-agent",
-    "version":"2021.2-canary.23"
+    "version":"2021.2-canary.23",
+    "label":"local",
+    "node_name":"sora@local"
   }
 `
 
@@ -326,7 +338,9 @@ var (
     "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
     "type":"connection.user-agent",
-    "version":"2021.2-canary.23"
+    "version":"2021.2-canary.23",
+    "label":"local",
+    "node_name":"sora@local"
   }
 `
 )
@@ -377,7 +391,9 @@ var (
     "spotlight": false,
     "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
-    "version":"2021.2-canary.23"}
+    "version":"2021.2-canary.23",
+    "label":"local",
+    "node_name":"sora@local"
   }`
 
 	missingTimestampJSON = `{
@@ -400,7 +416,9 @@ var (
     "multistream": false,
     "spotlight": false,
     "simulcast": false,
-    "version":"2021.2-canary.23"}
+    "version":"2021.2-canary.23",
+    "label":"local",
+    "node_name":"sora@local"
   }`
 
 	invalidChannelIDLengthJSON = `{
@@ -424,14 +442,16 @@ var (
     "spotlight": false,
     "simulcast": false,
     "timestamp":"2021-09-24T08:15:31.854427Z",
-    "version":"2021.2-canary.23"}
+    "version":"2021.2-canary.23",
+    "label":"local",
+    "node_name":"sora@local"
   }`
 )
 
 const (
 	connStr     = "postgres://postgres:password@127.0.0.1:5432/%s?sslmode=disable"
 	dbName      = "kohakutest"
-	sqlFilePath = "scripts/timescaledb.sql"
+	sqlFilePath = "scripts/schema.sql"
 
 	channelID    = "sora"
 	connectionID = "KB0DR2FWT13C70S0NYS11P04C0"
@@ -521,6 +541,7 @@ func TestTypeOutboundRTPCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeOutboundRTPJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
@@ -541,6 +562,7 @@ func TestTypeCodecCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeCodecJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
@@ -561,6 +583,7 @@ func TestTypeMediaSourceCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeMediaSourceJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
@@ -581,6 +604,7 @@ func TestTypeDataChannelCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeDataChannelJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
@@ -601,6 +625,7 @@ func TestTypeCandidatePairCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeCandidatePairJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
@@ -621,6 +646,7 @@ func TestTypeRemoteInboundRTPCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeRemoteInboundRTPJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
@@ -641,6 +667,7 @@ func TestTypeTransportCollector(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeTransportJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
@@ -661,6 +688,7 @@ func TestInvalidConnectionIDLength(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(invalidConnectionIDLengthJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
@@ -683,6 +711,7 @@ func TestUnexpectedType(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(unexpectedTypeJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Header.Set("x-sora-stats-exporter-type", "connection.unexpected_type")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
@@ -705,6 +734,7 @@ func TestMissingTimestamp(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(missingTimestampJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
@@ -720,13 +750,14 @@ func TestMissingTimestamp(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	assert.Equal(t, `{"error":"Key: 'SoraStatsExporter.Timestamp' Error:Field validation for 'Timestamp' failed on the 'required' tag"}`, string(body))
+	assert.Equal(t, `{"error":"Key: 'SoraConnectionStats.SoraStats.Timestamp' Error:Field validation for 'Timestamp' failed on the 'required' tag"}`, string(body))
 }
 
 func TestInvalidChannelIDLength(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(invalidChannelIDLengthJSON))
 	req.Header.Set("content-type", "application/json")
+	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
@@ -742,5 +773,5 @@ func TestInvalidChannelIDLength(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	assert.Equal(t, `{"error":"Key: 'SoraStatsExporter.ChannelID' Error:Field validation for 'ChannelID' failed on the 'maxb' tag"}`, string(body))
+	assert.Equal(t, `{"error":"Key: 'SoraConnectionStats.ChannelID' Error:Field validation for 'ChannelID' failed on the 'maxb' tag"}`, string(body))
 }
