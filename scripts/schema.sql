@@ -505,7 +505,7 @@ CREATE TABLE IF NOT EXISTS erlang_vm_memory_stats (
 
     stats_type varchar(255) NOT NULL,
 
-    type_total numeric NOT NULL,
+    type_total decimal NOT NULL,
     type_processes numeric NOT NULL,
     type_processes_used numeric NOT NULL,
     type_system numeric NOT NULL,

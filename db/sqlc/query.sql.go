@@ -6,7 +6,62 @@ package db
 import (
 	"context"
 	"time"
+
+	"github.com/jackc/pgtype"
 )
+
+const InsertErlangVmMemoryStats = `-- name: InsertErlangVmMemoryStats :exec
+INSERT INTO erlang_vm_memory_stats (
+  time,
+  sora_label, sora_version, sora_node_name,
+  stats_type,
+  type_total, type_processes, type_processes_used, type_system,
+  type_atom, type_atom_used, type_binary, type_code, type_ets
+) VALUES (
+  $1,
+  $2, $3, $4,
+  $5,
+  $6, $7, $8, $9,
+  $10, $11, $12, $13, $14
+)
+`
+
+type InsertErlangVmMemoryStatsParams struct {
+	Time              time.Time      `json:"time"`
+	SoraVersion       string         `json:"sora_version"`
+	SoraLabel         string         `json:"sora_label"`
+	SoraNodeName      string         `json:"sora_node_name"`
+	StatsType         string         `json:"stats_type"`
+	TypeTotal         pgtype.Numeric `json:"type_total"`
+	TypeProcesses     pgtype.Numeric `json:"type_processes"`
+	TypeProcessesUsed pgtype.Numeric `json:"type_processes_used"`
+	TypeSystem        pgtype.Numeric `json:"type_system"`
+	TypeAtom          pgtype.Numeric `json:"type_atom"`
+	TypeAtomUsed      pgtype.Numeric `json:"type_atom_used"`
+	TypeBinary        pgtype.Numeric `json:"type_binary"`
+	TypeCode          pgtype.Numeric `json:"type_code"`
+	TypeEts           pgtype.Numeric `json:"type_ets"`
+}
+
+func (q *Queries) InsertErlangVmMemoryStats(ctx context.Context, arg InsertErlangVmMemoryStatsParams) error {
+	_, err := q.db.Exec(ctx, InsertErlangVmMemoryStats,
+		arg.Time,
+		arg.SoraVersion,
+		arg.SoraLabel,
+		arg.SoraNodeName,
+		arg.StatsType,
+		arg.TypeTotal,
+		arg.TypeProcesses,
+		arg.TypeProcessesUsed,
+		arg.TypeSystem,
+		arg.TypeAtom,
+		arg.TypeAtomUsed,
+		arg.TypeBinary,
+		arg.TypeCode,
+		arg.TypeEts,
+	)
+	return err
+}
 
 const InsertSoraConnection = `-- name: InsertSoraConnection :exec
 INSERT INTO sora_connection (

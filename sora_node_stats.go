@@ -5,10 +5,16 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/doug-martin/goqu/v9"
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgtype"
 	db "github.com/shiguredo/kohaku/db/sqlc"
 )
+
+func toNumeric(n uint64) pgtype.Numeric {
+	var num pgtype.Numeric
+	num.Set(n)
+	return num
+}
 
 // TODO(v): sqlc 化
 func (s *Server) CollectorSoraNodeErlangVmStats(c *gin.Context, stats SoraNodeErlangVmStats) error {
@@ -38,15 +44,22 @@ func (s *Server) CollectorSoraNodeErlangVmStats(c *gin.Context, stats SoraNodeEr
 				return err
 			}
 
-			ds := goqu.Insert("erlang_vm_memory_stats").Rows(
-				ErlangVmMemory{
-					ErlangVm:            *erlangVm,
-					ErlangVmMemoryStats: *e,
-				},
-			)
-			insertSQL, _, _ := ds.ToSQL()
-			_, err := s.pool.Exec(context.Background(), insertSQL)
-			if err != nil {
+			if err := s.query.InsertErlangVmMemoryStats(c, db.InsertErlangVmMemoryStatsParams{
+				Time:              *erlangVm.Time,
+				SoraVersion:       erlangVm.Version,
+				SoraLabel:         erlangVm.Label,
+				SoraNodeName:      erlangVm.NodeName,
+				StatsType:         e.Type,
+				TypeTotal:         toNumeric(e.Total),
+				TypeProcesses:     toNumeric(e.Processes),
+				TypeProcessesUsed: toNumeric(e.ProcessesUsed),
+				TypeSystem:        toNumeric(e.System),
+				TypeAtom:          toNumeric(e.Atom),
+				TypeAtomUsed:      toNumeric(e.AtomUsed),
+				TypeBinary:        toNumeric(e.Binary),
+				TypeCode:          toNumeric(e.Code),
+				TypeEts:           toNumeric(e.ETS),
+			}); err != nil {
 				return err
 			}
 		default:
