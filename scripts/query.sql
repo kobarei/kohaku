@@ -11,9 +11,9 @@ WHERE
     SELECT id
     FROM sora_node
     WHERE (
-      (label = @label) AND
-      (version = @version) AND
-      (node_name = @node_name)
+      (label = @label::varchar) AND
+      (version = @version::varchar) AND
+      (node_name = @node_name::varchar)
     )
 );
 
@@ -34,10 +34,10 @@ WHERE
     SELECT id
     FROM sora_connection
     WHERE (
-      (channel_id = @channel_id) AND
-      (session_id = @session_id) AND
-      (client_id = @client_id) AND
-      (connection_id = @connection_id)
+      (channel_id = @channel_id::varchar) AND
+      (session_id = @session_id::char) AND
+      (client_id = @client_id::varchar) AND
+      (connection_id = @connection_id::char)
     )
 );
 

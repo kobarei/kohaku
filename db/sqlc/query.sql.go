@@ -80,10 +80,10 @@ WHERE
     SELECT id
     FROM sora_connection
     WHERE (
-      (channel_id = $9) AND
-      (session_id = $10) AND
-      (client_id = $11) AND
-      (connection_id = $12)
+      (channel_id = $9::varchar) AND
+      (session_id = $10::char) AND
+      (client_id = $11::varchar) AND
+      (connection_id = $12::char)
     )
 )
 `
@@ -134,9 +134,9 @@ WHERE
     SELECT id
     FROM sora_node
     WHERE (
-      (label = $2) AND
-      (version = $3) AND
-      (node_name = $4)
+      (label = $2::varchar) AND
+      (version = $3::varchar) AND
+      (node_name = $4::varchar)
     )
 )
 `
