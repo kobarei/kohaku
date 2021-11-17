@@ -23,7 +23,7 @@ func (s *Server) CollectorSoraNodeErlangVmStats(c *gin.Context, stats SoraNodeEr
 	}
 
 	erlangVm := &ErlangVm{
-		Time: stats.Timestamp,
+		Time: &stats.Timestamp,
 
 		Label:    stats.Label,
 		Version:  stats.Version,

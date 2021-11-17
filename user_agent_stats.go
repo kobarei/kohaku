@@ -17,7 +17,7 @@ func (server *Server) CollectorUserAgentStats(c *gin.Context, stats SoraConnecti
 	}
 
 	rtc := &RTC{
-		Time:         stats.Timestamp,
+		Time:         &stats.Timestamp,
 		ConnectionID: stats.ConnectionID,
 	}
 

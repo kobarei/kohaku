@@ -13,7 +13,7 @@ import (
 type SoraStats struct {
 	Type string `json:"type" binding:"required"`
 
-	Timestamp *time.Time `json:"timestamp" binding:"required"`
+	Timestamp time.Time `json:"timestamp" binding:"required"`
 
 	Label    string `json:"label" binding:"required"`
 	Version  string `json:"version" binding:"required"`
