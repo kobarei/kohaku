@@ -33,6 +33,7 @@ func (s *Server) Collector(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+
 		if err := s.CollectorSoraNodeErlangVmStats(c, *stats); err != nil {
 			zlog.Warn().Str("type", t).Err(err).Msg("")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

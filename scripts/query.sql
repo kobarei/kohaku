@@ -8,12 +8,12 @@ SELECT
   @label, @version, @node_name
 WHERE
   NOT EXISTS (
-    SELECT label
+    SELECT id
     FROM sora_node
     WHERE (
       (label = @label) AND
-      (node_name = @node_name) AND
-      (version = @version)
+      (version = @version) AND
+      (node_name = @node_name)
     )
 );
 
@@ -31,7 +31,7 @@ SELECT
   @role, @channel_id, @session_id, @client_id, @connection_id
 WHERE
   NOT EXISTS (
-    SELECT channel_id
+    SELECT id
     FROM sora_connection
     WHERE (
       (channel_id = @channel_id) AND

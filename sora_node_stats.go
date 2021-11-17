@@ -1,7 +1,6 @@
 package kohaku
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 
@@ -18,16 +17,12 @@ func toNumeric(n uint64) pgtype.Numeric {
 
 // TODO(v): sqlc 化
 func (s *Server) CollectorSoraNodeErlangVmStats(c *gin.Context, stats SoraNodeErlangVmStats) error {
+	fmt.Println(stats.Version)
+	fmt.Println(stats.Label)
+	fmt.Println(stats.NodeName)
+
 	if err := s.InsertSoraNode(c, stats); err != nil {
 		return err
-	}
-
-	erlangVm := &ErlangVm{
-		Time: &stats.Timestamp,
-
-		Label:    stats.Label,
-		Version:  stats.Version,
-		NodeName: stats.NodeName,
 	}
 
 	for _, v := range stats.Stats {
@@ -45,10 +40,10 @@ func (s *Server) CollectorSoraNodeErlangVmStats(c *gin.Context, stats SoraNodeEr
 			}
 
 			if err := s.query.InsertErlangVmMemoryStats(c, db.InsertErlangVmMemoryStatsParams{
-				Time:              *erlangVm.Time,
-				SoraVersion:       erlangVm.Version,
-				SoraLabel:         erlangVm.Label,
-				SoraNodeName:      erlangVm.NodeName,
+				Time:              stats.Timestamp,
+				SoraVersion:       stats.Version,
+				SoraLabel:         stats.Label,
+				SoraNodeName:      stats.NodeName,
 				StatsType:         e.Type,
 				TypeTotal:         toNumeric(e.Total),
 				TypeProcesses:     toNumeric(e.Processes),
@@ -70,9 +65,9 @@ func (s *Server) CollectorSoraNodeErlangVmStats(c *gin.Context, stats SoraNodeEr
 	return nil
 }
 
-func (s *Server) InsertSoraNode(ctx context.Context, stats SoraNodeErlangVmStats) error {
-	if err := s.query.InsertSoraNode(ctx, db.InsertSoraNodeParams{
-		Timestamp: *stats.Timestamp,
+func (s *Server) InsertSoraNode(c *gin.Context, stats SoraNodeErlangVmStats) error {
+	if err := s.query.InsertSoraNode(c, db.InsertSoraNodeParams{
+		Timestamp: stats.Timestamp,
 		Label:     stats.Label,
 		Version:   stats.Version,
 		NodeName:  stats.NodeName,

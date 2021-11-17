@@ -326,7 +326,7 @@ func (server *Server) CollectorUserAgentStats(c *gin.Context, stats SoraConnecti
 
 func (server *Server) InsertSoraConnections(ctx context.Context, stats SoraConnectionStats) error {
 	if err := server.query.InsertSoraConnection(ctx, db.InsertSoraConnectionParams{
-		Timestamp:    *stats.Timestamp,
+		Timestamp:    stats.Timestamp,
 		Label:        stats.Label,
 		Version:      stats.Version,
 		NodeName:     stats.NodeName,

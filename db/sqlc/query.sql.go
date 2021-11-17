@@ -77,7 +77,7 @@ SELECT
   $8, $9, $10, $11, $12
 WHERE
   NOT EXISTS (
-    SELECT channel_id
+    SELECT id
     FROM sora_connection
     WHERE (
       (channel_id = $9) AND
@@ -131,12 +131,12 @@ SELECT
   $2, $3, $4
 WHERE
   NOT EXISTS (
-    SELECT label
+    SELECT id
     FROM sora_node
     WHERE (
       (label = $2) AND
-      (node_name = $4) AND
-      (version = $3)
+      (version = $3) AND
+      (node_name = $4)
     )
 )
 `
