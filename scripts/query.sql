@@ -44,7 +44,7 @@ WHERE
 -- name: InsertErlangVmMemoryStats :exec
 INSERT INTO erlang_vm_memory_stats (
   time,
-  sora_label, sora_version, sora_node_name,
+  sora_version, sora_label, sora_node_name,
   stats_type,
   type_total, type_processes, type_processes_used, type_system,
   type_atom, type_atom_used, type_binary, type_code, type_ets

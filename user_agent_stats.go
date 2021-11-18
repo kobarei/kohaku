@@ -333,6 +333,7 @@ func (server *Server) InsertSoraConnections(ctx context.Context, stats SoraConne
 		Multistream:  *stats.Multistream,
 		Simulcast:    *stats.Simulcast,
 		Spotlight:    *stats.Spotlight,
+		Role:         stats.Role,
 		ChannelID:    stats.ChannelID,
 		SessionID:    stats.SessionID,
 		ClientID:     stats.ClientID,
