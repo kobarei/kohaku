@@ -2,6 +2,8 @@ collector_port: 5890
 
 timescale_url: postgres://postgres:password@127.0.0.1:5432/kohaku?sslmode=disable
 
+postgres_ca_cert_path: ""
+
 # pem なのは前提とする
 http2_fullchain_file: ""
 http2_privkey_file: ""

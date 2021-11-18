@@ -35,6 +35,8 @@ type KohakuConfig struct {
 	Http2MaxConcurrentStreams uint32 `yaml:"http2_max_concurrent_streams"`
 	Http2MaxReadFrameSize     uint32 `yaml:"http2_max_read_frame_size"`
 	Http2IdleTimeout          uint32 `yaml:"http2_idle_timeout"`
+
+	PostgresCacertPath string `yaml:"postgres_ca_cert_path"`
 }
 
 // LoadConfigFromFlags 起動パラメータから設定ファイルを読み込みます

@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -53,6 +54,13 @@ func init() {
 
 func main() {
 	var connStr = kohaku.Config.TimescaleURL
+	var postgresCacertPath = kohaku.Config.PostgresCacertPath
+	if postgresCacertPath != "" {
+		params := url.Values{
+			"sslrootcert": {postgresCacertPath},
+		}
+		connStr = connStr + "&" + params.Encode()
+	}
 	pool, err := NewDB(context.Background(), connStr)
 	if err != nil {
 		// TODO: エラーメッセージを修正する
