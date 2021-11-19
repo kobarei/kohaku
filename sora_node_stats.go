@@ -1,26 +1,28 @@
 package kohaku
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 
-	"github.com/doug-martin/goqu/v9"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgtype"
+	db "github.com/shiguredo/kohaku/db/sqlc"
 )
 
+func toNumeric(n uint64) pgtype.Numeric {
+	var num pgtype.Numeric
+	num.Set(n)
+	return num
+}
+
 // TODO(v): sqlc 化
-func CollectorSoraNodeErlangVmStats(pool *pgxpool.Pool, stats SoraNodeErlangVmStats) error {
-	if err := InsertSoraNode(context.Background(), pool, stats); err != nil {
+func (s *Server) CollectorSoraNodeErlangVmStats(c *gin.Context, stats SoraNodeErlangVmStats) error {
+	fmt.Println(stats.Version)
+	fmt.Println(stats.Label)
+	fmt.Println(stats.NodeName)
+
+	if err := s.InsertSoraNode(c, stats); err != nil {
 		return err
-	}
-
-	erlangVm := &ErlangVm{
-		Time: &stats.Timestamp,
-
-		Label:    stats.Label,
-		Version:  stats.Version,
-		NodeName: stats.NodeName,
 	}
 
 	for _, v := range stats.Stats {
@@ -32,20 +34,27 @@ func CollectorSoraNodeErlangVmStats(pool *pgxpool.Pool, stats SoraNodeErlangVmSt
 		// type をみて struct をさらに別途デコードする
 		switch erlangVmStats.Type {
 		case "erlang-vm-memory":
-			s := new(ErlangVmMemoryStats)
-			if err := json.Unmarshal(v, &s); err != nil {
+			e := new(ErlangVmMemoryStats)
+			if err := json.Unmarshal(v, &e); err != nil {
 				return err
 			}
 
-			ds := goqu.Insert("erlang_vm_memory_stats").Rows(
-				ErlangVmMemory{
-					ErlangVm:            *erlangVm,
-					ErlangVmMemoryStats: *s,
-				},
-			)
-			insertSQL, _, _ := ds.ToSQL()
-			_, err := pool.Exec(context.Background(), insertSQL)
-			if err != nil {
+			if err := s.query.InsertErlangVmMemoryStats(c, db.InsertErlangVmMemoryStatsParams{
+				Time:              stats.Timestamp,
+				SoraVersion:       stats.Version,
+				SoraLabel:         stats.Label,
+				SoraNodeName:      stats.NodeName,
+				StatsType:         e.Type,
+				TypeTotal:         toNumeric(e.Total),
+				TypeProcesses:     toNumeric(e.Processes),
+				TypeProcessesUsed: toNumeric(e.ProcessesUsed),
+				TypeSystem:        toNumeric(e.System),
+				TypeAtom:          toNumeric(e.Atom),
+				TypeAtomUsed:      toNumeric(e.AtomUsed),
+				TypeBinary:        toNumeric(e.Binary),
+				TypeCode:          toNumeric(e.Code),
+				TypeEts:           toNumeric(e.ETS),
+			}); err != nil {
 				return err
 			}
 		default:
@@ -56,39 +65,14 @@ func CollectorSoraNodeErlangVmStats(pool *pgxpool.Pool, stats SoraNodeErlangVmSt
 	return nil
 }
 
-// TODO(v): sqlc 化
-func InsertSoraNode(ctx context.Context, pool *pgxpool.Pool, stats SoraNodeErlangVmStats) error {
-	sq := goqu.Select("label").
-		From("sora_node").
-		Where(goqu.Ex{
-			"label":     stats.Label,
-			"node_name": stats.NodeName,
-			"version":   stats.Version,
-		})
-	le := goqu.L("NOT EXISTS ?", sq)
-
-	ds := goqu.Insert("sora_node").
-		Cols(
-			"timestamp",
-
-			"label",
-			"version",
-			"node_name",
-		).
-		FromQuery(
-			goqu.Select(
-				goqu.L("?, ?, ?, ?",
-					stats.Timestamp,
-
-					stats.Label,
-					stats.Version,
-					stats.NodeName,
-				),
-			).Where(le))
-	insertSQL, _, _ := ds.ToSQL()
-	if _, err := pool.Exec(ctx, insertSQL); err != nil {
+func (s *Server) InsertSoraNode(c *gin.Context, stats SoraNodeErlangVmStats) error {
+	if err := s.query.InsertSoraNode(c, db.InsertSoraNodeParams{
+		Timestamp: stats.Timestamp,
+		Label:     stats.Label,
+		Version:   stats.Version,
+		NodeName:  stats.NodeName,
+	}); err != nil {
 		return err
 	}
-
 	return nil
 }

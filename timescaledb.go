@@ -26,19 +26,6 @@ type SoraConnection struct {
 	ConnectionID string `db:"connection_id"`
 }
 
-type ErlangVm struct {
-	Time *time.Time `db:"time"`
-
-	Label    string `db:"sora_label"`
-	Version  string `db:"sora_version"`
-	NodeName string `db:"sora_node_name"`
-}
-
-type ErlangVmMemory struct {
-	ErlangVm
-	ErlangVmMemoryStats
-}
-
 type RTC struct {
 	Time *time.Time `db:"time"`
 

@@ -19,7 +19,7 @@ func (s *Server) Collector(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		if err := CollectorUserAgentStats(s.pool, *stats); err != nil {
+		if err := s.CollectorUserAgentStats(c, *stats); err != nil {
 			zlog.Warn().Str("type", t).Err(err).Msg("")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -33,7 +33,8 @@ func (s *Server) Collector(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		if err := CollectorSoraNodeErlangVmStats(s.pool, *stats); err != nil {
+
+		if err := s.CollectorSoraNodeErlangVmStats(c, *stats); err != nil {
 			zlog.Warn().Str("type", t).Err(err).Msg("")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return

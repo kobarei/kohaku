@@ -10,6 +10,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4/pgxpool"
+	db "github.com/shiguredo/kohaku/db/sqlc"
 
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
@@ -24,6 +25,7 @@ import (
 type Server struct {
 	config *KohakuConfig
 	pool   *pgxpool.Pool
+	query  *db.Queries
 	http.Server
 }
 
@@ -46,6 +48,7 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	s := &Server{
 		config: c,
 		pool:   pool,
+		query:  db.New(pool),
 		Server: http.Server{
 			Addr:    fmt.Sprintf(":%d", c.CollectorPort),
 			Handler: h2c.NewHandler(r, h2s),
