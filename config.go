@@ -22,7 +22,9 @@ type KohakuConfig struct {
 
 	CollectorPort int `yaml:"collector_port"`
 
-	TimescaleURL string `yaml:"timescale_url"`
+	TimescaleURL          string `yaml:"timescale_url"`
+	TimescaleSSLMode      string `yaml:"timescale_sslmode"`
+	TimescaleRootcertFile string `yaml:"timescale_rootcert_file"`
 
 	// TODO(v): 名前検討
 	Http2FullchainFile string `yaml:"http2_fullchain_file"`
@@ -35,8 +37,6 @@ type KohakuConfig struct {
 	Http2MaxConcurrentStreams uint32 `yaml:"http2_max_concurrent_streams"`
 	Http2MaxReadFrameSize     uint32 `yaml:"http2_max_read_frame_size"`
 	Http2IdleTimeout          uint32 `yaml:"http2_idle_timeout"`
-
-	PostgresCacertPath string `yaml:"postgres_ca_cert_path"`
 }
 
 // LoadConfigFromFlags 起動パラメータから設定ファイルを読み込みます

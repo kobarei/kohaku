@@ -54,12 +54,14 @@ func init() {
 
 func main() {
 	var connStr = kohaku.Config.TimescaleURL
-	var postgresCacertPath = kohaku.Config.PostgresCacertPath
-	if postgresCacertPath != "" {
+	var timescaleSSLMode = kohaku.Config.TimescaleSSLMode
+	var timescaleRootcertFile = kohaku.Config.TimescaleRootcertFile
+	if (timescaleSSLMode != "") && (timescaleRootcertFile != "") {
 		params := url.Values{
-			"sslrootcert": {postgresCacertPath},
+			"sslrootcert": {timescaleRootcertFile},
+			"sslmode":     {timescaleSSLMode},
 		}
-		connStr = connStr + "&" + params.Encode()
+		connStr = connStr + "?" + params.Encode()
 	}
 	pool, err := NewDB(context.Background(), connStr)
 	if err != nil {
