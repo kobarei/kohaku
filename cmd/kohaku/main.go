@@ -53,9 +53,9 @@ func init() {
 }
 
 func main() {
-	var connStr = kohaku.Config.TimescaleURL
-	var timescaleSSLMode = kohaku.Config.TimescaleSSLMode
-	var timescaleRootcertFile = kohaku.Config.TimescaleRootcertFile
+	connStr := kohaku.Config.TimescaleURL
+	timescaleSSLMode := kohaku.Config.TimescaleSSLMode
+	timescaleRootcertFile := kohaku.Config.TimescaleRootcertFile
 	if (timescaleSSLMode != "") && (timescaleRootcertFile != "") {
 		params := url.Values{
 			"sslrootcert": {timescaleRootcertFile},
