@@ -12,7 +12,6 @@ WorkingDirectory=/home/shiguredo/kohaku
 Environment="GIN_MODE=release"
 ExecStart=/bin/bash -c '/home/shiguredo/kohaku/bin/kohaku -c /home/shiguredo/kohaku/config.yaml 2>/var/log/kohaku/stderr.log 1>/var/log/kohaku/stdout.log'
 Type=simple
-ExecStop=/bin/kill -SIGTERM ${MAINPID}
 LogsDirectory=kohaku
 
 [Install]
