@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Restart=always
 RestartSec=60s
-KillMode=process
+KillMode=control-group
 User=shiguredo
 Group=shiguredo
 WorkingDirectory=/home/shiguredo/kohaku
