@@ -476,7 +476,7 @@ var (
 const (
 	connStr     = "postgres://postgres:password@127.0.0.1:5432/%s?sslmode=disable"
 	dbName      = "kohakutest"
-	sqlFilePath = "scripts/schema.sql"
+	sqlFilePath = "script/schema.sql"
 
 	channelID    = "sora"
 	connectionID = "KB0DR2FWT13C70S0NYS11P04C0"
