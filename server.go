@@ -71,7 +71,7 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 			}
 
 			tlsConfig := &tls.Config{
-				ClientAuth: tls.VerifyClientCertIfGiven,
+				ClientAuth: tls.RequireAndVerifyClientCert,
 				ClientCAs:  certPool,
 			}
 			s.Server.TLSConfig = tlsConfig
