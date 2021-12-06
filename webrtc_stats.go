@@ -37,7 +37,7 @@ type RTCReceivedRtpStreamStats struct {
 	RTCRtpStreamStats
 
 	PacketsReceived       *uint64  `json:"packetsReceived" db:"packets_received"`              // unsigned long long   packetsReceived;
-	PacketsLost           *uint32  `json:"packetsLost" db:"packets_lost"`                      // long long            packetsLost;
+	PacketsLost           *int64   `json:"packetsLost" db:"packets_lost"`                      // long long            packetsLost;
 	Jitter                *float64 `json:"jitter" db:"jitter"`                                 // double               jitter;
 	PacketsDiscarded      *uint64  `json:"packetsDiscarded" db:"packets_discarded"`            // unsigned long long   packetsDiscarded;
 	PacketsRepaired       *uint64  `json:"packetsRepaired" db:"packets_repaired"`              // unsigned long long   packetsRepaired;
