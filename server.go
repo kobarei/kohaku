@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -102,6 +103,15 @@ func (s *Server) Start(c *KohakuConfig) error {
 	} else {
 		http2FullchainFile := c.Http2FullchainFile
 		http2PrivkeyFile := c.Http2PrivkeyFile
+
+		if _, err := os.Stat(http2FullchainFile); err != nil {
+			return fmt.Errorf("http2FullchainFile: %s", err)
+		}
+
+		if _, err := os.Stat(http2PrivkeyFile); err != nil {
+			return fmt.Errorf("http2PrivkeyFile: %s", err)
+		}
+
 		if err := s.ListenAndServeTLS(http2FullchainFile, http2PrivkeyFile); err != http.ErrServerClosed {
 			return err
 		}
