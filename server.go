@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -60,15 +61,9 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	if !http2H2c {
 		if c.Http2VerifyCacertPath != "" {
 			clientCAPath := c.Http2VerifyCacertPath
-			clientCA, err := ioutil.ReadFile(clientCAPath)
+			certPool, err := appendCerts(clientCAPath)
 			if err != nil {
 				panic(err)
-			}
-
-			certPool := x509.NewCertPool()
-			ok := certPool.AppendCertsFromPEM(clientCA)
-			if !ok {
-				panic("failed to append certificates")
 			}
 
 			tlsConfig := &tls.Config{
@@ -167,4 +162,38 @@ func logEvent(status int) *zerolog.Event {
 	}
 
 	return event
+}
+
+func appendCerts(clientCAPath string) (*x509.CertPool, error) {
+	certPool := x509.NewCertPool()
+	fi, err := os.Stat(clientCAPath)
+	if err != nil {
+		return nil, err
+	}
+	if fi.IsDir() {
+		files, err := ioutil.ReadDir(clientCAPath)
+		if err != nil {
+			return nil, err
+		}
+		for _, f := range files {
+			clientCA, err := ioutil.ReadFile(filepath.Join(clientCAPath, f.Name()))
+			if err != nil {
+				return nil, err
+			}
+			ok := certPool.AppendCertsFromPEM(clientCA)
+			if !ok {
+				return nil, fmt.Errorf("failed to append certificates: %s", filepath.Join(clientCAPath, f.Name()))
+			}
+		}
+	} else {
+		clientCA, err := ioutil.ReadFile(clientCAPath)
+		if err != nil {
+			return nil, err
+		}
+		ok := certPool.AppendCertsFromPEM(clientCA)
+		if !ok {
+			return nil, fmt.Errorf("failed to append certificates: %s", clientCAPath)
+		}
+	}
+	return certPool, nil
 }
