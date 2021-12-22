@@ -7,13 +7,16 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
-	"os/exec"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/ory/dockertest/v3"
+	"github.com/ory/dockertest/v3/docker"
 )
 
 // TODO(v): mockDB を導入する
@@ -474,9 +477,10 @@ var (
 )
 
 const (
-	connStr     = "postgres://postgres:password@127.0.0.1:5432/%s?sslmode=disable"
-	dbName      = "kohakutest"
-	sqlFilePath = "script/schema.sql"
+	connStr          = "postgres://%s:%s@%s/%s?sslmode=disable"
+	postgresUser     = "postgres"
+	postgresPassword = "password"
+	postgresDB       = "kohakutest"
 
 	channelID    = "sora"
 	connectionID = "KB0DR2FWT13C70S0NYS11P04C0"
@@ -484,22 +488,13 @@ const (
 )
 
 var (
-	pool               *pgxpool.Pool
-	postgresDBURL      = fmt.Sprintf(connStr, "postgres")
-	kohakuDBURL        = fmt.Sprintf(connStr, dbName)
-	dropDBSQL          = fmt.Sprintf("DROP DATABASE IF EXISTS %s", dbName)
-	createDBSQL        = fmt.Sprintf("CREATE DATABASE %s", dbName)
-	createExtensionSQL = fmt.Sprintf("CREATE EXTENSION IF NOT EXISTS timescaledb")
-	server             *Server
+	pgPool *pgxpool.Pool
+	server *Server
 )
-
-func createTable() error {
-	return exec.Command("psql", "-d", dbName, "-f", sqlFilePath).Run()
-}
 
 func getStatsType(table, connectionID string) (*string, error) {
 	selectSQL := fmt.Sprintf("SELECT stats_type FROM %s WHERE sora_connection_id=$1", table)
-	row := pool.QueryRow(context.Background(), selectSQL, connectionID)
+	row := pgPool.QueryRow(context.Background(), selectSQL, connectionID)
 
 	var statsType string
 	if err := row.Scan(&statsType); err != nil {
@@ -510,56 +505,62 @@ func getStatsType(table, connectionID string) (*string, error) {
 }
 
 func TestMain(m *testing.M) {
-	// DB の削除、作成、Table の作成
-	postgresDBConfig, err := pgxpool.ParseConfig(postgresDBURL)
-	if err != nil {
-		panic(err)
-	}
-	postgresDBPool, err := pgxpool.ConnectConfig(context.Background(), postgresDBConfig)
-	if err != nil {
-		panic(err)
-	}
-	defer postgresDBPool.Close()
-
-	_, err = postgresDBPool.Exec(context.Background(), dropDBSQL)
-	if err != nil {
-		panic(err)
-	}
-	_, err = postgresDBPool.Exec(context.Background(), createDBSQL)
-	if err != nil {
-		panic(err)
-	}
-	config, err := pgxpool.ParseConfig(kohakuDBURL)
-	if err != nil {
-		panic(err)
-	}
-	pool, err = pgxpool.ConnectConfig(context.Background(), config)
+	pool, err := dockertest.NewPool("")
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = pool.Exec(context.Background(), createExtensionSQL)
+	pwd, _ := os.Getwd()
+
+	resource, err := pool.RunWithOptions(&dockertest.RunOptions{
+		Repository: "timescale/timescaledb",
+		Tag:        "2.5.1-pg14",
+		Env: []string{
+			"POSTGRES_PASSWORD=" + postgresPassword,
+			"POSTGRES_USER=" + postgresUser,
+			"POSTGRES_DB=" + postgresDB,
+			"listen_addresses = '*'",
+		},
+		Mounts: []string{
+			pwd + "/script/schema.sql:/docker-entrypoint-initdb.d/schema.sql",
+		},
+	}, func(config *docker.HostConfig) {
+		config.AutoRemove = true
+		config.RestartPolicy = docker.RestartPolicy{Name: "no"}
+	})
 	if err != nil {
 		panic(err)
 	}
 
-	// TODO: pool を使用する
-	if err := createTable(); err != nil {
+	hostAndPort := resource.GetHostPort("5432/tcp")
+	kohakuDBURL := fmt.Sprintf(connStr, postgresUser, postgresPassword, hostAndPort, postgresDB)
+
+	resource.Expire(120)
+	pool.MaxWait = 120 * time.Second
+	if err = pool.Retry(func() error {
+		config, err := pgxpool.ParseConfig(kohakuDBURL)
+		if err != nil {
+			return err
+		}
+		pgPool, err = pgxpool.ConnectConfig(context.Background(), config)
+		if err != nil {
+			return err
+		}
+
+		return pgPool.Ping(context.Background())
+	}); err != nil {
 		panic(err)
 	}
 
-	server = NewServer(&KohakuConfig{}, pool)
+	server = NewServer(&KohakuConfig{}, pgPool)
 
-	status := m.Run()
+	code := m.Run()
 
-	// DB の削除
-	pool.Close()
-	_, err = postgresDBPool.Exec(context.Background(), dropDBSQL)
-	if err != nil {
+	if err := pool.Purge(resource); err != nil {
 		panic(err)
 	}
 
-	os.Exit(status)
+	os.Exit(code)
 }
 
 func TestTypeOutboundRTPCollector(t *testing.T) {
