@@ -1,0 +1,24 @@
+package kohaku
+
+import (
+	"net/http"
+	"net/http/httptest"
+	"strings"
+	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestStatus(t *testing.T) {
+	// Setup
+	req := httptest.NewRequest(http.MethodPost, "/status", strings.NewReader(""))
+	req.Proto = "HTTP/2.0"
+	rec := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(rec)
+	c.Request = req
+
+	// Assertions
+	server.Status(c)
+	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+}
