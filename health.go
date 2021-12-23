@@ -9,7 +9,7 @@ import (
 )
 
 // TODO: ログレベル、ログメッセージを変更する
-func (s *Server) Status(c *gin.Context) {
+func (s *Server) Health(c *gin.Context) {
 	if err := s.pool.Ping(context.Background()); err != nil {
 		zlog.Error().Err(err).Msg("")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

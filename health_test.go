@@ -12,13 +12,13 @@ import (
 
 func TestStatus(t *testing.T) {
 	// Setup
-	req := httptest.NewRequest(http.MethodPost, "/status", strings.NewReader(""))
+	req := httptest.NewRequest(http.MethodPost, "/health", strings.NewReader(""))
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(rec)
 	c.Request = req
 
 	// Assertions
-	server.Status(c)
+	server.Health(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 }
