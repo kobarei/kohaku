@@ -23,456 +23,491 @@ import (
 
 var (
 	collectorTypeCodecJSON = `{
-    "role": "sendrecv",
-    "type": "connection.user-agent",
     "channel_id": "sora",
-    "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
-    "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
-    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
-    "stats": [{
-      "id": "RTCCodec_video_V04mIx_Inbound_120",
-      "timestamp": 1628869622194.298,
-      "type": "codec",
-      "transportId": "RTCTransport_data_1",
-      "payloadType": 120,
-      "mimeType": "video/VP9",
-      "clockRate": 90000,
-      "sdpFmtpLine": "profile-id=0"
-    }],
-    "multistream": false,
-    "spotlight": false,
+    "client_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "connection_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "id": "W8B607ZBG92PD9JTMS19BSTE18",
+    "label": "WebRTC SFU Sora",
+    "multistream": true,
+    "node_name": "sora@127.0.0.1",
+    "role": "sendrecv",
+    "session_id": "JTYG1KGGPH2DKF86Y5B0GMWFSM",
     "simulcast": false,
-    "timestamp":"2021-09-24T08:15:31.854427Z",
-    "version":"2021.2-canary.23",
-    "label":"local",
-    "node_name":"sora@local"
+    "spotlight": false,
+    "stats": [
+      {
+        "channels": 2,
+        "id": "RTCCodec_audio_NB1bb0_Inbound_109",
+        "timestamp": 1640225763760.085,
+        "type": "codec",
+        "clockRate": 48000,
+        "mimeType": "audio/opus",
+        "payloadType": 109,
+        "sdpFmtpLine": "minptime=10;useinbandfec=1",
+        "transportId": "RTCTransport_data_1"
+      }
+    ],
+    "timestamp": "2021-12-23T02:16:03.775161Z",
+    "type": "connection.user-agent",
+    "version": "2021.2.0"
   }`
 
 	collectorTypeOutboundRTPJSON = `{
-    "role": "sendrecv",
-    "type": "connection.user-agent",
     "channel_id": "sora",
-    "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
-    "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
-    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
-    "stats": [{
-      "id": "RTCOutboundRTPVideoStream_1028062523",
-      "timestamp": 1628927446077.817,
-      "type": "outbound-rtp",
-      "ssrc": 1028062523,
-      "kind": "video",
-      "trackId": "RTCMediaStreamTrack_sender_2",
-      "transportId": "RTCTransport_data_1",
-      "codecId": "RTCCodec_video_oVLkJT_Outbound_120",
-      "mediaType": "video",
-      "mediaSourceId": "RTCVideoSource_2",
-      "remoteId": "RTCRemoteInboundRtpVideoStream_1028062523",
-      "packetsSent": 2056,
-      "retransmittedPacketsSent": 0,
-      "bytesSent": 2059458,
-      "headerBytesSent": 54692,
-      "retransmittedBytesSent": 0,
-      "framesEncoded": 538,
-      "keyFramesEncoded": 1,
-      "totalEncodeTime": 2.541,
-      "totalEncodedBytesTarget": 0,
-      "frameWidth": 640,
-      "frameHeight": 480,
-      "framesPerSecond": 30,
-      "framesSent": 538,
-      "hugeFramesSent": 0,
-      "totalPacketSendDelay": 60.249,
-      "qualityLimitationReason": "none",
-      "qualityLimitationResolutionChanges": 0,
-      "encoderImplementation": "libvpx",
-      "firCount": 0,
-      "pliCount": 0,
-      "nackCount": 0,
-      "qpSum": 40927
-    }],
-    "multistream": false,
-    "spotlight": false,
+    "client_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "connection_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "id": "W8B607ZBG92PD9JTMS19BSTE18",
+    "label": "WebRTC SFU Sora",
+    "multistream": true,
+    "node_name": "sora@127.0.0.1",
+    "role": "sendrecv",
+    "session_id": "JTYG1KGGPH2DKF86Y5B0GMWFSM",
     "simulcast": false,
-    "timestamp":"2021-09-24T08:15:31.854427Z",
-    "version":"2021.2-canary.23",
-    "label":"local",
-    "node_name":"sora@local"
+    "spotlight": false,
+    "stats": [
+      {
+        "framesEncoded": 892,
+        "totalPacketSendDelay": 19.477,
+        "mediaSourceId": "RTCVideoSource_10",
+        "headerBytesSent": 26760,
+        "transportId": "RTCTransport_data_1",
+        "framesPerSecond": 31,
+        "framesSent": 892,
+        "id": "RTCOutboundRTPVideoStream_148236668",
+        "totalEncodeTime": 1.532,
+        "retransmittedBytesSent": 0,
+        "keyFramesEncoded": 1,
+        "frameWidth": 240,
+        "qualityLimitationDurations": {
+          "cpu": 0,
+          "none": 30083,
+          "other": 0,
+          "bandwidth": 0
+        },
+        "packetsSent": 971,
+        "nackCount": 0,
+        "encoderImplementation": "libvpx",
+        "trackId": "RTCMediaStreamTrack_sender_10",
+        "qualityLimitationReason": "none",
+        "type": "outbound-rtp",
+        "firCount": 0,
+        "codecId": "RTCCodec_video_WvsPAp_Outbound_120",
+        "totalEncodedBytesTarget": 0,
+        "kind": "video",
+        "frameHeight": 160,
+        "hugeFramesSent": 0,
+        "pliCount": 0,
+        "qpSum": 8808,
+        "bytesSent": 722767,
+        "timestamp": 1640225763760.085,
+        "ssrc": 148236668,
+        "remoteId": "RTCRemoteInboundRtpVideoStream_148236668",
+        "retransmittedPacketsSent": 0,
+        "mediaType": "video",
+        "qualityLimitationResolutionChanges": 0
+      }
+    ],
+    "timestamp": "2021-12-23T02:16:03.775161Z",
+    "type": "connection.user-agent",
+    "version": "2021.2.0"
   }`
 
 	collectorTypeMediaSourceJSON = `{
+    "channel_id": "sora",
+    "client_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "connection_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "id": "W8B607ZBG92PD9JTMS19BSTE18",
+    "label": "WebRTC SFU Sora",
+    "multistream": true,
+    "node_name": "sora@127.0.0.1",
     "role": "sendrecv",
-    "channel_id":"sora",
-    "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
-    "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
-    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
-    "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
-    "label":"WebRTC.SFU.Sora",
-    "stats":[{
-      "id":"RTCAudioSource_3",
-      "kind":"audio",
-      "timestamp":1.63247133184561206055e+12,
-      "type":"media-source",
-      "audioLevel":2.13629566331980345895e-03,
-      "echoReturnLoss":-30,
-      "echoReturnLossEnhancement":1.75512030720710754395e-01,
-      "totalAudioEnergy":4.43774538826569622503e-05,
-      "totalSamplesDuration":1.00599999999998299671e+01,
-      "trackIdentifier":"e6763fb2-0f7a-46f2-af0d-bdde1fcc1ee7"
-    },{
-      "height":480,
-      "id":"RTCVideoSource_4",
-      "kind":"video",
-      "timestamp":1.63247133184561206055e+12,
-      "type":"media-source",
-      "width":640,
-      "frames":284,
-      "framesPerSecond":30,
-      "trackIdentifier":"9d2bc9fd-361e-4a74-9030-ee2212aadfee"
-    }],
-    "multistream": false,
-    "spotlight": false,
+    "session_id": "JTYG1KGGPH2DKF86Y5B0GMWFSM",
     "simulcast": false,
-    "timestamp":"2021-09-24T08:15:31.854427Z",
-    "type":"connection.user-agent",
-    "version":"2021.2-canary.23",
-    "label":"local",
-    "node_name":"sora@local"
+    "spotlight": false,
+    "stats": [
+      {
+        "id": "RTCAudioSource_9",
+        "kind": "audio",
+        "timestamp": 1640225763760.085,
+        "type": "media-source",
+        "audioLevel": 0,
+        "totalAudioEnergy": 0,
+        "totalSamplesDuration": 30.090000000001904,
+        "trackIdentifier": "9b36135b-f15f-4779-9aa2-d00609839d2d"
+      },
+      {
+        "height": 160,
+        "id": "RTCVideoSource_10",
+        "kind": "video",
+        "timestamp": 1640225763760.085,
+        "type": "media-source",
+        "width": 240,
+        "frames": 894,
+        "framesPerSecond": 31,
+        "trackIdentifier": "425bc57b-5f59-4263-bcc5-579deb8c4d83"
+      }
+    ],
+    "timestamp": "2021-12-23T02:16:03.775161Z",
+    "type": "connection.user-agent",
+    "version": "2021.2.0"
   }
 `
 
 	collectorTypeDataChannelJSON = `{
+    "channel_id": "sora",
+    "client_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "connection_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "id": "W8B607ZBG92PD9JTMS19BSTE18",
+    "label": "WebRTC SFU Sora",
+    "multistream": true,
+    "node_name": "sora@127.0.0.1",
     "role": "sendrecv",
-    "channel_id":"sora",
-    "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
-    "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
-    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
-    "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
-    "label":"WebRTC.SFU.Sora",
-    "stats":[{
-      "id":"RTCDataChannel_10",
-      "label":"stats",
-      "protocol":"",
-      "state":"open",
-      "timestamp":1.63247133184561206055e+12,
-      "type":"data-channel",
-      "bytesReceived":56,
-      "bytesSent":2853,
-      "dataChannelIdentifier":8,
-      "messagesReceived":2,
-      "messagesSent":1
-    },{
-      "id":"RTCDataChannel_6",
-      "label":"signaling",
-      "protocol":"",
-      "state":"open",
-      "timestamp":1.63247133184561206055e+12,
-      "type":"data-channel",
-      "bytesReceived":0,
-      "bytesSent":0,
-      "dataChannelIdentifier":0,
-      "messagesReceived":0,
-      "messagesSent":0
-    },{
-      "id":"RTCDataChannel_7",
-      "label":"notify",
-      "protocol":"",
-      "state":"open",
-      "timestamp":1.63247133184561206055e+12,
-      "type":"data-channel",
-      "bytesReceived":64,
-      "bytesSent":0,
-      "dataChannelIdentifier":2,
-      "messagesReceived":1,
-      "messagesSent":0
-    },{
-      "id":"RTCDataChannel_8",
-      "label":"push",
-      "protocol":"",
-      "state":"open",
-      "timestamp":1.63247133184561206055e+12,
-      "type":"data-channel",
-      "bytesReceived":0,
-      "bytesSent":0,
-      "dataChannelIdentifier":4,
-      "messagesReceived":0,
-      "messagesSent":0
-    },{
-      "id":"RTCDataChannel_9",
-      "label":"e2ee",
-      "protocol":"",
-      "state":"open",
-      "timestamp":1.63247133184561206055e+12,
-      "type":"data-channel",
-      "bytesReceived":0,
-      "bytesSent":0,
-      "dataChannelIdentifier":6,
-      "messagesReceived":0,
-      "messagesSent":0
-    }],
-    "multistream": false,
-    "spotlight": false,
+    "session_id": "JTYG1KGGPH2DKF86Y5B0GMWFSM",
     "simulcast": false,
-    "timestamp":"2021-09-24T08:15:31.854427Z",
-    "type":"connection.user-agent",
-    "version":"2021.2-canary.23",
-    "label":"local",
-    "node_name":"sora@local"
+    "spotlight": false,
+    "stats": [
+      {
+        "id": "RTCDataChannel_17",
+        "label": "signaling",
+        "protocol": "",
+        "state": "open",
+        "timestamp": 1640225763760.085,
+        "type": "data-channel",
+        "bytesReceived": 0,
+        "bytesSent": 0,
+        "dataChannelIdentifier": 0,
+        "messagesReceived": 0,
+        "messagesSent": 0
+      },
+      {
+        "id": "RTCDataChannel_18",
+        "label": "notify",
+        "protocol": "",
+        "state": "open",
+        "timestamp": 1640225763760.085,
+        "type": "data-channel",
+        "bytesReceived": 192,
+        "bytesSent": 0,
+        "dataChannelIdentifier": 2,
+        "messagesReceived": 3,
+        "messagesSent": 0
+      },
+      {
+        "id": "RTCDataChannel_19",
+        "label": "push",
+        "protocol": "",
+        "state": "open",
+        "timestamp": 1640225763760.085,
+        "type": "data-channel",
+        "bytesReceived": 0,
+        "bytesSent": 0,
+        "dataChannelIdentifier": 4,
+        "messagesReceived": 0,
+        "messagesSent": 0
+      },
+      {
+        "id": "RTCDataChannel_20",
+        "label": "stats",
+        "protocol": "",
+        "state": "open",
+        "timestamp": 1640225763760.085,
+        "type": "data-channel",
+        "bytesReceived": 28,
+        "bytesSent": 0,
+        "dataChannelIdentifier": 6,
+        "messagesReceived": 1,
+        "messagesSent": 0
+      }
+    ],
+    "timestamp": "2021-12-23T02:16:03.775161Z",
+    "type": "connection.user-agent",
+    "version": "2021.2.0"
   }
 `
 
 	collectorTypeCandidatePairJSON = `{
+    "channel_id": "sora",
+    "client_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "connection_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "id": "W8B607ZBG92PD9JTMS19BSTE18",
+    "label": "WebRTC SFU Sora",
+    "multistream": true,
+    "node_name": "sora@127.0.0.1",
     "role": "sendrecv",
-    "channel_id":"sora",
-    "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
-    "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
-    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
-    "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
-    "label":"WebRTC.SFU.Sora",
-    "stats":[{
-      "id":"RTCIceCandidatePair_zNnR\/QQb_SwzcXtlY",
-      "priority":179616219446525440,
-      "state":"succeeded",
-      "timestamp":1.63247133184561206055e+12,
-      "type":"candidate-pair",
-      "writable":true,
-      "availableOutgoingBitrate":500000,
-      "bytesReceived":3437,
-      "bytesSent":670907,
-      "consentRequestsSent":7,
-      "currentRoundTripTime":1.00000000000000002082e-03,
-      "localCandidateId":"RTCIceCandidate_zNnR\/QQb",
-      "nominated":true,
-      "remoteCandidateId":"RTCIceCandidate_SwzcXtlY",
-      "requestsReceived":9,
-      "requestsSent":1,
-      "responsesReceived":8,
-      "responsesSent":9,
-      "totalRoundTripTime":5.00000000000000010408e-03,
-      "transportId":"RTCTransport_data_1"
-    }],
-    "multistream": false,
-    "spotlight": false,
+    "session_id": "JTYG1KGGPH2DKF86Y5B0GMWFSM",
     "simulcast": false,
-    "timestamp":"2021-09-24T08:15:31.854427Z",
-    "type":"connection.user-agent",
-    "version":"2021.2-canary.23",
-    "label":"local",
-    "node_name":"sora@local"
+    "spotlight": false,
+    "stats": [
+      {
+        "id": "RTCIceCandidatePair_eRplCBvi_JXPaEzOA",
+        "priority": 179616219446525440,
+        "state": "succeeded",
+        "timestamp": 1640225763760.085,
+        "type": "candidate-pair",
+        "writable": true,
+        "availableOutgoingBitrate": 1000000,
+        "bytesDiscardedOnSend": 0,
+        "bytesReceived": 5490,
+        "bytesSent": 833847,
+        "consentRequestsSent": 15,
+        "currentRoundTripTime": 0.001,
+        "localCandidateId": "RTCIceCandidate_eRplCBvi",
+        "nominated": true,
+        "packetsDiscardedOnSend": 0,
+        "packetsReceived": 60,
+        "packetsSent": 2520,
+        "remoteCandidateId": "RTCIceCandidate_JXPaEzOA",
+        "requestsReceived": 14,
+        "requestsSent": 1,
+        "responsesReceived": 16,
+        "responsesSent": 14,
+        "totalRoundTripTime": 0.032,
+        "transportId": "RTCTransport_data_1"
+      }
+    ],
+    "timestamp": "2021-12-23T02:16:03.775161Z",
+    "type": "connection.user-agent",
+    "version": "2021.2.0"
   }
 `
 
 	collectorTypeRemoteInboundRTPJSON = `{
+    "channel_id": "sora",
+    "client_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "connection_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "id": "W8B607ZBG92PD9JTMS19BSTE18",
+    "label": "WebRTC SFU Sora",
+    "multistream": true,
+    "node_name": "sora@127.0.0.1",
     "role": "sendrecv",
-    "channel_id":"sora",
-    "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
-    "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
-    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
-    "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
-    "label":"WebRTC.SFU.Sora",
-    "stats":[{
-      "fractionLost":0,
-      "id":"RTCRemoteInboundRtpAudioStream_1073653878",
-      "kind":"audio",
-      "ssrc":1073653878,
-      "timestamp":1.63247133183873803711e+12,
-      "type":"remote-inbound-rtp",
-      "codecId":"RTCCodec_audio_Z4hWio_Outbound_109",
-      "jitter":2.91666666666666690808e-04,
-      "localId":"RTCOutboundRTPAudioStream_1073653878",
-      "packetsLost":0,
-      "roundTripTime":1.00000000000000002082e-03,
-      "roundTripTimeMeasurements":2,
-      "totalRoundTripTime":2.00000000000000004163e-03,
-      "transportId":"RTCTransport_data_1"
-    },{
-      "fractionLost":0,
-      "id":"RTCRemoteInboundRtpVideoStream_1597059872",
-      "kind":"video",
-      "ssrc":1597059872,
-      "timestamp":1.63247133144896899414e+12,
-      "type":"remote-inbound-rtp",
-      "codecId":"RTCCodec_video_Xn86YA_Outbound_120",
-      "jitter":2.34444444444444500403e-03,
-      "localId":"RTCOutboundRTPVideoStream_1597059872",
-      "packetsLost":0,
-      "roundTripTime":1.00000000000000002082e-03,
-      "roundTripTimeMeasurements":10,
-      "totalRoundTripTime":1.00000000000000002082e-02,
-      "transportId":"RTCTransport_data_1"
-    }],
-    "multistream": false,
-    "spotlight": false,
+    "session_id": "JTYG1KGGPH2DKF86Y5B0GMWFSM",
     "simulcast": false,
-    "timestamp":"2021-09-24T08:15:31.854427Z",
-    "type":"connection.user-agent",
-    "version":"2021.2-canary.23",
-    "label":"local",
-    "node_name":"sora@local"
+    "spotlight": false,
+    "stats": [
+      {
+        "fractionLost": 0,
+        "id": "RTCRemoteInboundRtpAudioStream_962078423",
+        "kind": "audio",
+        "ssrc": 962078423,
+        "timestamp": 1640225763758.615,
+        "type": "remote-inbound-rtp",
+        "codecId": "RTCCodec_audio_NB1bb0_Outbound_109",
+        "jitter": 0.0021041666666666665,
+        "localId": "RTCOutboundRTPAudioStream_962078423",
+        "packetsLost": 0,
+        "roundTripTime": 0.002,
+        "roundTripTimeMeasurements": 6,
+        "totalRoundTripTime": 0.009,
+        "transportId": "RTCTransport_data_1"
+      },
+      {
+        "fractionLost": 0,
+        "id": "RTCRemoteInboundRtpVideoStream_148236668",
+        "kind": "video",
+        "ssrc": 148236668,
+        "timestamp": 1640225763393.525,
+        "type": "remote-inbound-rtp",
+        "codecId": "RTCCodec_video_WvsPAp_Outbound_120",
+        "jitter": 0.0017111111111111112,
+        "localId": "RTCOutboundRTPVideoStream_148236668",
+        "packetsLost": 0,
+        "roundTripTime": 0.003,
+        "roundTripTimeMeasurements": 37,
+        "totalRoundTripTime": 0.059,
+        "transportId": "RTCTransport_data_1"
+      }
+    ],
+    "timestamp": "2021-12-23T02:16:03.775161Z",
+    "type": "connection.user-agent",
+    "version": "2021.2.0"
   }
 `
 
 	collectorTypeTransportJSON = `{
+    "channel_id": "sora",
+    "client_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "connection_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "id": "W8B607ZBG92PD9JTMS19BSTE18",
+    "label": "WebRTC SFU Sora",
+    "multistream": true,
+    "node_name": "sora@127.0.0.1",
     "role": "sendrecv",
-    "channel_id":"sora",
-    "client_id":"KB0DR2FWT13C70S0NYS11P04C0",
-    "connection_id":"KB0DR2FWT13C70S0NYS11P04C0",
-    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
-    "id":"3Q1Y9Y6B9X7CKDXFWNZX3PVJ9W",
-    "label":"WebRTC.SFU.Sora",
-    "stats":[{
-      "id":"RTCTransport_data_1",
-      "timestamp":1.63247133184561206055e+12,
-      "type":"transport",
-      "bytesReceived":3437,
-      "bytesSent":670907,
-      "dtlsCipher":"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
-      "dtlsState":"connected",
-      "localCertificateId":"RTCCertificate_60:96:2D:B7:B6:D8:0A:15:92:45:21:4E:1B:DB:66:01:CC:44:65:D2:43:44:31:15:E4:09:D0:64:58:A2:BF:84",
-      "packetsReceived":34,
-      "packetsSent":1105,
-      "remoteCertificateId":"RTCCertificate_1C:64:46:83:99:7F:9C:44:8A:5B:5C:DF:07:C0:A4:2D:39:51:72:39:8B:76:B5:D2:75:0C:A4:0D:58:FF:67:69",
-      "selectedCandidatePairChanges":1,
-      "selectedCandidatePairId":"RTCIceCandidatePair_zNnR\/QQb_SwzcXtlY",
-      "srtpCipher":"AEAD_AES_128_GCM",
-      "tlsVersion":"FEFD"
-    }],
-    "multistream": false,
-    "spotlight": false,
+    "session_id": "JTYG1KGGPH2DKF86Y5B0GMWFSM",
     "simulcast": false,
-    "timestamp":"2021-09-24T08:15:31.854427Z",
-    "type":"connection.user-agent",
-    "version":"2021.2-canary.23",
-    "label":"local",
-    "node_name":"sora@local"
+    "spotlight": false,
+    "stats": [
+      {
+        "id": "RTCTransport_data_1",
+        "timestamp": 1640225763760.085,
+        "type": "transport",
+        "bytesReceived": 5490,
+        "bytesSent": 833847,
+        "dtlsCipher": "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+        "dtlsState": "connected",
+        "localCertificateId": "RTCCertificate_66:F6:14:8E:B3:3E:C1:44:D0:DB:3C:2B:1C:35:7E:F4:4B:3A:6C:87:AD:E2:09:06:7C:EB:5B:DD:62:6F:36:40",
+        "packetsReceived": 60,
+        "packetsSent": 2520,
+        "remoteCertificateId": "RTCCertificate_A9:4A:03:B1:A9:66:46:EC:AD:03:73:D8:1E:99:46:06:5C:56:E9:00:AC:A5:F9:7C:50:8C:28:16:2A:E5:BF:07",
+        "selectedCandidatePairChanges": 1,
+        "selectedCandidatePairId": "RTCIceCandidatePair_eRplCBvi_JXPaEzOA",
+        "srtpCipher": "AEAD_AES_128_GCM",
+        "tlsVersion": "FEFD"
+      }
+    ],
+    "timestamp": "2021-12-23T02:16:03.775161Z",
+    "type": "connection.user-agent",
+    "version": "2021.2.0"
   }
 `
 )
 
 var (
 	invalidConnectionIDLengthJSON = `{
-    "role": "sendrecv",
-    "type": "connection.user-agent",
     "channel_id": "sora",
-    "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
-    "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC===",
-    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
-    "stats": [{
-      "id": "RTCCodec_video_V04mIx_Inbound_120",
-      "timestamp": 1628869622194.298,
-      "type": "codec",
-      "transportId": "RTCTransport_data_1",
-      "payloadType": 120,
-      "mimeType": "video/VP9",
-      "clockRate": 90000,
-      "sdpFmtpLine": "profile-id=0"
-    }],
-    "multistream": false,
-    "spotlight": false,
+    "client_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "connection_id": "QJ253E85SH1C170WQSPYJGFHCR=",
+    "id": "W8B607ZBG92PD9JTMS19BSTE18",
+    "label": "WebRTC SFU Sora",
+    "multistream": true,
+    "node_name": "sora@127.0.0.1",
+    "role": "sendrecv",
+    "session_id": "JTYG1KGGPH2DKF86Y5B0GMWFSM",
     "simulcast": false,
-    "timestamp":"2021-09-24T08:15:31.854427Z",
-    "version":"2021.2-canary.23"}
+    "spotlight": false,
+    "stats": [
+      {
+        "channels": 2,
+        "id": "RTCCodec_audio_NB1bb0_Inbound_109",
+        "timestamp": 1640225763760.085,
+        "type": "codec",
+        "clockRate": 48000,
+        "mimeType": "audio/opus",
+        "payloadType": 109,
+        "sdpFmtpLine": "minptime=10;useinbandfec=1",
+        "transportId": "RTCTransport_data_1"
+      }
+    ],
+    "timestamp": "2021-12-23T02:16:03.775161Z",
+    "type": "connection.user-agent",
+    "version": "2021.2.0"
   }`
 
 	unexpectedTypeJSON = `{
-    "role": "sendrecv",
-    "type": "connection.unexpected_type",
     "channel_id": "sora",
-    "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
-    "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
-    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
-    "stats": [{
-      "id": "RTCCodec_video_V04mIx_Inbound_120",
-      "timestamp": 1628869622194.298,
-      "type": "codec",
-      "transportId": "RTCTransport_data_1",
-      "payloadType": 120,
-      "mimeType": "video/VP9",
-      "clockRate": 90000,
-      "sdpFmtpLine": "profile-id=0"
-    }],
-    "multistream": false,
-    "spotlight": false,
+    "client_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "connection_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "id": "W8B607ZBG92PD9JTMS19BSTE18",
+    "label": "WebRTC SFU Sora",
+    "multistream": true,
+    "node_name": "sora@127.0.0.1",
+    "role": "sendrecv",
+    "session_id": "JTYG1KGGPH2DKF86Y5B0GMWFSM",
     "simulcast": false,
-    "timestamp":"2021-09-24T08:15:31.854427Z",
-    "version":"2021.2-canary.23",
-    "label":"local",
-    "node_name":"sora@local"
+    "spotlight": false,
+    "stats": [
+      {
+        "channels": 2,
+        "id": "RTCCodec_audio_NB1bb0_Inbound_109",
+        "timestamp": 1640225763760.085,
+        "type": "codec",
+        "clockRate": 48000,
+        "mimeType": "audio/opus",
+        "payloadType": 109,
+        "sdpFmtpLine": "minptime=10;useinbandfec=1",
+        "transportId": "RTCTransport_data_1"
+      }
+    ],
+    "timestamp": "2021-12-23T02:16:03.775161Z",
+    "type": "connection.unexpected_type",
+    "version": "2021.2.0"
   }`
 
 	missingTimestampJSON = `{
-    "role": "sendrecv",
-    "type": "connection.unexpected_type",
     "channel_id": "sora",
-    "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
-    "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
-    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
-    "stats": [{
-      "id": "RTCCodec_video_V04mIx_Inbound_120",
-      "timestamp": 1628869622194.298,
-      "type": "codec",
-      "transportId": "RTCTransport_data_1",
-      "payloadType": 120,
-      "mimeType": "video/VP9",
-      "clockRate": 90000,
-      "sdpFmtpLine": "profile-id=0"
-    }],
-    "multistream": false,
-    "spotlight": false,
+    "client_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "connection_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "id": "W8B607ZBG92PD9JTMS19BSTE18",
+    "label": "WebRTC SFU Sora",
+    "multistream": true,
+    "node_name": "sora@127.0.0.1",
+    "role": "sendrecv",
+    "session_id": "JTYG1KGGPH2DKF86Y5B0GMWFSM",
     "simulcast": false,
-    "version":"2021.2-canary.23",
-    "label":"local",
-    "node_name":"sora@local"
+    "spotlight": false,
+    "stats": [
+      {
+        "channels": 2,
+        "id": "RTCCodec_audio_NB1bb0_Inbound_109",
+        "timestamp": 1640225763760.085,
+        "type": "codec",
+        "clockRate": 48000,
+        "mimeType": "audio/opus",
+        "payloadType": 109,
+        "sdpFmtpLine": "minptime=10;useinbandfec=1",
+        "transportId": "RTCTransport_data_1"
+      }
+    ],
+    "type": "connection.user-agent",
+    "version": "2021.2.0"
   }`
 
 	invalidChannelIDLengthJSON = `{
-    "role": "sendrecv",
-    "type": "connection.user-agent",
     "channel_id": "2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX86RC2QB23E50YD6FKEFG9GW2TX",
-    "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
-    "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
-    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
-    "stats": [{
-      "id": "RTCCodec_video_V04mIx_Inbound_120",
-      "timestamp": 1628869622194.298,
-      "type": "codec",
-      "transportId": "RTCTransport_data_1",
-      "payloadType": 120,
-      "mimeType": "video/VP9",
-      "clockRate": 90000,
-      "sdpFmtpLine": "profile-id=0"
-    }],
-    "multistream": false,
-    "spotlight": false,
+    "client_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "connection_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "id": "W8B607ZBG92PD9JTMS19BSTE18",
+    "label": "WebRTC SFU Sora",
+    "multistream": true,
+    "node_name": "sora@127.0.0.1",
+    "role": "sendrecv",
+    "session_id": "JTYG1KGGPH2DKF86Y5B0GMWFSM",
     "simulcast": false,
-    "timestamp":"2021-09-24T08:15:31.854427Z",
-    "version":"2021.2-canary.23",
-    "label":"local",
-    "node_name":"sora@local"
+    "spotlight": false,
+    "stats": [
+      {
+        "channels": 2,
+        "id": "RTCCodec_audio_NB1bb0_Inbound_109",
+        "timestamp": 1640225763760.085,
+        "type": "codec",
+        "clockRate": 48000,
+        "mimeType": "audio/opus",
+        "payloadType": 109,
+        "sdpFmtpLine": "minptime=10;useinbandfec=1",
+        "transportId": "RTCTransport_data_1"
+      }
+    ],
+    "timestamp": "2021-12-23T02:16:03.775161Z",
+    "type": "connection.user-agent",
+    "version": "2021.2.0"
   }`
 
 	missingMultistreamJSON = `{
-    "role": "sendrecv",
-    "type": "connection.unexpected_type",
     "channel_id": "sora",
-    "client_id": "2QB23E50YD6FKEFG9GW2TX86RC",
-    "connection_id": "2QB23E50YD6FKEFG9GW2TX86RC",
-    "session_id": "KE9C2QKV892TD03CA2CR38BV4G",
-    "stats": [{
-      "id": "RTCCodec_video_V04mIx_Inbound_120",
-      "timestamp": 1628869622194.298,
-      "type": "codec",
-      "transportId": "RTCTransport_data_1",
-      "payloadType": 120,
-      "mimeType": "video/VP9",
-      "clockRate": 90000,
-      "sdpFmtpLine": "profile-id=0"
-    }],
-    "spotlight": false,
+    "client_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "connection_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "id": "W8B607ZBG92PD9JTMS19BSTE18",
+    "label": "WebRTC SFU Sora",
+    "node_name": "sora@127.0.0.1",
+    "role": "sendrecv",
+    "session_id": "JTYG1KGGPH2DKF86Y5B0GMWFSM",
     "simulcast": false,
-    "timestamp":"2021-09-24T08:15:31.854427Z",
-    "version":"2021.2-canary.23",
-    "label":"local",
-    "node_name":"sora@local"
+    "spotlight": false,
+    "stats": [
+      {
+        "channels": 2,
+        "id": "RTCCodec_audio_NB1bb0_Inbound_109",
+        "timestamp": 1640225763760.085,
+        "type": "codec",
+        "clockRate": 48000,
+        "mimeType": "audio/opus",
+        "payloadType": 109,
+        "sdpFmtpLine": "minptime=10;useinbandfec=1",
+        "transportId": "RTCTransport_data_1"
+      }
+    ],
+    "timestamp": "2021-12-23T02:16:03.775161Z",
+    "type": "connection.user-agent",
+    "version": "2021.2.0"
   }`
 )
 
@@ -483,8 +518,8 @@ const (
 	postgresDB       = "kohakutest"
 
 	channelID    = "sora"
-	connectionID = "KB0DR2FWT13C70S0NYS11P04C0"
-	clientID     = "KB0DR2FWT13C70S0NYS11P04C0"
+	connectionID = "QJ253E85SH1C170WQSPYJGFHCR"
+	clientID     = "QJ253E85SH1C170WQSPYJGFHCR"
 )
 
 var (
@@ -577,7 +612,7 @@ func TestTypeOutboundRTPCollector(t *testing.T) {
 	server.Collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 
-	statsType, err := getStatsType("rtc_outbound_rtp_stream_stats", "2QB23E50YD6FKEFG9GW2TX86RC")
+	statsType, err := getStatsType("rtc_outbound_rtp_stream_stats", connectionID)
 	if err != nil {
 		panic(err)
 	}
@@ -598,7 +633,7 @@ func TestTypeCodecCollector(t *testing.T) {
 	server.Collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 
-	statsType, err := getStatsType("rtc_codec_stats", "2QB23E50YD6FKEFG9GW2TX86RC")
+	statsType, err := getStatsType("rtc_codec_stats", connectionID)
 	if err != nil {
 		panic(err)
 	}
