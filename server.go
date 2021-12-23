@@ -37,8 +37,6 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	r.Use(httpLogger())
 	r.Use(gin.Recovery())
 
-	r.Use(validateHttpVersion())
-
 	// TODO(v): こいつ自身の統計情報を /stats でとれた方がいい
 
 	h2s := &http2.Server{
@@ -75,7 +73,7 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	}
 
 	// 統計情報を突っ込むところ
-	r.POST("/collector", s.Collector)
+	r.POST("/collector", validateHttpVersion(), s.Collector)
 	// ヘルスチェック
 	r.POST("/health", s.Health)
 
