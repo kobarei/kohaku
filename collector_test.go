@@ -535,8 +535,8 @@ func TestMain(m *testing.M) {
 	hostAndPort := resource.GetHostPort("5432/tcp")
 	kohakuDBURL := fmt.Sprintf(connStr, postgresUser, postgresPassword, hostAndPort, postgresDB)
 
-	resource.Expire(120)
-	pool.MaxWait = 120 * time.Second
+	resource.Expire(60)
+	pool.MaxWait = 60 * time.Second
 	if err = pool.Retry(func() error {
 		config, err := pgxpool.ParseConfig(kohakuDBURL)
 		if err != nil {
