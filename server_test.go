@@ -1,0 +1,159 @@
+package kohaku
+
+import (
+	"context"
+	"crypto/tls"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"strings"
+	"testing"
+
+	"golang.org/x/net/http2"
+
+	"github.com/stretchr/testify/assert"
+)
+
+type CertPair struct {
+	CertificateFile string
+	KeyFile         string
+}
+
+const (
+	Port = 15890
+)
+
+var (
+	config = &KohakuConfig{
+		Http2H2c:              false,
+		Http2FullchainFile:    "cert/server/server.pem",
+		Http2PrivkeyFile:      "cert/server/server.key",
+		Http2VerifyCacertPath: "cert/client/ca.pem",
+		CollectorPort:         Port,
+	}
+
+	certPair = &CertPair{
+		"cert/client/user.pem",
+		"cert/client/user.key",
+	}
+)
+
+func NewClient(nextProto string, c *CertPair) (*http.Client, error) {
+	cert, err := tls.LoadX509KeyPair(c.CertificateFile, c.KeyFile)
+	if err != nil {
+		return nil, err
+	}
+
+	var certs []tls.Certificate
+	certs = append(certs, cert)
+	tlsConfig := &tls.Config{
+		MaxVersion:         tls.VersionTLS13,
+		Certificates:       certs,
+		InsecureSkipVerify: true,
+		NextProtos:         []string{nextProto},
+	}
+
+	var client http.Client
+
+	if nextProto == "h2" {
+		client.Transport = &http2.Transport{
+			TLSClientConfig: tlsConfig,
+		}
+	} else {
+		client.Transport = &http.Transport{
+			TLSClientConfig: tlsConfig,
+		}
+	}
+
+	return &client, nil
+}
+
+func TestMutualTLS(t *testing.T) {
+	server = NewServer(config, pgPool)
+	go (func() {
+		server.Start(config)
+	})()
+
+	// Setup
+	client, err := NewClient("http/1.1", certPair)
+	if err != nil {
+		panic(err)
+	}
+
+	url := fmt.Sprintf("https://localhost:%d/health", Port)
+
+	ctx := context.Background()
+	req, _ := http.NewRequestWithContext(ctx, "POST", url, strings.NewReader(""))
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	assert.Equal(t, "HTTP/1.1", resp.Proto)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	assert.Empty(t, string(body))
+}
+
+func TestInvalidClientCertificate(t *testing.T) {
+	server = NewServer(config, pgPool)
+	go (func() {
+		server.Start(config)
+	})()
+
+	// Setup
+	invalidCertPair := &CertPair{
+		"cert/client/invalid.pem",
+		"cert/client/invalid.key",
+	}
+	client, err := NewClient("http/1.1", invalidCertPair)
+	if err != nil {
+		panic(err)
+	}
+
+	url := fmt.Sprintf("https://localhost:%d/health", Port)
+
+	ctx := context.Background()
+	req, _ := http.NewRequestWithContext(ctx, "POST", url, strings.NewReader(""))
+	_, err = client.Do(req)
+	assert.NotNil(t, err)
+}
+
+func TestH2(t *testing.T) {
+	server = NewServer(config, pgPool)
+	go (func() {
+		server.Start(config)
+	})()
+
+	// Setup
+	client, err := NewClient("h2", certPair)
+	if err != nil {
+		panic(err)
+	}
+
+	url := fmt.Sprintf("https://localhost:%d/health", Port)
+
+	ctx := context.Background()
+	req, _ := http.NewRequestWithContext(ctx, "POST", url, strings.NewReader(""))
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	assert.Equal(t, "HTTP/2.0", resp.Proto)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	assert.Empty(t, string(body))
+}
