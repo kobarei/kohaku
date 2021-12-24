@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestStatus(t *testing.T) {
+func TestHealth(t *testing.T) {
 	// Setup
 	req := httptest.NewRequest(http.MethodPost, "/health", strings.NewReader(""))
 	req.Proto = "HTTP/2.0"
