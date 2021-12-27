@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"strings"
@@ -21,16 +20,18 @@ type CertPair struct {
 }
 
 const (
-	Port = 15890
+	port = 15890
 )
 
 var (
+	url = fmt.Sprintf("https://localhost:%d/health", port)
+
 	config = &KohakuConfig{
 		Http2H2c:              false,
 		Http2FullchainFile:    "cert/server/server.pem",
 		Http2PrivkeyFile:      "cert/server/server.key",
 		Http2VerifyCacertPath: "cert/client/ca.pem",
-		CollectorPort:         Port,
+		CollectorPort:         port,
 	}
 
 	certPair = &CertPair{
@@ -91,8 +92,6 @@ func TestMutualTLS(t *testing.T) {
 		panic(err)
 	}
 
-	url := fmt.Sprintf("https://localhost:%d/health", Port)
-
 	ctx := context.Background()
 	req, _ := http.NewRequestWithContext(ctx, "POST", url, strings.NewReader(""))
 	resp, err := client.Do(req)
@@ -103,13 +102,6 @@ func TestMutualTLS(t *testing.T) {
 
 	assert.Equal(t, "HTTP/1.1", resp.Proto)
 	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
-	}
-
-	assert.Empty(t, string(body))
 }
 
 func TestInvalidClientCertificate(t *testing.T) {
@@ -127,8 +119,6 @@ func TestInvalidClientCertificate(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-
-	url := fmt.Sprintf("https://localhost:%d/health", Port)
 
 	ctx := context.Background()
 	req, _ := http.NewRequestWithContext(ctx, "POST", url, strings.NewReader(""))
@@ -148,8 +138,6 @@ func TestH2(t *testing.T) {
 		panic(err)
 	}
 
-	url := fmt.Sprintf("https://localhost:%d/health", Port)
-
 	ctx := context.Background()
 	req, _ := http.NewRequestWithContext(ctx, "POST", url, strings.NewReader(""))
 	resp, err := client.Do(req)
@@ -160,13 +148,6 @@ func TestH2(t *testing.T) {
 
 	assert.Equal(t, "HTTP/2.0", resp.Proto)
 	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
-	}
-
-	assert.Empty(t, string(body))
 }
 
 func TestH2C(t *testing.T) {
