@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"strings"
 	"testing"
@@ -39,6 +40,18 @@ var (
 )
 
 func NewClient(nextProto string, c *CertPair) (*http.Client, error) {
+	var client http.Client
+
+	if nextProto == "h2c" {
+		client.Transport = &http2.Transport{
+			AllowHTTP: true,
+			DialTLS: func(network, addr string, cfg *tls.Config) (net.Conn, error) {
+				return net.Dial(network, addr)
+			},
+		}
+		return &client, nil
+	}
+
 	cert, err := tls.LoadX509KeyPair(c.CertificateFile, c.KeyFile)
 	if err != nil {
 		return nil, err
@@ -52,8 +65,6 @@ func NewClient(nextProto string, c *CertPair) (*http.Client, error) {
 		InsecureSkipVerify: true,
 		NextProtos:         []string{nextProto},
 	}
-
-	var client http.Client
 
 	if nextProto == "h2" {
 		client.Transport = &http2.Transport{
@@ -156,4 +167,34 @@ func TestH2(t *testing.T) {
 	}
 
 	assert.Empty(t, string(body))
+}
+
+func TestH2C(t *testing.T) {
+	h2cConfig := &KohakuConfig{
+		Http2H2c:      true,
+		CollectorPort: 25890,
+	}
+	server = NewServer(h2cConfig, pgPool)
+	go (func() {
+		server.Start(h2cConfig)
+	})()
+
+	// Setup
+	client, err := NewClient("h2c", nil)
+	if err != nil {
+		panic(err)
+	}
+
+	url := fmt.Sprintf("http://localhost:%d/health", 25890)
+
+	ctx := context.Background()
+	req, _ := http.NewRequestWithContext(ctx, "POST", url, strings.NewReader(""))
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	assert.Equal(t, "HTTP/2.0", resp.Proto)
+	assert.Equal(t, http.StatusNoContent, resp.StatusCode)
 }
