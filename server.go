@@ -98,11 +98,11 @@ func (s *Server) Start(c *KohakuConfig) error {
 		http2PrivkeyFile := c.Http2PrivkeyFile
 
 		if _, err := os.Stat(http2FullchainFile); err != nil {
-			return fmt.Errorf("http2FullchainFile: %s", err)
+			return fmt.Errorf("http2FullchainFile error: %s", err)
 		}
 
 		if _, err := os.Stat(http2PrivkeyFile); err != nil {
-			return fmt.Errorf("http2PrivkeyFile: %s", err)
+			return fmt.Errorf("http2PrivkeyFile error: %s", err)
 		}
 
 		if err := s.ListenAndServeTLS(http2FullchainFile, http2PrivkeyFile); err != http.ErrServerClosed {
@@ -122,8 +122,7 @@ func validateHttpVersion() gin.HandlerFunc {
 		}
 
 		if c.Request.Proto != "HTTP/2.0" {
-			err := fmt.Errorf("UNSUPPORTED-HTTP-VERSION: %s", c.Request.Proto)
-			// TODO: 505 を返すかの検討
+			err := fmt.Errorf("http version not supported: %s", c.Request.Proto)
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		}
 	}
