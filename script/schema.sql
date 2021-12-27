@@ -219,7 +219,7 @@ CREATE TABLE IF NOT EXISTS rtc_outbound_rtp_stream_stats (
     codec_id varchar(255) NULL,
 
     -- RTCSentRtpStreamStats
-    packets_sent numeric NULL,
+    packets_sent bigint NULL,
     bytes_sent numeric NULL,
 
     rtx_ssrc bigint NULL,
@@ -253,7 +253,7 @@ CREATE TABLE IF NOT EXISTS rtc_outbound_rtp_stream_stats (
     total_encode_time double precision NULL,
     total_packet_send_delay double precision NULL,
     average_rtcp_interval double precision NULL,
-    quality_limitation_reason char(255) NULL,
+    quality_limitation_reason varchar(9) NULL,
     quality_limitation_durations varchar(255) NULL,
     quality_limitation_resolution_changes bigint NULL,
     per_dscp_packets_sent varchar(255) NULL,
@@ -287,7 +287,7 @@ CREATE TABLE IF NOT EXISTS rtc_remote_outbound_rtp_stream_stats (
     codec_id varchar(255) NULL,
 
     -- RTCSentRtpStreamStats
-    packets_sent numeric NULL,
+    packets_sent bigint NULL,
     bytes_sent numeric NULL,
 
     local_id varchar(255) NULL,
@@ -314,8 +314,8 @@ CREATE TABLE IF NOT EXISTS rtc_audio_source_stats (
     stats_type varchar(255) NOT NULL,
     stats_id varchar(255) NOT NULL,
 
-    track_identifier varchar(255) NULL,
-    kind varchar(255) NULL,
+    track_identifier varchar(255) NOT NULL,
+    kind varchar(255) NOT NULL,
     relayed_source boolean NULL,
 
     audio_level double precision NULL,
@@ -341,8 +341,8 @@ CREATE TABLE IF NOT EXISTS rtc_video_source_stats (
     stats_type varchar(255) NOT NULL,
     stats_id varchar(255) NOT NULL,
 
-    track_identifier varchar(255) NULL,
-    kind varchar(255) NULL,
+    track_identifier varchar(255) NOT NULL,
+    kind varchar(255) NOT NULL,
     relayed_source boolean NULL,
 
     width bigint NULL,
@@ -371,7 +371,7 @@ CREATE TABLE IF NOT EXISTS rtc_data_channel_stats (
     label varchar(255) NULL,
     protocol varchar(255) NULL,
     data_channel_identifier integer NULL,
-    state varchar(255) NULL,
+    state varchar(255) NOT NULL,
     messages_sent bigint NULL,
     bytes_sent numeric NULL,
     messages_received bigint NULL,
@@ -401,7 +401,7 @@ CREATE TABLE IF NOT EXISTS rtc_transport_stats (
     rtcp_transport_stats_id char(255) NULL,
     ice_role varchar(255) NULL,
     ice_local_username_fragment varchar(255) NULL,
-    dtls_state varchar(255) NULL,
+    dtls_state varchar(255) NOT NULL,
     ice_state varchar(255) NULL,
     selected_candidate_pair_id char(255) NULL,
     local_certificate_id varchar(255) NULL,
@@ -479,7 +479,8 @@ CREATE TABLE IF NOT EXISTS rtc_ice_candidate_stats (
     stats_type varchar(255) NOT NULL,
     stats_id varchar(255) NOT NULL,
 
-    transport_id varchar(255) NOT NULL,
+    -- required だが Firefox では local-candidate, remote-candidate に含まれていないため NULL を許容する
+    transport_id varchar(255) NULL,
     address varchar(255) NULL,
     port integer NULL,
     protocol varchar(255) NULL,
