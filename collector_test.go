@@ -533,6 +533,30 @@ var (
     "type": "connection.user-agent",
     "version": "2021.2.0"
   }`
+
+	unexpectedErlangVmTypeJSON = `{
+    "id": "NXXP9WDGCH72SC7SJAZ2A28318",
+    "label": "WebRTC SFU Sora",
+    "node_name": "sora@127.0.0.1",
+    "stats": [
+      {
+        "atom": 1270065,
+        "atom_used": 1243247,
+        "binary": 340376,
+        "code": 33580550,
+        "ets": 2661680,
+        "processes": 18702696,
+        "processes_used": 18702696,
+        "system": 51684512,
+        "total": 70387208,
+        "type": "unexpected_type"
+      }
+    ],
+    "timestamp": "2021-12-23T02:25:07.471546Z",
+    "type": "node.erlang-vm",
+    "version": "2021.2.0"
+  }
+`
 )
 
 const (
@@ -907,4 +931,19 @@ func TestTypeErlangVmMemoryCollector(t *testing.T) {
 	}
 
 	assert.Equal(t, "erlang-vm-memory", statsType)
+}
+
+func TestUnexpectedErlangVmType(t *testing.T) {
+	// Setup
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(unexpectedErlangVmTypeJSON))
+	req.Header.Set("content-type", "application/json")
+	req.Header.Set("x-sora-stats-exporter-type", "node.erlang-vm")
+	req.Proto = "HTTP/2.0"
+	rec := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(rec)
+	c.Request = req
+
+	// Assertions
+	server.Collector(c)
+	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
 }

@@ -54,8 +54,7 @@ func (s *Server) CollectorSoraNodeErlangVmStats(c *gin.Context, stats SoraNodeEr
 				return err
 			}
 		default:
-			// TODO: return err にする
-			fmt.Println(erlangVmStats.Type)
+			return fmt.Errorf("Unexpected erlangVmStats.Type: %s", erlangVmStats.Type)
 		}
 	}
 	return nil
