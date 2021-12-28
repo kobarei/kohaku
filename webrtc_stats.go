@@ -10,12 +10,12 @@ type RTCStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcrtpstreamstats
-type RTCRtpStreamStats struct {
+type RTCRTPStreamStats struct {
 	RTCStats
 
 	SSRC        *uint32 `json:"ssrc" validate:"required" db:"ssrc"` // required unsigned long       ssrc;
 	Kind        *string `json:"kind" validate:"required" db:"kind"` // required DOMString           kind;
-	TransportId *string `json:"transportId" db:"transport_id"`      // DOMString           transportId;
+	TransportID *string `json:"transportId" db:"transport_id"`      // DOMString           transportId;
 	CodecID     *string `json:"codecId" db:"codec_id"`              // DOMString           codecId;
 }
 
@@ -25,7 +25,7 @@ type RTCCodecStats struct {
 
 	PayloadType *uint32 `json:"payloadType" validate:"required" db:"payload_type"` // required unsigned long payloadType;
 	CodecType   *string `json:"codecType" db:"codec_type"`                         // RTCCodecType  codecType;
-	TransportId *string `json:"transportId" validate:"required" db:"transport_id"` // required DOMString     transportId;
+	TransportID *string `json:"transportId" validate:"required" db:"transport_id"` // required DOMString     transportId;
 	MimeType    *string `json:"mimeType" validate:"required" db:"mime_type"`       // required DOMString     mimeType;
 	ClockRate   *uint32 `json:"clockRate" db:"clock_rate"`                         // unsigned long clockRate;
 	Channels    *uint32 `json:"channels" db:"channels"`                            // unsigned long channels;
@@ -33,8 +33,8 @@ type RTCCodecStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#receivedrtpstats-dict*
-type RTCReceivedRtpStreamStats struct {
-	RTCRtpStreamStats
+type RTCReceivedRTPStreamStats struct {
+	RTCRTPStreamStats
 
 	PacketsReceived       *uint64  `json:"packetsReceived" db:"packets_received"`              // unsigned long long   packetsReceived;
 	PacketsLost           *int64   `json:"packetsLost" db:"packets_lost"`                      // long long            packetsLost;
@@ -55,11 +55,11 @@ type RTCReceivedRtpStreamStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcinboundrtpstreamstats
-type RTCInboundRtpStreamStats struct {
-	RTCReceivedRtpStreamStats
+type RTCInboundRTPStreamStats struct {
+	RTCReceivedRTPStreamStats
 
-	ReceiverId                  *string  `json:"receiverId" validate:"required" db:"receiver_id"`                  // required DOMString   receiverId;
-	RemoteId                    *string  `json:"remoteId" db:"remote_id"`                                          // DOMString            remoteId;
+	ReceiverID                  *string  `json:"receiverId" validate:"required" db:"receiver_id"`                  // required DOMString   receiverId;
+	RemoteID                    *string  `json:"remoteId" db:"remote_id"`                                          // DOMString            remoteId;
 	FramesDecoded               *uint32  `json:"framesDecoded" db:"frames_decoded"`                                // unsigned long        framesDecoded;
 	KeyFramesDecoded            *uint32  `json:"keyFramesDecoded" db:"key_frames_decoded"`                         // unsigned long        keyFramesDecoded;
 	FrameWidth                  *uint32  `json:"frameWidth" db:"frame_width"`                                      // unsigned long        frameWidth;
@@ -106,10 +106,10 @@ type RTCInboundRtpStreamStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcremoteinboundrtpstreamstats
-type RTCRemoteInboundRtpStreamStats struct {
-	RTCReceivedRtpStreamStats
+type RTCRemoteInboundRTPStreamStats struct {
+	RTCReceivedRTPStreamStats
 
-	LocalId                   *string  `json:"localId" db:"local_id"`                                       // DOMString            localId;
+	LocalID                   *string  `json:"localId" db:"local_id"`                                       // DOMString            localId;
 	RoundTripTime             *float64 `json:"roundTripTime" db:"round_trip_time"`                          // double               roundTripTime;
 	TotalRoundTripTime        *float64 `json:"totalRoundTripTime" db:"total_round_trip_time"`               // double               totalRoundTripTime;
 	FractionLost              *float64 `json:"fractionLost" db:"fraction_lost"`                             // double               fractionLost;
@@ -118,16 +118,16 @@ type RTCRemoteInboundRtpStreamStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcsentrtpstreamstats
-type RTCSentRtpStreamStats struct {
-	RTCRtpStreamStats
+type RTCSentRTPStreamStats struct {
+	RTCRTPStreamStats
 
 	PacketsSent *uint32 `json:"packetsSent" db:"packets_sent"` // unsigned long      packetsSent;
 	BytesSent   *uint64 `json:"bytesSent" db:"bytes_sent"`     // unsigned long long bytesSent;
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcoutboundrtpstreamstats
-type RTCOutboundRtpStreamStats struct {
-	RTCSentRtpStreamStats
+type RTCOutboundRTPStreamStats struct {
+	RTCSentRTPStreamStats
 
 	RtxSSRC                            *uint32     `json:"rtxSsrc" db:"rtx_ssrc"`                                                         // unsigned long        rtxSsrc;
 	MediaSourceID                      *string     `json:"mediaSourceId" db:"media_source_id"`                                            // DOMString            mediaSourceId;
@@ -172,10 +172,10 @@ type RTCOutboundRtpStreamStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcremoteoutboundrtpstreamstats
-type RTCRemoteOutboundRtpStreamStats struct {
-	RTCSentRtpStreamStats
+type RTCRemoteOutboundRTPStreamStats struct {
+	RTCSentRTPStreamStats
 
-	LocalId                   *string  `json:"localId" db:"local_id"`                                       // DOMString           localId;
+	LocalID                   *string  `json:"localId" db:"local_id"`                                       // DOMString           localId;
 	RemoteTimestamp           *float64 `json:"remoteTimestamp" db:"remote_timestamp"`                       // DOMHighResTimeStamp remoteTimestamp;
 	ReportsSent               *uint64  `json:"reportsSent" db:"reports_sent"`                               // unsigned long long  reportsSent;
 	RoundTripTime             *float64 `json:"roundTripTime" db:"round_trip_time"`                          // double              roundTripTime;
@@ -215,11 +215,11 @@ type RTCVideoSourceStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcrtpcontributingsourcestats
-type RTCRtpContributingSourceStats struct {
+type RTCRTPContributingSourceStats struct {
 	RTCStats
 
 	ContributorSsrc      *uint32  `json:"contributorSsrc" validate:"required" db:"contributor_ssrc"`         // required unsigned long contributorSsrc;
-	InboundRtpStreamId   *string  `json:"inboundRtpStreamId" validate:"required" db:"inbound_rtp_stream_id"` // required DOMString     inboundRtpStreamId;
+	InboundRTPStreamID   *string  `json:"inboundRTPStreamId" validate:"required" db:"inbound_rtp_stream_id"` // required DOMString     inboundRTPStreamId;
 	PacketsContributedTo *uint32  `json:"packetsContributedTo" db:"packets_contributed_to"`                  // unsigned long packetsContributedTo;
 	AudioLevel           *float64 `json:"audioLevel" db:"audio_level"`                                       // double        audioLevel;
 }
@@ -235,11 +235,11 @@ type RTCPeerConnectionStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcrtptransceiverstats
-type RTCRtpTransceiverStats struct {
+type RTCRTPTransceiverStats struct {
 	RTCStats
 
-	SenderId   *string `json:"senderId" validate:"required" db:"sender_id"`     // required DOMString senderId;
-	ReceiverId *string `json:"receiverId" validate:"required" db:"receiver_id"` // required DOMString receiverId;
+	SenderID   *string `json:"senderId" validate:"required" db:"sender_id"`     // required DOMString senderId;
+	ReceiverID *string `json:"receiverId" validate:"required" db:"receiver_id"` // required DOMString receiverId;
 	Mid        *string `json:"mid" db:"mid"`                                    // DOMString mid;
 }
 
@@ -276,7 +276,7 @@ type RTCAudioHandlerStats struct {
 type RTCAudioSenderStats struct {
 	RTCAudioHandlerStats
 
-	MediaSourceId *string `json:"mediaSourceId" db:"media_source_id"` // DOMString           mediaSourceId;
+	MediaSourceID *string `json:"mediaSourceId" db:"media_source_id"` // DOMString           mediaSourceId;
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcaudioreceiverstats
@@ -306,18 +306,18 @@ type RTCTransportStats struct {
 	PacketsReceived              *uint64 `json:"packetsReceived" db:"packets_received"`                             // unsigned long long    packetsReceived;
 	BytesSent                    *uint64 `json:"bytesSent" db:"bytes_sent"`                                         // unsigned long long    bytesSent;
 	BytesReceived                *uint64 `json:"bytesReceived" db:"bytes_received"`                                 // unsigned long long    bytesReceived;
-	RtcpTransportStatsId         *string `json:"rtcpTransportStatsId" db:"rtcp_transport_stats_id"`                 // DOMString             rtcpTransportStatsId;
+	RtcpTransportStatsID         *string `json:"rtcpTransportStatsId" db:"rtcp_transport_stats_id"`                 // DOMString             rtcpTransportStatsId;
 	IceRole                      *string `json:"iceRole" db:"ice_role"`                                             // RTCIceRole            iceRole;
 	IceLocalUsernameFragment     *string `json:"iceLocalUsernameFragment" db:"ice_local_username_fragment"`         // DOMString             iceLocalUsernameFragment;
 	DtlsState                    *string `json:"dtlsState" validate:"required" db:"dtls_state"`                     // required RTCDtlsTransportState dtlsState;
 	IceState                     *string `json:"iceState" db:"ice_state"`                                           // RTCIceTransportState  iceState;
-	SelectedCandidatePairId      *string `json:"selectedCandidatePairId" db:"selected_candidate_pair_id"`           // DOMString             selectedCandidatePairId;
-	LocalCertificateId           *string `json:"localCertificateId" db:"local_certificate_id"`                      // DOMString             localCertificateId;
-	RemoteCertificateId          *string `json:"remoteCertificateId" db:"remote_certificate_id"`                    // DOMString             remoteCertificateId;
-	TlsVersion                   *string `json:"tlsVersion" db:"tls_version"`                                       // DOMString             tlsVersion;
+	SelectedCandidatePairID      *string `json:"selectedCandidatePairId" db:"selected_candidate_pair_id"`           // DOMString             selectedCandidatePairId;
+	LocalCertificateID           *string `json:"localCertificateId" db:"local_certificate_id"`                      // DOMString             localCertificateId;
+	RemoteCertificateID          *string `json:"remoteCertificateId" db:"remote_certificate_id"`                    // DOMString             remoteCertificateId;
+	TLSVersion                   *string `json:"tlsVersion" db:"tls_version"`                                       // DOMString             tlsVersion;
 	DtlsCipher                   *string `json:"dtlsCipher" db:"dtls_cipher"`                                       // DOMString             dtlsCipher;
 	SrtpCipher                   *string `json:"srtpCipher" db:"srtp_cipher"`                                       // DOMString             srtpCipher;
-	TlsGroup                     *string `json:"tlsGroup" db:"tls_group"`                                           // DOMString             tlsGroup;
+	TLSGroup                     *string `json:"tlsGroup" db:"tls_group"`                                           // DOMString             tlsGroup;
 	SelectedCandidatePairChanges *uint32 `json:"selectedCandidatePairChanges" db:"selected_candidate_pair_changes"` // unsigned long         selectedCandidatePairChanges;
 }
 
@@ -325,7 +325,7 @@ type RTCTransportStats struct {
 type RTCSctpTransportStats struct {
 	RTCStats
 
-	TransportId           *string  `json:"transportId" db:"transport_id"`                       // DOMString transportId;
+	TransportID           *string  `json:"transportId" db:"transport_id"`                       // DOMString transportId;
 	SmoothedRoundTripTime *float64 `json:"smoothedRoundTripTime" db:"smoothed_round_trip_time"` // double smoothedRoundTripTime;
 	CongestionWindow      *uint32  `json:"congestionWindow" db:"congestion_window"`             // unsigned long congestionWindow;
 	ReceiverWindow        *uint32  `json:"receiverWindow" db:"receiver_window"`                 // unsigned long receiverWindow;
@@ -337,13 +337,13 @@ type RTCSctpTransportStats struct {
 type RTCIceCandidateStats struct {
 	RTCStats
 
-	TransportId   *string `json:"transportId" validate:"required" db:"transport_id"`     // required DOMString       transportId;
+	TransportID   *string `json:"transportId" validate:"required" db:"transport_id"`     // required DOMString       transportId;
 	Address       *string `json:"address" db:"address"`                                  // DOMString?               address;
 	Port          *int32  `json:"port" db:"port"`                                        // long                     port;
 	Protocol      *string `json:"protocol" db:"protocol"`                                // DOMString                protocol;
 	CandidateType *string `json:"candidateType" validate:"required" db:"candidate_type"` // required RTCIceCandidateType candidateType;
 	Priority      *int32  `json:"priority" db:"priority"`                                // long                     priority;
-	Url           *string `json:"url" db:"url"`                                          // DOMString                url;
+	URL           *string `json:"url" db:"url"`                                          // DOMString                url;
 	RelayProtocol *string `json:"relayProtocol" db:"relay_protocol"`                     // DOMString                relayProtocol;
 }
 
@@ -351,9 +351,9 @@ type RTCIceCandidateStats struct {
 type RTCIceCandidatePairStats struct {
 	RTCStats
 
-	TransportId                 *string  `json:"transportId" validate:"required" db:"transport_id"`               // required DOMString            transportId;
-	LocalCandidateId            *string  `json:"localCandidateId" validate:"required" db:"local_candidate_id"`    // required DOMString            localCandidateId;
-	RemoteCandidateId           *string  `json:"remoteCandidateId" validate:"required" db:"remote_candidate_id"`  // required DOMString            remoteCandidateId;
+	TransportID                 *string  `json:"transportId" validate:"required" db:"transport_id"`               // required DOMString            transportId;
+	LocalCandidateID            *string  `json:"localCandidateId" validate:"required" db:"local_candidate_id"`    // required DOMString            localCandidateId;
+	RemoteCandidateID           *string  `json:"remoteCandidateId" validate:"required" db:"remote_candidate_id"`  // required DOMString            remoteCandidateId;
 	State                       *string  `json:"state" validate:"required" db:"state"`                            // required RTCStatsIceCandidatePairState state;
 	Nominated                   *bool    `json:"nominated" db:"nominated"`                                        // boolean                       nominated;
 	PacketsSent                 *uint64  `json:"packetsSent" db:"packets_sent"`                                   // unsigned long long            packetsSent;
@@ -392,14 +392,14 @@ type RTCCertificateStats struct {
 	Fingerprint          *string `json:"fingerprint" validate:"required" db:"fingerprint"`                    // required DOMString fingerprint;
 	FingerprintAlgorithm *string `json:"fingerprintAlgorithm" validate:"required" db:"fingerprint_algorithm"` // required DOMString fingerprintAlgorithm;
 	Base64Certificate    *string `json:"base64Certificate" validate:"required" db:"base64_certificate"`       // required DOMString base64Certificate;
-	IssuerCertificateId  *string `json:"issuerCertificateId" db:"issuer_certificate_id"`                      // DOMString issuerCertificateId;
+	IssuerCertificateID  *string `json:"issuerCertificateId" db:"issuer_certificate_id"`                      // DOMString issuerCertificateId;
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtciceserverstats
 type RTCIceServerStats struct {
 	RTCStats
 
-	Url                    *string  `json:"url" validate:"required" db:"url"`                     // required DOMString url;
+	URL                    *string  `json:"url" validate:"required" db:"url"`                     // required DOMString url;
 	Port                   *int32   `json:"port" db:"port"`                                       // long port;
 	RelayProtocol          *string  `json:"relayProtocol" db:"relay_protocol"`                    // DOMString relayProtocol;
 	TotalRequestsSent      *uint32  `json:"totalRequestsSent" db:"total_requests_sent"`           // unsigned long totalRequestsSent;

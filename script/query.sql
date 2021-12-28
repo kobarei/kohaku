@@ -41,7 +41,7 @@ WHERE
     )
 );
 
--- name: InsertErlangVmMemoryStats :exec
+-- name: InsertErlangVMMemoryStats :exec
 INSERT INTO erlang_vm_memory_stats (
   time,
   sora_version, sora_label, sora_node_name,

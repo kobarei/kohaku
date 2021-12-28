@@ -16,26 +16,26 @@ func toNumeric(n uint64) pgtype.Numeric {
 }
 
 // TODO(v): sqlc 化
-func (s *Server) CollectorSoraNodeErlangVmStats(c *gin.Context, stats SoraNodeErlangVmStats) error {
+func (s *Server) CollectorSoraNodeErlangVMStats(c *gin.Context, stats SoraNodeErlangVMStats) error {
 	if err := s.InsertSoraNode(c, stats); err != nil {
 		return err
 	}
 
 	for _, v := range stats.Stats {
-		erlangVmStats := new(ErlangVmStats)
-		if err := json.Unmarshal(v, &erlangVmStats); err != nil {
+		erlangVMStats := new(ErlangVMStats)
+		if err := json.Unmarshal(v, &erlangVMStats); err != nil {
 			return err
 		}
 
 		// type をみて struct をさらに別途デコードする
-		switch erlangVmStats.Type {
+		switch erlangVMStats.Type {
 		case "erlang-vm-memory":
-			e := new(ErlangVmMemoryStats)
+			e := new(ErlangVMMemoryStats)
 			if err := json.Unmarshal(v, &e); err != nil {
 				return err
 			}
 
-			if err := s.query.InsertErlangVmMemoryStats(c, db.InsertErlangVmMemoryStatsParams{
+			if err := s.query.InsertErlangVMMemoryStats(c, db.InsertErlangVMMemoryStatsParams{
 				Time:              stats.Timestamp,
 				SoraVersion:       stats.Version,
 				SoraLabel:         stats.Label,
@@ -54,13 +54,13 @@ func (s *Server) CollectorSoraNodeErlangVmStats(c *gin.Context, stats SoraNodeEr
 				return err
 			}
 		default:
-			return fmt.Errorf("unexpected erlangVmStats.Type: %s", erlangVmStats.Type)
+			return fmt.Errorf("unexpected erlangVMStats.Type: %s", erlangVMStats.Type)
 		}
 	}
 	return nil
 }
 
-func (s *Server) InsertSoraNode(c *gin.Context, stats SoraNodeErlangVmStats) error {
+func (s *Server) InsertSoraNode(c *gin.Context, stats SoraNodeErlangVMStats) error {
 	if err := s.query.InsertSoraNode(c, db.InsertSoraNodeParams{
 		Timestamp: stats.Timestamp,
 		Label:     stats.Label,

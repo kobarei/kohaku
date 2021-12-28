@@ -10,7 +10,7 @@ import (
 	"github.com/jackc/pgtype"
 )
 
-const InsertErlangVmMemoryStats = `-- name: InsertErlangVmMemoryStats :exec
+const InsertErlangVMMemoryStats = `-- name: InsertErlangVMMemoryStats :exec
 INSERT INTO erlang_vm_memory_stats (
   time,
   sora_version, sora_label, sora_node_name,
@@ -26,7 +26,7 @@ INSERT INTO erlang_vm_memory_stats (
 )
 `
 
-type InsertErlangVmMemoryStatsParams struct {
+type InsertErlangVMMemoryStatsParams struct {
 	Time              time.Time      `json:"time"`
 	SoraVersion       string         `json:"sora_version"`
 	SoraLabel         string         `json:"sora_label"`
@@ -43,8 +43,8 @@ type InsertErlangVmMemoryStatsParams struct {
 	TypeEts           pgtype.Numeric `json:"type_ets"`
 }
 
-func (q *Queries) InsertErlangVmMemoryStats(ctx context.Context, arg InsertErlangVmMemoryStatsParams) error {
-	_, err := q.db.Exec(ctx, InsertErlangVmMemoryStats,
+func (q *Queries) InsertErlangVMMemoryStats(ctx context.Context, arg InsertErlangVMMemoryStatsParams) error {
+	_, err := q.db.Exec(ctx, InsertErlangVMMemoryStats,
 		arg.Time,
 		arg.SoraVersion,
 		arg.SoraLabel,

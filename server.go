@@ -40,9 +40,9 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	// TODO(v): こいつ自身の統計情報を /stats でとれた方がいい
 
 	h2s := &http2.Server{
-		MaxConcurrentStreams: c.Http2MaxConcurrentStreams,
-		MaxReadFrameSize:     c.Http2MaxReadFrameSize,
-		IdleTimeout:          time.Duration(c.Http2IdleTimeout) * time.Second,
+		MaxConcurrentStreams: c.HTTP2MaxConcurrentStreams,
+		MaxReadFrameSize:     c.HTTP2MaxReadFrameSize,
+		IdleTimeout:          time.Duration(c.HTTP2IdleTimeout) * time.Second,
 	}
 
 	s := &Server{
@@ -55,10 +55,10 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 		},
 	}
 
-	http2H2c := c.Http2H2c
+	http2H2c := c.HTTP2H2c
 	if !http2H2c {
-		if c.Http2VerifyCacertPath != "" {
-			clientCAPath := c.Http2VerifyCacertPath
+		if c.HTTP2VerifyCacertPath != "" {
+			clientCAPath := c.HTTP2VerifyCacertPath
 			certPool, err := appendCerts(clientCAPath)
 			if err != nil {
 				panic(err)
@@ -73,7 +73,7 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	}
 
 	// 統計情報を突っ込むところ
-	r.POST("/collector", validateHttpVersion(), s.Collector)
+	r.POST("/collector", validateHTTPVersion(), s.Collector)
 	// ヘルスチェック
 	r.POST("/health", s.Health)
 
@@ -87,15 +87,15 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 }
 
 func (s *Server) Start(c *KohakuConfig) error {
-	http2H2c := c.Http2H2c
+	http2H2c := c.HTTP2H2c
 
 	if http2H2c {
 		if err := s.ListenAndServe(); err != http.ErrServerClosed {
 			return err
 		}
 	} else {
-		http2FullchainFile := c.Http2FullchainFile
-		http2PrivkeyFile := c.Http2PrivkeyFile
+		http2FullchainFile := c.HTTP2FullchainFile
+		http2PrivkeyFile := c.HTTP2PrivkeyFile
 
 		if _, err := os.Stat(http2FullchainFile); err != nil {
 			return fmt.Errorf("http2FullchainFile error: %s", err)
@@ -113,7 +113,7 @@ func (s *Server) Start(c *KohakuConfig) error {
 	return nil
 }
 
-func validateHttpVersion() gin.HandlerFunc {
+func validateHTTPVersion() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// prior knowledge ではない場合
 		if upgrade, ok := c.Request.Header["Upgrade"]; ok && upgrade[0] == "h2c" {

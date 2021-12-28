@@ -37,24 +37,24 @@ type RTCCodec struct {
 	RTCCodecStats
 }
 
-type RTCInboundRtpStream struct {
+type RTCInboundRTPStream struct {
 	RTC
-	RTCInboundRtpStreamStats
+	RTCInboundRTPStreamStats
 }
 
-type RTCRemoteInboundRtpStream struct {
+type RTCRemoteInboundRTPStream struct {
 	RTC
-	RTCRemoteInboundRtpStreamStats
+	RTCRemoteInboundRTPStreamStats
 }
 
-type RTCOutboundRtpStream struct {
+type RTCOutboundRTPStream struct {
 	RTC
-	RTCOutboundRtpStreamStats
+	RTCOutboundRTPStreamStats
 }
 
-type RTCRemoteOutboundRtpStream struct {
+type RTCRemoteOutboundRTPStream struct {
 	RTC
-	RTCRemoteOutboundRtpStreamStats
+	RTCRemoteOutboundRTPStreamStats
 }
 
 type RTCAuidoSource struct {

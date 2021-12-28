@@ -27,16 +27,16 @@ type KohakuConfig struct {
 	TimescaleRootcertFile string `yaml:"timescale_rootcert_file"`
 
 	// TODO(v): 名前検討
-	Http2FullchainFile string `yaml:"http2_fullchain_file"`
+	HTTP2FullchainFile string `yaml:"http2_fullchain_file"`
 	// TODO(v): 名前検討
-	Http2PrivkeyFile string `yaml:"http2_privkey_file"`
+	HTTP2PrivkeyFile string `yaml:"http2_privkey_file"`
 	// TODO: 名前検討
-	Http2VerifyCacertPath string `yaml:"http2_verify_cacert_path"`
+	HTTP2VerifyCacertPath string `yaml:"http2_verify_cacert_path"`
 
-	Http2H2c                  bool   `yaml:"http2_h2c"`
-	Http2MaxConcurrentStreams uint32 `yaml:"http2_max_concurrent_streams"`
-	Http2MaxReadFrameSize     uint32 `yaml:"http2_max_read_frame_size"`
-	Http2IdleTimeout          uint32 `yaml:"http2_idle_timeout"`
+	HTTP2H2c                  bool   `yaml:"http2_h2c"`
+	HTTP2MaxConcurrentStreams uint32 `yaml:"http2_max_concurrent_streams"`
+	HTTP2MaxReadFrameSize     uint32 `yaml:"http2_max_read_frame_size"`
+	HTTP2IdleTimeout          uint32 `yaml:"http2_idle_timeout"`
 }
 
 // LoadConfigFromFlags 起動パラメータから設定ファイルを読み込みます

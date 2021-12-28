@@ -32,8 +32,8 @@ type RtcAudioSourceStats struct {
 	StatsTimestamp            float64         `json:"stats_timestamp"`
 	StatsType                 string          `json:"stats_type"`
 	StatsID                   string          `json:"stats_id"`
-	TrackIdentifier           sql.NullString  `json:"track_identifier"`
-	Kind                      sql.NullString  `json:"kind"`
+	TrackIdentifier           string          `json:"track_identifier"`
+	Kind                      string          `json:"kind"`
 	RelayedSource             sql.NullBool    `json:"relayed_source"`
 	AudioLevel                sql.NullFloat64 `json:"audio_level"`
 	TotalAudioEnergy          sql.NullFloat64 `json:"total_audio_energy"`
@@ -66,7 +66,7 @@ type RtcDataChannelStats struct {
 	Label                 sql.NullString `json:"label"`
 	Protocol              sql.NullString `json:"protocol"`
 	DataChannelIdentifier sql.NullInt32  `json:"data_channel_identifier"`
-	State                 sql.NullString `json:"state"`
+	State                 string         `json:"state"`
 	MessagesSent          sql.NullInt64  `json:"messages_sent"`
 	BytesSent             pgtype.Numeric `json:"bytes_sent"`
 	MessagesReceived      sql.NullInt64  `json:"messages_received"`
@@ -119,7 +119,7 @@ type RtcIceCandidateStats struct {
 	StatsTimestamp   float64        `json:"stats_timestamp"`
 	StatsType        string         `json:"stats_type"`
 	StatsID          string         `json:"stats_id"`
-	TransportID      string         `json:"transport_id"`
+	TransportID      sql.NullString `json:"transport_id"`
 	Address          sql.NullString `json:"address"`
 	Port             sql.NullInt32  `json:"port"`
 	Protocol         sql.NullString `json:"protocol"`
@@ -211,7 +211,7 @@ type RtcOutboundRtpStreamStats struct {
 	Kind                               string          `json:"kind"`
 	TransportID                        sql.NullString  `json:"transport_id"`
 	CodecID                            sql.NullString  `json:"codec_id"`
-	PacketsSent                        pgtype.Numeric  `json:"packets_sent"`
+	PacketsSent                        sql.NullInt64   `json:"packets_sent"`
 	BytesSent                          pgtype.Numeric  `json:"bytes_sent"`
 	RtxSsrc                            sql.NullInt64   `json:"rtx_ssrc"`
 	MediaSourceID                      sql.NullString  `json:"media_source_id"`
@@ -299,7 +299,7 @@ type RtcRemoteOutboundRtpStreamStats struct {
 	Kind                      string          `json:"kind"`
 	TransportID               sql.NullString  `json:"transport_id"`
 	CodecID                   sql.NullString  `json:"codec_id"`
-	PacketsSent               pgtype.Numeric  `json:"packets_sent"`
+	PacketsSent               sql.NullInt64   `json:"packets_sent"`
 	BytesSent                 pgtype.Numeric  `json:"bytes_sent"`
 	LocalID                   sql.NullString  `json:"local_id"`
 	RemoteTimestamp           sql.NullFloat64 `json:"remote_timestamp"`
@@ -322,7 +322,7 @@ type RtcTransportStats struct {
 	RtcpTransportStatsID         sql.NullString `json:"rtcp_transport_stats_id"`
 	IceRole                      sql.NullString `json:"ice_role"`
 	IceLocalUsernameFragment     sql.NullString `json:"ice_local_username_fragment"`
-	DtlsState                    sql.NullString `json:"dtls_state"`
+	DtlsState                    string         `json:"dtls_state"`
 	IceState                     sql.NullString `json:"ice_state"`
 	SelectedCandidatePairID      sql.NullString `json:"selected_candidate_pair_id"`
 	LocalCertificateID           sql.NullString `json:"local_certificate_id"`
@@ -340,8 +340,8 @@ type RtcVideoSourceStats struct {
 	StatsTimestamp   float64         `json:"stats_timestamp"`
 	StatsType        string          `json:"stats_type"`
 	StatsID          string          `json:"stats_id"`
-	TrackIdentifier  sql.NullString  `json:"track_identifier"`
-	Kind             sql.NullString  `json:"kind"`
+	TrackIdentifier  string          `json:"track_identifier"`
+	Kind             string          `json:"kind"`
 	RelayedSource    sql.NullBool    `json:"relayed_source"`
 	Width            sql.NullInt64   `json:"width"`
 	Height           sql.NullInt64   `json:"height"`

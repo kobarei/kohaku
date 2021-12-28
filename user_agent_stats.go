@@ -47,7 +47,7 @@ func (s *Server) CollectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 				return err
 			}
 		case "inbound-rtp":
-			stats := new(RTCInboundRtpStreamStats)
+			stats := new(RTCInboundRTPStreamStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
@@ -62,9 +62,9 @@ func (s *Server) CollectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 			}
 
 			ds := goqu.Insert("rtc_inbound_rtp_stream_stats").Rows(
-				RTCInboundRtpStream{
+				RTCInboundRTPStream{
 					RTC:                      *rtc,
-					RTCInboundRtpStreamStats: *stats,
+					RTCInboundRTPStreamStats: *stats,
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
@@ -73,7 +73,7 @@ func (s *Server) CollectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 				return err
 			}
 		case "outbound-rtp":
-			stats := new(RTCOutboundRtpStreamStats)
+			stats := new(RTCOutboundRTPStreamStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
@@ -96,9 +96,9 @@ func (s *Server) CollectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 			}
 
 			ds := goqu.Insert("rtc_outbound_rtp_stream_stats").Rows(
-				RTCOutboundRtpStream{
+				RTCOutboundRTPStream{
 					RTC:                       *rtc,
-					RTCOutboundRtpStreamStats: *stats,
+					RTCOutboundRTPStreamStats: *stats,
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
@@ -107,14 +107,14 @@ func (s *Server) CollectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 				return err
 			}
 		case "remote-inbound-rtp":
-			stats := new(RTCRemoteInboundRtpStreamStats)
+			stats := new(RTCRemoteInboundRTPStreamStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 			ds := goqu.Insert("rtc_remote_inbound_rtp_stream_stats").Rows(
-				RTCRemoteInboundRtpStream{
+				RTCRemoteInboundRTPStream{
 					RTC:                            *rtc,
-					RTCRemoteInboundRtpStreamStats: *stats,
+					RTCRemoteInboundRTPStreamStats: *stats,
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
@@ -123,14 +123,14 @@ func (s *Server) CollectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 				return err
 			}
 		case "remote-outbound-rtp":
-			stats := new(RTCRemoteOutboundRtpStreamStats)
+			stats := new(RTCRemoteOutboundRTPStreamStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 			ds := goqu.Insert("rtc_remote_outbound_rtp_stream_stats").Rows(
-				RTCRemoteOutboundRtpStream{
+				RTCRemoteOutboundRTPStream{
 					RTC:                             *rtc,
-					RTCRemoteOutboundRtpStreamStats: *stats,
+					RTCRemoteOutboundRTPStreamStats: *stats,
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
@@ -179,7 +179,7 @@ func (s *Server) CollectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 				}
 			}
 		case "csrc":
-			stats := new(RTCRtpContributingSourceStats)
+			stats := new(RTCRTPContributingSourceStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
@@ -212,7 +212,7 @@ func (s *Server) CollectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 			return nil
 		case "transceiver":
 			// TODO(v): データベース書き込み
-			stats := new(RTCRtpTransceiverStats)
+			stats := new(RTCRTPTransceiverStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}

@@ -1,11 +1,11 @@
 package kohaku
 
-type ErlangVmStats struct {
+type ErlangVMStats struct {
 	Type string `json:"type" db:"stats_type"`
 }
 
-type ErlangVmMemoryStats struct {
-	ErlangVmStats
+type ErlangVMMemoryStats struct {
+	ErlangVMStats
 
 	Total         uint64 `json:"total" db:"type_total"`
 	Processes     uint64 `json:"processes" db:"type_processes"`

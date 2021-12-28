@@ -360,7 +360,7 @@ var (
   }
 `
 
-	collectorTypeErlangVmMemoryJSON = `{
+	collectorTypeErlangVMMemoryJSON = `{
     "id": "NXXP9WDGCH72SC7SJAZ2A28318",
     "label": "WebRTC SFU Sora",
     "node_name": "sora@127.0.0.1",
@@ -534,7 +534,7 @@ var (
     "version": "2021.2.0"
   }`
 
-	unexpectedErlangVmTypeJSON = `{
+	unexpectedErlangVMTypeJSON = `{
     "id": "NXXP9WDGCH72SC7SJAZ2A28318",
     "label": "WebRTC SFU Sora",
     "node_name": "sora@127.0.0.1",
@@ -908,9 +908,9 @@ func TestMissingMultistream(t *testing.T) {
 	assert.Equal(t, `{"error":"Key: 'SoraConnectionStats.Multistream' Error:Field validation for 'Multistream' failed on the 'required' tag"}`, string(body))
 }
 
-func TestTypeErlangVmMemoryCollector(t *testing.T) {
+func TestTypeErlangVMMemoryCollector(t *testing.T) {
 	// Setup
-	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeErlangVmMemoryJSON))
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(collectorTypeErlangVMMemoryJSON))
 	req.Header.Set("content-type", "application/json")
 	req.Header.Set("x-sora-stats-exporter-type", "node.erlang-vm")
 	req.Proto = "HTTP/2.0"
@@ -933,9 +933,9 @@ func TestTypeErlangVmMemoryCollector(t *testing.T) {
 	assert.Equal(t, "erlang-vm-memory", statsType)
 }
 
-func TestUnexpectedErlangVmType(t *testing.T) {
+func TestUnexpectedErlangVMType(t *testing.T) {
 	// Setup
-	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(unexpectedErlangVmTypeJSON))
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(unexpectedErlangVMTypeJSON))
 	req.Header.Set("content-type", "application/json")
 	req.Header.Set("x-sora-stats-exporter-type", "node.erlang-vm")
 	req.Proto = "HTTP/2.0"

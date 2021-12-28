@@ -27,14 +27,14 @@ func (s *Server) Collector(c *gin.Context) {
 		c.Status(http.StatusNoContent)
 		return
 	case "node.erlang-vm":
-		stats := new(SoraNodeErlangVmStats)
+		stats := new(SoraNodeErlangVMStats)
 		if err := c.Bind(stats); err != nil {
 			zlog.Debug().Str("type", t).Err(err).Msg("")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		if err := s.CollectorSoraNodeErlangVmStats(c, *stats); err != nil {
+		if err := s.CollectorSoraNodeErlangVMStats(c, *stats); err != nil {
 			zlog.Warn().Str("type", t).Err(err).Msg("")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return

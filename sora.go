@@ -37,7 +37,7 @@ type SoraConnectionStats struct {
 	Stats []json.RawMessage `json:"stats" binding:"required"`
 }
 
-type SoraNodeErlangVmStats struct {
+type SoraNodeErlangVMStats struct {
 	SoraStats
 
 	Stats []json.RawMessage `json:"stats" binding:"required"`
