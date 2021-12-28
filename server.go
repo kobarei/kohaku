@@ -80,7 +80,7 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	// Custom Validation Functions の登録
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		// TODO: タグ名を変更する
-		v.RegisterValidation("maxb", MaximumNumberOfBytesFunc)
+		v.RegisterValidation("maxb", maximumNumberOfBytesFunc)
 	}
 
 	return s

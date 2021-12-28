@@ -859,7 +859,7 @@ func TestMissingTimestamp(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	assert.Equal(t, `{"error":"Key: 'SoraConnectionStats.SoraStats.Timestamp' Error:Field validation for 'Timestamp' failed on the 'required' tag"}`, string(body))
+	assert.Equal(t, `{"error":"Key: 'soraConnectionStats.soraStats.Timestamp' Error:Field validation for 'Timestamp' failed on the 'required' tag"}`, string(body))
 }
 
 func TestInvalidChannelIDLength(t *testing.T) {
@@ -882,7 +882,7 @@ func TestInvalidChannelIDLength(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	assert.Equal(t, `{"error":"Key: 'SoraConnectionStats.ChannelID' Error:Field validation for 'ChannelID' failed on the 'maxb' tag"}`, string(body))
+	assert.Equal(t, `{"error":"Key: 'soraConnectionStats.ChannelID' Error:Field validation for 'ChannelID' failed on the 'maxb' tag"}`, string(body))
 }
 
 func TestMissingMultistream(t *testing.T) {
@@ -905,7 +905,7 @@ func TestMissingMultistream(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	assert.Equal(t, `{"error":"Key: 'SoraConnectionStats.Multistream' Error:Field validation for 'Multistream' failed on the 'required' tag"}`, string(body))
+	assert.Equal(t, `{"error":"Key: 'soraConnectionStats.Multistream' Error:Field validation for 'Multistream' failed on the 'required' tag"}`, string(body))
 }
 
 func TestTypeErlangVMMemoryCollector(t *testing.T) {

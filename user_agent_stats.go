@@ -11,18 +11,18 @@ import (
 )
 
 // TODO(v): sqlc したいが厳しそう
-func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionStats) error {
+func (s *Server) collectorUserAgentStats(c *gin.Context, stats soraConnectionStats) error {
 	if err := s.InsertSoraConnections(c, stats); err != nil {
 		return err
 	}
 
-	rtc := &RTC{
+	rtc := &rtc{
 		Time:         &stats.Timestamp,
 		ConnectionID: stats.ConnectionID,
 	}
 
 	for _, v := range stats.Stats {
-		rtcStats := new(RTCStats)
+		rtcStats := new(rtcStats)
 		if err := json.Unmarshal(v, &rtcStats); err != nil {
 			return err
 		}
@@ -30,15 +30,15 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 		// Type が送られてこない場合を考慮してる
 		switch *rtcStats.Type {
 		case "codec":
-			stats := new(RTCCodecStats)
+			stats := new(rtcCodecStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 
 			ds := goqu.Insert("rtc_codec_stats").Rows(
-				RTCCodec{
-					RTC:           *rtc,
-					RTCCodecStats: *stats,
+				rtcCodec{
+					rtc:           *rtc,
+					rtcCodecStats: *stats,
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
@@ -47,7 +47,7 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 				return err
 			}
 		case "inbound-rtp":
-			stats := new(RTCInboundRTPStreamStats)
+			stats := new(rtcInboundRTPStreamStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
@@ -62,9 +62,9 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 			}
 
 			ds := goqu.Insert("rtc_inbound_rtp_stream_stats").Rows(
-				RTCInboundRTPStream{
-					RTC:                      *rtc,
-					RTCInboundRTPStreamStats: *stats,
+				rtcInboundRTPStream{
+					rtc:                      *rtc,
+					rtcInboundRTPStreamStats: *stats,
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
@@ -73,7 +73,7 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 				return err
 			}
 		case "outbound-rtp":
-			stats := new(RTCOutboundRTPStreamStats)
+			stats := new(rtcOutboundRTPStreamStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
@@ -96,9 +96,9 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 			}
 
 			ds := goqu.Insert("rtc_outbound_rtp_stream_stats").Rows(
-				RTCOutboundRTPStream{
-					RTC:                       *rtc,
-					RTCOutboundRTPStreamStats: *stats,
+				rtcOutboundRTPStream{
+					rtc:                       *rtc,
+					rtcOutboundRTPStreamStats: *stats,
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
@@ -107,14 +107,14 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 				return err
 			}
 		case "remote-inbound-rtp":
-			stats := new(RTCRemoteInboundRTPStreamStats)
+			stats := new(rtcRemoteInboundRTPStreamStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 			ds := goqu.Insert("rtc_remote_inbound_rtp_stream_stats").Rows(
-				RTCRemoteInboundRTPStream{
-					RTC:                            *rtc,
-					RTCRemoteInboundRTPStreamStats: *stats,
+				rtcRemoteInboundRTPStream{
+					rtc:                            *rtc,
+					rtcRemoteInboundRTPStreamStats: *stats,
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
@@ -123,14 +123,14 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 				return err
 			}
 		case "remote-outbound-rtp":
-			stats := new(RTCRemoteOutboundRTPStreamStats)
+			stats := new(rtcRemoteOutboundRTPStreamStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 			ds := goqu.Insert("rtc_remote_outbound_rtp_stream_stats").Rows(
-				RTCRemoteOutboundRTPStream{
-					RTC:                             *rtc,
-					RTCRemoteOutboundRTPStreamStats: *stats,
+				rtcRemoteOutboundRTPStream{
+					rtc:                             *rtc,
+					rtcRemoteOutboundRTPStreamStats: *stats,
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
@@ -140,20 +140,20 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 			}
 		case "media-source":
 			// RTCAudioSourceStats or RTCVideoSourceStats depending on its kind.
-			stats := new(RTCMediaSourceStats)
+			stats := new(rtcMediaSourceStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 			switch *stats.Kind {
 			case "audio":
-				stats := new(RTCAudioSourceStats)
+				stats := new(rtcAudioSourceStats)
 				if err := json.Unmarshal(v, &stats); err != nil {
 					return err
 				}
 				ds := goqu.Insert("rtc_audio_source_stats").Rows(
-					RTCAuidoSource{
-						RTC:                 *rtc,
-						RTCAudioSourceStats: *stats,
+					rtcAuidoSource{
+						rtc:                 *rtc,
+						rtcAudioSourceStats: *stats,
 					},
 				)
 				insertSQL, _, _ := ds.ToSQL()
@@ -162,14 +162,14 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 					return err
 				}
 			case "video":
-				stats := new(RTCVideoSourceStats)
+				stats := new(rtcVideoSourceStats)
 				if err := json.Unmarshal(v, &stats); err != nil {
 					return err
 				}
 				ds := goqu.Insert("rtc_video_source_stats").Rows(
-					RTCVideoSource{
-						RTC:                 *rtc,
-						RTCVideoSourceStats: *stats,
+					rtcVideoSource{
+						rtc:                 *rtc,
+						rtcVideoSourceStats: *stats,
 					},
 				)
 				insertSQL, _, _ := ds.ToSQL()
@@ -179,24 +179,24 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 				}
 			}
 		case "csrc":
-			stats := new(RTCRTPContributingSourceStats)
+			stats := new(rtcRTPContributingSourceStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 		case "peer-connection":
-			stats := new(RTCPeerConnectionStats)
+			stats := new(rtcPeerConnectionStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 		case "data-channel":
-			stats := new(RTCDataChannelStats)
+			stats := new(rtcDataChannelStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 			ds := goqu.Insert("rtc_data_channel_stats").Rows(
-				RTCDataChannel{
-					RTC:                 *rtc,
-					RTCDataChannelStats: *stats,
+				rtcDataChannel{
+					rtc:                 *rtc,
+					rtcDataChannelStats: *stats,
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
@@ -212,55 +212,55 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 			return nil
 		case "transceiver":
 			// TODO(v): データベース書き込み
-			stats := new(RTCRTPTransceiverStats)
+			stats := new(rtcRTPTransceiverStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 		case "sender":
 			// TODO(v): データベース書き込み
-			stats := new(RTCMediaHandlerStats)
+			stats := new(rtcMediaHandlerStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 			switch *stats.Kind {
 			case "audio":
-				stats := new(RTCAudioSenderStats)
+				stats := new(rtcAudioSenderStats)
 				if err := json.Unmarshal(v, &stats); err != nil {
 					return err
 				}
 			case "video":
-				stats := new(RTCVideoSenderStats)
+				stats := new(rtcVideoSenderStats)
 				if err := json.Unmarshal(v, &stats); err != nil {
 					return err
 				}
 			}
 		case "receiver":
 			// TODO(v): データベース書き込み
-			stats := new(RTCMediaHandlerStats)
+			stats := new(rtcMediaHandlerStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 			switch *stats.Kind {
 			case "audio":
-				stats := new(RTCAudioReceiverStats)
+				stats := new(rtcAudioReceiverStats)
 				if err := json.Unmarshal(v, &stats); err != nil {
 					return err
 				}
 			case "video":
-				stats := new(RTCVideoReceiverStats)
+				stats := new(rtcVideoReceiverStats)
 				if err := json.Unmarshal(v, &stats); err != nil {
 					return err
 				}
 			}
 		case "transport":
-			stats := new(RTCTransportStats)
+			stats := new(rtcTransportStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 			ds := goqu.Insert("rtc_transport_stats").Rows(
-				RTCTransport{
-					RTC:               *rtc,
-					RTCTransportStats: *stats,
+				rtcTransport{
+					rtc:               *rtc,
+					rtcTransportStats: *stats,
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
@@ -269,19 +269,19 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 				return err
 			}
 		case "sctp-transport":
-			stats := new(RTCSctpTransportStats)
+			stats := new(rtcSctpTransportStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 		case "candidate-pair":
-			stats := new(RTCIceCandidatePairStats)
+			stats := new(rtcIceCandidatePairStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 			ds := goqu.Insert("rtc_ice_candidate_pair_stats").Rows(
-				RTCIceCandidatePair{
-					RTC:                      *rtc,
-					RTCIceCandidatePairStats: *stats,
+				rtcIceCandidatePair{
+					rtc:                      *rtc,
+					rtcIceCandidatePairStats: *stats,
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
@@ -290,14 +290,14 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 				return err
 			}
 		case "local-candidate", "remote-candidate":
-			stats := new(RTCIceCandidateStats)
+			stats := new(rtcIceCandidateStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 			ds := goqu.Insert("rtc_ice_candidate_stats").Rows(
-				RTCIceCandidate{
-					RTC:                  *rtc,
-					RTCIceCandidateStats: *stats,
+				rtcIceCandidate{
+					rtc:                  *rtc,
+					rtcIceCandidateStats: *stats,
 				},
 			)
 			insertSQL, _, _ := ds.ToSQL()
@@ -306,12 +306,12 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 				return err
 			}
 		case "certificate":
-			stats := new(RTCCertificateStats)
+			stats := new(rtcCertificateStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
 		case "ice-server":
-			stats := new(RTCIceServerStats)
+			stats := new(rtcIceServerStats)
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
@@ -324,7 +324,7 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionSta
 	return nil
 }
 
-func (s *Server) InsertSoraConnections(ctx context.Context, stats SoraConnectionStats) error {
+func (s *Server) InsertSoraConnections(ctx context.Context, stats soraConnectionStats) error {
 	if err := s.query.InsertSoraConnection(ctx, db.InsertSoraConnectionParams{
 		Timestamp:    stats.Timestamp,
 		Label:        stats.Label,

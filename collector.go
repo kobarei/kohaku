@@ -13,7 +13,7 @@ func (s *Server) collector(c *gin.Context) {
 	switch t {
 	case "connection.user-agent":
 		// TODO(v): validator 処理
-		stats := new(SoraConnectionStats)
+		stats := new(soraConnectionStats)
 		if err := c.Bind(stats); err != nil {
 			zlog.Debug().Str("type", t).Err(err).Msg("")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -27,7 +27,7 @@ func (s *Server) collector(c *gin.Context) {
 		c.Status(http.StatusNoContent)
 		return
 	case "node.erlang-vm":
-		stats := new(SoraNodeErlangVMStats)
+		stats := new(soraNodeErlangVMStats)
 		if err := c.Bind(stats); err != nil {
 			zlog.Debug().Str("type", t).Err(err).Msg("")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

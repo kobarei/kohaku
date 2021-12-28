@@ -3,15 +3,15 @@ package kohaku
 // https://www.w3.org/TR/webrtc-stats/
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcstats
-type RTCStats struct {
+type rtcStats struct {
 	Timestamp *float64 `json:"timestamp" validate:"required" db:"stats_timestamp"` // required DOMHighResTimeStamp timestamp;
 	Type      *string  `json:"type" validate:"required" db:"stats_type"`           // required RTCStatsType        type;
 	ID        *string  `json:"id" validate:"required" db:"stats_id"`               // required DOMString           id;
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcrtpstreamstats
-type RTCRTPStreamStats struct {
-	RTCStats
+type rtcRTPStreamStats struct {
+	rtcStats
 
 	SSRC        *uint32 `json:"ssrc" validate:"required" db:"ssrc"` // required unsigned long       ssrc;
 	Kind        *string `json:"kind" validate:"required" db:"kind"` // required DOMString           kind;
@@ -20,8 +20,8 @@ type RTCRTPStreamStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtccodecstats
-type RTCCodecStats struct {
-	RTCStats
+type rtcCodecStats struct {
+	rtcStats
 
 	PayloadType *uint32 `json:"payloadType" validate:"required" db:"payload_type"` // required unsigned long payloadType;
 	CodecType   *string `json:"codecType" db:"codec_type"`                         // RTCCodecType  codecType;
@@ -33,8 +33,8 @@ type RTCCodecStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#receivedrtpstats-dict*
-type RTCReceivedRTPStreamStats struct {
-	RTCRTPStreamStats
+type rtcReceivedRTPStreamStats struct {
+	rtcRTPStreamStats
 
 	PacketsReceived       *uint64  `json:"packetsReceived" db:"packets_received"`              // unsigned long long   packetsReceived;
 	PacketsLost           *int64   `json:"packetsLost" db:"packets_lost"`                      // long long            packetsLost;
@@ -55,8 +55,8 @@ type RTCReceivedRTPStreamStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcinboundrtpstreamstats
-type RTCInboundRTPStreamStats struct {
-	RTCReceivedRTPStreamStats
+type rtcInboundRTPStreamStats struct {
+	rtcReceivedRTPStreamStats
 
 	ReceiverID                  *string  `json:"receiverId" validate:"required" db:"receiver_id"`                  // required DOMString   receiverId;
 	RemoteID                    *string  `json:"remoteId" db:"remote_id"`                                          // DOMString            remoteId;
@@ -106,8 +106,8 @@ type RTCInboundRTPStreamStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcremoteinboundrtpstreamstats
-type RTCRemoteInboundRTPStreamStats struct {
-	RTCReceivedRTPStreamStats
+type rtcRemoteInboundRTPStreamStats struct {
+	rtcReceivedRTPStreamStats
 
 	LocalID                   *string  `json:"localId" db:"local_id"`                                       // DOMString            localId;
 	RoundTripTime             *float64 `json:"roundTripTime" db:"round_trip_time"`                          // double               roundTripTime;
@@ -118,16 +118,16 @@ type RTCRemoteInboundRTPStreamStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcsentrtpstreamstats
-type RTCSentRTPStreamStats struct {
-	RTCRTPStreamStats
+type rtcSentRTPStreamStats struct {
+	rtcRTPStreamStats
 
 	PacketsSent *uint32 `json:"packetsSent" db:"packets_sent"` // unsigned long      packetsSent;
 	BytesSent   *uint64 `json:"bytesSent" db:"bytes_sent"`     // unsigned long long bytesSent;
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcoutboundrtpstreamstats
-type RTCOutboundRTPStreamStats struct {
-	RTCSentRTPStreamStats
+type rtcOutboundRTPStreamStats struct {
+	rtcSentRTPStreamStats
 
 	RtxSSRC                            *uint32     `json:"rtxSsrc" db:"rtx_ssrc"`                                                         // unsigned long        rtxSsrc;
 	MediaSourceID                      *string     `json:"mediaSourceId" db:"media_source_id"`                                            // DOMString            mediaSourceId;
@@ -172,8 +172,8 @@ type RTCOutboundRTPStreamStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcremoteoutboundrtpstreamstats
-type RTCRemoteOutboundRTPStreamStats struct {
-	RTCSentRTPStreamStats
+type rtcRemoteOutboundRTPStreamStats struct {
+	rtcSentRTPStreamStats
 
 	LocalID                   *string  `json:"localId" db:"local_id"`                                       // DOMString           localId;
 	RemoteTimestamp           *float64 `json:"remoteTimestamp" db:"remote_timestamp"`                       // DOMHighResTimeStamp remoteTimestamp;
@@ -184,8 +184,8 @@ type RTCRemoteOutboundRTPStreamStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcmediasourcestats
-type RTCMediaSourceStats struct {
-	RTCStats
+type rtcMediaSourceStats struct {
+	rtcStats
 
 	TrackIdentifier *string `json:"trackIdentifier" validate:"required" db:"track_identifier"` // required DOMString       trackIdentifier;
 	Kind            *string `json:"kind" validate:"required" db:"kind"`                        // required DOMString       kind;
@@ -193,8 +193,8 @@ type RTCMediaSourceStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcmediasourcestats
-type RTCAudioSourceStats struct {
-	RTCMediaSourceStats
+type rtcAudioSourceStats struct {
+	rtcMediaSourceStats
 
 	AudioLevel                *float64 `json:"audioLevel" db:"audio_level"`                                 // double              audioLevel;
 	TotalAudioEnergy          *float64 `json:"totalAudioEnergy" db:"total_audio_energy"`                    // double              totalAudioEnergy;
@@ -204,8 +204,8 @@ type RTCAudioSourceStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcvideosourcestats
-type RTCVideoSourceStats struct {
-	RTCMediaSourceStats
+type rtcVideoSourceStats struct {
+	rtcMediaSourceStats
 
 	Width           *uint32  `json:"width" db:"width"`                       // unsigned long   width;
 	Height          *uint32  `json:"height" db:"height"`                     // unsigned long   height;
@@ -215,8 +215,8 @@ type RTCVideoSourceStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcrtpcontributingsourcestats
-type RTCRTPContributingSourceStats struct {
-	RTCStats
+type rtcRTPContributingSourceStats struct {
+	rtcStats
 
 	ContributorSsrc      *uint32  `json:"contributorSsrc" validate:"required" db:"contributor_ssrc"`         // required unsigned long contributorSsrc;
 	InboundRTPStreamID   *string  `json:"inboundRTPStreamId" validate:"required" db:"inbound_rtp_stream_id"` // required DOMString     inboundRTPStreamId;
@@ -225,8 +225,8 @@ type RTCRTPContributingSourceStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcpeerconnectionstats
-type RTCPeerConnectionStats struct {
-	RTCStats
+type rtcPeerConnectionStats struct {
+	rtcStats
 
 	DataChannelsOpened    *uint32 `json:"dataChannelsOpened" db:"data_channels_opened"`       // unsigned long dataChannelsOpened;
 	DataChannelsClosed    *uint32 `json:"dataChannelsClosed" db:"data_channels_closed"`       // unsigned long dataChannelsClosed;
@@ -235,8 +235,8 @@ type RTCPeerConnectionStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcrtptransceiverstats
-type RTCRTPTransceiverStats struct {
-	RTCStats
+type rtcRTPTransceiverStats struct {
+	rtcStats
 
 	SenderID   *string `json:"senderId" validate:"required" db:"sender_id"`     // required DOMString senderId;
 	ReceiverID *string `json:"receiverId" validate:"required" db:"receiver_id"` // required DOMString receiverId;
@@ -244,8 +244,8 @@ type RTCRTPTransceiverStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcmediahandlerstats
-type RTCMediaHandlerStats struct {
-	RTCStats
+type rtcMediaHandlerStats struct {
+	rtcStats
 
 	TrackIdentifier *string `json:"trackIdentifier" db:"track_identifier"` // DOMString           trackIdentifier;
 	Ended           *bool   `json:"ended" db:"ended"`                      // boolean             ended;
@@ -253,40 +253,40 @@ type RTCMediaHandlerStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcvideohandlerstats
-type RTCVideoHandlerStats struct {
-	RTCMediaHandlerStats
+type rtcVideoHandlerStats struct {
+	rtcMediaHandlerStats
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcvideosenderstats
-type RTCVideoSenderStats struct {
-	RTCVideoHandlerStats
+type rtcVideoSenderStats struct {
+	rtcVideoHandlerStats
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcvideoreceiverstats
-type RTCVideoReceiverStats struct {
-	RTCVideoHandlerStats
+type rtcVideoReceiverStats struct {
+	rtcVideoHandlerStats
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcaudiohandlerstats
-type RTCAudioHandlerStats struct {
-	RTCMediaHandlerStats
+type rtcAudioHandlerStats struct {
+	rtcMediaHandlerStats
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcaudiosenderstats
-type RTCAudioSenderStats struct {
-	RTCAudioHandlerStats
+type rtcAudioSenderStats struct {
+	rtcAudioHandlerStats
 
 	MediaSourceID *string `json:"mediaSourceId" db:"media_source_id"` // DOMString           mediaSourceId;
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcaudioreceiverstats
-type RTCAudioReceiverStats struct {
-	RTCAudioHandlerStats
+type rtcAudioReceiverStats struct {
+	rtcAudioHandlerStats
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcdatachannelstats
-type RTCDataChannelStats struct {
-	RTCStats
+type rtcDataChannelStats struct {
+	rtcStats
 
 	Label                 *string `json:"label" db:"label"`                                   // DOMString           label;
 	Protocol              *string `json:"protocol" db:"protocol"`                             // DOMString           protocol;
@@ -299,8 +299,8 @@ type RTCDataChannelStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtctransportstats
-type RTCTransportStats struct {
-	RTCStats
+type rtcTransportStats struct {
+	rtcStats
 
 	PacketsSent                  *uint64 `json:"packetsSent" db:"packets_sent"`                                     // unsigned long long    packetsSent;
 	PacketsReceived              *uint64 `json:"packetsReceived" db:"packets_received"`                             // unsigned long long    packetsReceived;
@@ -322,8 +322,8 @@ type RTCTransportStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcsctptransportstats
-type RTCSctpTransportStats struct {
-	RTCStats
+type rtcSctpTransportStats struct {
+	rtcStats
 
 	TransportID           *string  `json:"transportId" db:"transport_id"`                       // DOMString transportId;
 	SmoothedRoundTripTime *float64 `json:"smoothedRoundTripTime" db:"smoothed_round_trip_time"` // double smoothedRoundTripTime;
@@ -334,8 +334,8 @@ type RTCSctpTransportStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcicecandidatestats
-type RTCIceCandidateStats struct {
-	RTCStats
+type rtcIceCandidateStats struct {
+	rtcStats
 
 	TransportID   *string `json:"transportId" validate:"required" db:"transport_id"`     // required DOMString       transportId;
 	Address       *string `json:"address" db:"address"`                                  // DOMString?               address;
@@ -348,8 +348,8 @@ type RTCIceCandidateStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtcicecandidatepairstats
-type RTCIceCandidatePairStats struct {
-	RTCStats
+type rtcIceCandidatePairStats struct {
+	rtcStats
 
 	TransportID                 *string  `json:"transportId" validate:"required" db:"transport_id"`               // required DOMString            transportId;
 	LocalCandidateID            *string  `json:"localCandidateId" validate:"required" db:"local_candidate_id"`    // required DOMString            localCandidateId;
@@ -386,8 +386,8 @@ type RTCIceCandidatePairStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtccertificatestats
-type RTCCertificateStats struct {
-	RTCStats
+type rtcCertificateStats struct {
+	rtcStats
 
 	Fingerprint          *string `json:"fingerprint" validate:"required" db:"fingerprint"`                    // required DOMString fingerprint;
 	FingerprintAlgorithm *string `json:"fingerprintAlgorithm" validate:"required" db:"fingerprint_algorithm"` // required DOMString fingerprintAlgorithm;
@@ -396,8 +396,8 @@ type RTCCertificateStats struct {
 }
 
 // https://www.w3.org/TR/webrtc-stats/#dom-rtciceserverstats
-type RTCIceServerStats struct {
-	RTCStats
+type rtcIceServerStats struct {
+	rtcStats
 
 	URL                    *string  `json:"url" validate:"required" db:"url"`                     // required DOMString url;
 	Port                   *int32   `json:"port" db:"port"`                                       // long port;

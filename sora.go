@@ -10,7 +10,7 @@ import (
 
 // TODO: validator 処理の追加
 
-type SoraStats struct {
+type soraStats struct {
 	Type string `json:"type" binding:"required"`
 
 	Timestamp time.Time `json:"timestamp" binding:"required"`
@@ -21,8 +21,8 @@ type SoraStats struct {
 }
 
 // type: connection.user-agent / type: connection.sora
-type SoraConnectionStats struct {
-	SoraStats
+type soraConnectionStats struct {
+	soraStats
 
 	Multistream *bool `json:"multistream" binding:"required"`
 	Simulcast   *bool `json:"simulcast" binding:"required"`
@@ -37,13 +37,13 @@ type SoraConnectionStats struct {
 	Stats []json.RawMessage `json:"stats" binding:"required"`
 }
 
-type SoraNodeErlangVMStats struct {
-	SoraStats
+type soraNodeErlangVMStats struct {
+	soraStats
 
 	Stats []json.RawMessage `json:"stats" binding:"required"`
 }
 
-func MaximumNumberOfBytesFunc(fl validator.FieldLevel) bool {
+func maximumNumberOfBytesFunc(fl validator.FieldLevel) bool {
 	param := fl.Param()
 
 	// 255 バイトまで指定可能

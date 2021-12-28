@@ -3,7 +3,7 @@ package kohaku
 import "time"
 
 // 使ってない
-type SoraNode struct {
+type soraNode struct {
 	Timestamp time.Time `db:"timestamp"`
 
 	Label    string `db:"label"`
@@ -12,8 +12,8 @@ type SoraNode struct {
 }
 
 // 使ってない
-type SoraConnection struct {
-	SoraNode
+type soraConnection struct {
+	soraNode
 
 	Multistream bool `db:"multistream"`
 	Simulcast   bool `db:"simulcast"`
@@ -26,63 +26,63 @@ type SoraConnection struct {
 	ConnectionID string `db:"connection_id"`
 }
 
-type RTC struct {
+type rtc struct {
 	Time *time.Time `db:"time"`
 
 	ConnectionID string `db:"sora_connection_id"`
 }
 
-type RTCCodec struct {
-	RTC
-	RTCCodecStats
+type rtcCodec struct {
+	rtc
+	rtcCodecStats
 }
 
-type RTCInboundRTPStream struct {
-	RTC
-	RTCInboundRTPStreamStats
+type rtcInboundRTPStream struct {
+	rtc
+	rtcInboundRTPStreamStats
 }
 
-type RTCRemoteInboundRTPStream struct {
-	RTC
-	RTCRemoteInboundRTPStreamStats
+type rtcRemoteInboundRTPStream struct {
+	rtc
+	rtcRemoteInboundRTPStreamStats
 }
 
-type RTCOutboundRTPStream struct {
-	RTC
-	RTCOutboundRTPStreamStats
+type rtcOutboundRTPStream struct {
+	rtc
+	rtcOutboundRTPStreamStats
 }
 
-type RTCRemoteOutboundRTPStream struct {
-	RTC
-	RTCRemoteOutboundRTPStreamStats
+type rtcRemoteOutboundRTPStream struct {
+	rtc
+	rtcRemoteOutboundRTPStreamStats
 }
 
-type RTCAuidoSource struct {
-	RTC
-	RTCAudioSourceStats
+type rtcAuidoSource struct {
+	rtc
+	rtcAudioSourceStats
 }
 
-type RTCVideoSource struct {
-	RTC
-	RTCVideoSourceStats
+type rtcVideoSource struct {
+	rtc
+	rtcVideoSourceStats
 }
 
-type RTCDataChannel struct {
-	RTC
-	RTCDataChannelStats
+type rtcDataChannel struct {
+	rtc
+	rtcDataChannelStats
 }
 
-type RTCTransport struct {
-	RTC
-	RTCTransportStats
+type rtcTransport struct {
+	rtc
+	rtcTransportStats
 }
 
-type RTCIceCandidate struct {
-	RTC
-	RTCIceCandidateStats
+type rtcIceCandidate struct {
+	rtc
+	rtcIceCandidateStats
 }
 
-type RTCIceCandidatePair struct {
-	RTC
-	RTCIceCandidatePairStats
+type rtcIceCandidatePair struct {
+	rtc
+	rtcIceCandidatePairStats
 }
