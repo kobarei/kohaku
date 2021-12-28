@@ -370,7 +370,7 @@ type RTCIceCandidatePairStats struct {
 	AvailableOutgoingBitrate    *float64 `json:"availableOutgoingBitrate" db:"available_outgoing_bitrate"`        // double                        availableOutgoingBitrate;
 	AvailableIncomingBitrate    *float64 `json:"availableIncomingBitrate" db:"available_incoming_bitrate"`        // double                        availableIncomingBitrate;
 	CircuitBreakerTriggerCount  *uint32  `json:"circuitBreakerTriggerCount" db:"circuit_breaker_trigger_count"`   // unsigned long                 circuitBreakerTriggerCount;
-	RequestsReceived            *uint32  `json:"requestsReceived" db:"requests_received"`                         // unsigned long long            requestsReceived;
+	RequestsReceived            *uint64  `json:"requestsReceived" db:"requests_received"`                         // unsigned long long            requestsReceived;
 	RequestsSent                *uint64  `json:"requestsSent" db:"requests_sent"`                                 // unsigned long long            requestsSent;
 	ResponsesReceived           *uint64  `json:"responsesReceived" db:"responses_received"`                       // unsigned long long            responsesReceived;
 	ResponsesSent               *uint64  `json:"responsesSent" db:"responses_sent"`                               // unsigned long long            responsesSent;
