@@ -19,6 +19,6 @@ func TestHealth(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Health(c)
+	server.health(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 }

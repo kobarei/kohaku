@@ -11,7 +11,7 @@ import (
 )
 
 // TODO(v): sqlc したいが厳しそう
-func (s *Server) CollectorUserAgentStats(c *gin.Context, stats SoraConnectionStats) error {
+func (s *Server) collectorUserAgentStats(c *gin.Context, stats SoraConnectionStats) error {
 	if err := s.InsertSoraConnections(c, stats); err != nil {
 		return err
 	}

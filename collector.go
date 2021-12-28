@@ -8,7 +8,7 @@ import (
 )
 
 // TODO: ログレベル、ログメッセージを変更する
-func (s *Server) Collector(c *gin.Context) {
+func (s *Server) collector(c *gin.Context) {
 	t := c.Request.Header.Get("x-sora-stats-exporter-type")
 	switch t {
 	case "connection.user-agent":
@@ -19,7 +19,7 @@ func (s *Server) Collector(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		if err := s.CollectorUserAgentStats(c, *stats); err != nil {
+		if err := s.collectorUserAgentStats(c, *stats); err != nil {
 			zlog.Warn().Str("type", t).Err(err).Msg("")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -34,7 +34,7 @@ func (s *Server) Collector(c *gin.Context) {
 			return
 		}
 
-		if err := s.CollectorSoraNodeErlangVMStats(c, *stats); err != nil {
+		if err := s.collectorSoraNodeErlangVMStats(c, *stats); err != nil {
 			zlog.Warn().Str("type", t).Err(err).Msg("")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return

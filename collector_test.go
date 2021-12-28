@@ -657,7 +657,7 @@ func TestTypeOutboundRTPCollector(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Collector(c)
+	server.collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 
 	statsType, err := getStatsType("rtc_outbound_rtp_stream_stats", connectionID)
@@ -678,7 +678,7 @@ func TestTypeCodecCollector(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Collector(c)
+	server.collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 
 	statsType, err := getStatsType("rtc_codec_stats", connectionID)
@@ -699,7 +699,7 @@ func TestTypeMediaSourceCollector(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Collector(c)
+	server.collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 
 	statsType, err := getStatsType("rtc_audio_source_stats", connectionID)
@@ -720,7 +720,7 @@ func TestTypeDataChannelCollector(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Collector(c)
+	server.collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 
 	statsType, err := getStatsType("rtc_data_channel_stats", connectionID)
@@ -741,7 +741,7 @@ func TestTypeCandidatePairCollector(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Collector(c)
+	server.collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 
 	statsType, err := getStatsType("rtc_ice_candidate_pair_stats", connectionID)
@@ -762,7 +762,7 @@ func TestTypeRemoteInboundRTPCollector(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Collector(c)
+	server.collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 
 	statsType, err := getStatsType("rtc_remote_inbound_rtp_stream_stats", connectionID)
@@ -783,7 +783,7 @@ func TestTypeTransportCollector(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Collector(c)
+	server.collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 
 	statsType, err := getStatsType("rtc_transport_stats", connectionID)
@@ -804,7 +804,7 @@ func TestInvalidConnectionIDLength(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Collector(c)
+	server.collector(c)
 	resp := rec.Result()
 
 	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
@@ -827,7 +827,7 @@ func TestUnexpectedType(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Collector(c)
+	server.collector(c)
 	resp := rec.Result()
 
 	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
@@ -850,7 +850,7 @@ func TestMissingTimestamp(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Collector(c)
+	server.collector(c)
 	resp := rec.Result()
 
 	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
@@ -873,7 +873,7 @@ func TestInvalidChannelIDLength(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Collector(c)
+	server.collector(c)
 	resp := rec.Result()
 
 	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
@@ -896,7 +896,7 @@ func TestMissingMultistream(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Collector(c)
+	server.collector(c)
 	resp := rec.Result()
 
 	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
@@ -919,7 +919,7 @@ func TestTypeErlangVMMemoryCollector(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Collector(c)
+	server.collector(c)
 	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
 
 	// TODO: 関数化
@@ -944,6 +944,6 @@ func TestUnexpectedErlangVMType(t *testing.T) {
 	c.Request = req
 
 	// Assertions
-	server.Collector(c)
+	server.collector(c)
 	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
 }

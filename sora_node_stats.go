@@ -16,7 +16,7 @@ func toNumeric(n uint64) pgtype.Numeric {
 }
 
 // TODO(v): sqlc 化
-func (s *Server) CollectorSoraNodeErlangVMStats(c *gin.Context, stats SoraNodeErlangVMStats) error {
+func (s *Server) collectorSoraNodeErlangVMStats(c *gin.Context, stats SoraNodeErlangVMStats) error {
 	if err := s.InsertSoraNode(c, stats); err != nil {
 		return err
 	}
