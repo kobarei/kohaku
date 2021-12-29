@@ -9,4 +9,4 @@ clean:
 	rm -rf ./kohaku.log
 
 test:
-	go test
+	go test -v
