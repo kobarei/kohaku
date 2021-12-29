@@ -316,8 +316,7 @@ func (s *Server) collectorUserAgentStats(c *gin.Context, stats soraConnectionSta
 				return err
 			}
 		default:
-			// TODO: return err にする
-			fmt.Println(rtcStats.ID)
+			return fmt.Errorf("unexpected rtcStats.Type: %s", *rtcStats.Type)
 		}
 
 	}

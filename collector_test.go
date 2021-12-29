@@ -557,6 +557,35 @@ var (
     "version": "2021.2.0"
   }
 `
+	unexpectedStatsTypeJSON = `{
+    "channel_id": "sora",
+    "client_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "connection_id": "QJ253E85SH1C170WQSPYJGFHCR",
+    "id": "W8B607ZBG92PD9JTMS19BSTE18",
+    "label": "WebRTC SFU Sora",
+    "multistream": true,
+    "node_name": "sora@127.0.0.1",
+    "role": "sendrecv",
+    "session_id": "JTYG1KGGPH2DKF86Y5B0GMWFSM",
+    "simulcast": false,
+    "spotlight": false,
+    "stats": [
+      {
+        "channels": 2,
+        "id": "RTCCodec_audio_NB1bb0_Inbound_109",
+        "timestamp": 1640225763760.085,
+        "type": "unexpected_type",
+        "clockRate": 48000,
+        "mimeType": "audio/opus",
+        "payloadType": 109,
+        "sdpFmtpLine": "minptime=10;useinbandfec=1",
+        "transportId": "RTCTransport_data_1"
+      }
+    ],
+    "timestamp": "2021-12-23T02:16:03.775161Z",
+    "type": "connection.user-agent",
+    "version": "2021.2.0"
+  }`
 )
 
 const (
@@ -906,6 +935,29 @@ func TestMissingMultistream(t *testing.T) {
 		panic(err)
 	}
 	assert.Equal(t, `{"error":"Key: 'soraConnectionStats.Multistream' Error:Field validation for 'Multistream' failed on the 'required' tag"}`, string(body))
+}
+
+func TestUnexpectedStatsType(t *testing.T) {
+	// Setup
+	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(unexpectedStatsTypeJSON))
+	req.Header.Set("content-type", "application/json")
+	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
+	req.Proto = "HTTP/2.0"
+	rec := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(rec)
+	c.Request = req
+
+	// Assertions
+	server.collector(c)
+	resp := rec.Result()
+
+	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	assert.Equal(t, `{"error":"unexpected rtcStats.Type: unexpected_type"}`, string(body))
 }
 
 func TestTypeErlangVMMemoryCollector(t *testing.T) {
