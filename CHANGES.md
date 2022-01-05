@@ -11,6 +11,8 @@
 
 ## develop
 
+- [CHANGE] kohaku の設定ファイルのパス指定のデフォルトを ../config.yaml から ./config.yaml に変更する
+
 ## 2021.1.0
 
 **祝リリース**
