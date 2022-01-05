@@ -77,6 +77,8 @@ $ openssl ecparam -out client.key -name prime256v1 -genkey
 
 #### CSR 及び証明書の作成
 
+subj は適宜変更してください。
+
 ```
 $ openssl req -new \
               -sha256 \
