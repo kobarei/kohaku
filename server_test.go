@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+	"time"
 
 	"golang.org/x/net/http2"
 
@@ -21,6 +22,9 @@ type CertPair struct {
 
 const (
 	port = 15890
+
+	// millisecond
+	waitingTime = 100
 )
 
 var (
@@ -86,6 +90,8 @@ func TestMutualTLS(t *testing.T) {
 		server.Start(config)
 	})()
 
+	time.Sleep(waitingTime * time.Millisecond)
+
 	// Setup
 	client, err := NewClient("http/1.1", certPair)
 	if err != nil {
@@ -110,6 +116,8 @@ func TestInvalidClientCertificate(t *testing.T) {
 		server.Start(config)
 	})()
 
+	time.Sleep(waitingTime * time.Millisecond)
+
 	// Setup
 	invalidCertPair := &CertPair{
 		"cert/client/invalid.pem",
@@ -131,6 +139,8 @@ func TestH2(t *testing.T) {
 	go (func() {
 		server.Start(config)
 	})()
+
+	time.Sleep(waitingTime * time.Millisecond)
 
 	// Setup
 	client, err := NewClient("h2", certPair)
@@ -159,6 +169,8 @@ func TestH2C(t *testing.T) {
 	go (func() {
 		server.Start(h2cConfig)
 	})()
+
+	time.Sleep(waitingTime * time.Millisecond)
 
 	// Setup
 	client, err := NewClient("h2c", nil)
