@@ -6,7 +6,7 @@ require (
 	github.com/doug-martin/goqu/v9 v9.18.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/goccy/go-yaml v1.9.5
-	github.com/jackc/pgx/v4 v4.14.1
+	github.com/jackc/pgx/v4 v4.15.0
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/rs/zerolog v1.26.1
 	github.com/stretchr/testify v1.7.0
@@ -20,7 +20,7 @@ require (
 
 require (
 	github.com/go-playground/validator/v10 v10.10.0
-	github.com/jackc/pgconn v1.10.1
+	github.com/jackc/pgconn v1.11.0
 	github.com/jackc/pgtype v1.10.0
 	github.com/ory/dockertest/v3 v3.8.1
 )
