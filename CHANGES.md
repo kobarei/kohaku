@@ -11,6 +11,9 @@
 
 ## develop
 
+- [UPDATE] Github Actions chekcout のバージョンを v3 にあげる
+- [UPDATE] Github Actions go のバージョンを v3 にあげる
+    - バージョンを `^1.17.7` にする
 - [CHANGE] kohaku の設定ファイルのパス指定のデフォルトを ../config.yaml から ./config.yaml に変更する
 
 ## 2021.1.0
