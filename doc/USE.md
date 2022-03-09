@@ -24,6 +24,9 @@ $ cp config.example.yaml config.yaml
 $ ./bin/kohaku -c config.yaml
 ```
 
+## TimescaleDB のスキーマ
+
+script ディレクトリ以下に `schema.sql` がありますのでこちらをご利用ください。
 
 ## mTLS で使用するクライアント証明書の作成と設定
 
