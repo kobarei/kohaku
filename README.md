@@ -66,3 +66,7 @@ limitations under the License.
 
 - AWS Timestream 対応
 
+## 記事
+
+- [\[備忘録\] WebRTC Stats Collector Kohakuを触ってみた](https://zenn.dev/adaniya/articles/1a06e22a23927b)
+    - 導入からグラフ化までを一通り試した良記事
