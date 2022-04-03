@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgtype"
-	db "github.com/shiguredo/kohaku/db/sqlc"
+	db "github.com/shiguredo/kohaku/gen/sqlc"
 )
 
 func toNumeric(n uint64) pgtype.Numeric {

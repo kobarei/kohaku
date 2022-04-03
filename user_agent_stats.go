@@ -7,7 +7,7 @@ import (
 
 	"github.com/doug-martin/goqu/v9"
 	"github.com/gin-gonic/gin"
-	db "github.com/shiguredo/kohaku/db/sqlc"
+	db "github.com/shiguredo/kohaku/gen/sqlc"
 )
 
 // TODO(v): sqlc したいが厳しそう

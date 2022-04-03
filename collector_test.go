@@ -152,7 +152,7 @@ func TestMain(m *testing.M) {
 			"listen_addresses = '*'",
 		},
 		Mounts: []string{
-			pwd + "/script/schema.sql:/docker-entrypoint-initdb.d/schema.sql",
+			pwd + "/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql",
 		},
 	}, func(config *docker.HostConfig) {
 		config.AutoRemove = true
