@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgtype"
-	db "github.com/shiguredo/kohaku/db/sqlc"
+	db "github.com/shiguredo/kohaku/gen/sqlc"
 )
 
 func toNumeric(n uint64) pgtype.Numeric {
@@ -15,7 +15,6 @@ func toNumeric(n uint64) pgtype.Numeric {
 	return num
 }
 
-// TODO(v): sqlc 化
 func (s *Server) collectorSoraNodeErlangVMStats(c *gin.Context, stats soraNodeErlangVMStats) error {
 	if err := s.InsertSoraNode(c, stats); err != nil {
 		return err
