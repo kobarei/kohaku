@@ -29,7 +29,7 @@ Kohaku はクライアントと Sora の統計情報を Sora から HTTP/2 経�
 
 ## 使ってみる
 
-Momo を使ってみたい人は [USE.md](https://github.com/shiguredo/kohaku/blob/develop/doc/USE.md) をお読みください。
+Kohaku を使ってみたい人は [USE.md](https://github.com/shiguredo/kohaku/blob/develop/doc/USE.md) をお読みください。
 
 ## 開発ログ
 
