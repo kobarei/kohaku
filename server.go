@@ -34,7 +34,7 @@ type Server struct {
 	http.Server
 }
 
-func NewServer2(c *KohakuConfig, pool *pgxpool.Pool) *Server {
+func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	e := echo.New()
 
 	// e.Use(httpLogger())
