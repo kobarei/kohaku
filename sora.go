@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/go-playground/validator/v10"
+	zlog "github.com/rs/zerolog/log"
 )
 
 // TODO: validator 処理の追加
@@ -49,6 +50,7 @@ func maximumNumberOfBytesFunc(fl validator.FieldLevel) bool {
 	// 255 バイトまで指定可能
 	length, err := strconv.ParseUint(param, 10, 8)
 	if err != nil {
+		zlog.Error().Err(err).Send()
 		panic(err)
 	}
 

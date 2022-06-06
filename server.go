@@ -13,6 +13,7 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	zlog "github.com/rs/zerolog/log"
 	db "github.com/shiguredo/kohaku/gen/sqlc"
 
 	"golang.org/x/net/http2"
@@ -61,6 +62,7 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 			clientCAPath := c.HTTP2VerifyCacertPath
 			certPool, err := appendCerts(clientCAPath)
 			if err != nil {
+				zlog.Error().Err(err).Send()
 				panic(err)
 			}
 

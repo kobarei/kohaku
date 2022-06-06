@@ -13,6 +13,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
@@ -196,6 +197,8 @@ func TestMain(m *testing.M) {
 func TestTypeOutboundRTPCollector(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "framesEncoded": 892,
@@ -265,6 +268,8 @@ func TestTypeOutboundRTPCollector(t *testing.T) {
 func TestTypeCodecCollector(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "channels": 2,
@@ -304,6 +309,8 @@ func TestTypeCodecCollector(t *testing.T) {
 func TestTypeMediaSourceCollector(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	stats := make([]json.RawMessage, 0, 2)
 	stats = append(stats, json.RawMessage(`{
         "id": "RTCAudioSource_9",
@@ -337,6 +344,8 @@ func TestTypeMediaSourceCollector(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
+
+	e.Validator = &Validator{validator: validator.New()}
 	c := e.NewContext(req, rec)
 
 	// Assertions
@@ -353,6 +362,8 @@ func TestTypeMediaSourceCollector(t *testing.T) {
 func TestTypeDataChannelCollector(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	stats := make([]json.RawMessage, 0, 4)
 	stats = append(stats, json.RawMessage(`{
         "id": "RTCDataChannel_17",
@@ -433,6 +444,8 @@ func TestTypeDataChannelCollector(t *testing.T) {
 func TestTypeCandidatePairCollector(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "id": "RTCIceCandidatePair_eRplCBvi_JXPaEzOA",
@@ -487,6 +500,8 @@ func TestTypeCandidatePairCollector(t *testing.T) {
 func TestTypeRemoteInboundRTPCollector(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	stats := make([]json.RawMessage, 0, 2)
 	stats = append(stats, json.RawMessage(`{
         "fractionLost": 0,
@@ -547,6 +562,8 @@ func TestTypeRemoteInboundRTPCollector(t *testing.T) {
 func TestTypeTransportCollector(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "id": "RTCTransport_data_1",
@@ -592,6 +609,8 @@ func TestTypeTransportCollector(t *testing.T) {
 func TestInvalidConnectionIDLength(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "channels": 2,
@@ -634,6 +653,8 @@ func TestInvalidConnectionIDLength(t *testing.T) {
 func TestUnexpectedType(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "channels": 2,
@@ -676,6 +697,8 @@ func TestUnexpectedType(t *testing.T) {
 func TestMissingTimestamp(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(missingTimestampJSON))
 	req.Header.Set("content-type", "application/json")
 	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
@@ -699,6 +722,8 @@ func TestMissingTimestamp(t *testing.T) {
 func TestInvalidChannelIDLength(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "channels": 2,
@@ -741,6 +766,8 @@ func TestInvalidChannelIDLength(t *testing.T) {
 func TestMissingMultistream(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "channels": 2,
@@ -783,6 +810,8 @@ func TestMissingMultistream(t *testing.T) {
 func TestUnexpectedStatsType(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "channels": 2,
@@ -824,6 +853,8 @@ func TestUnexpectedStatsType(t *testing.T) {
 func TestTypeErlangVMMemoryCollector(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	body, err := json.Marshal(collectorErlangVMMemoryJSON)
 	if err != nil {
 		panic(err)
@@ -853,6 +884,8 @@ func TestTypeErlangVMMemoryCollector(t *testing.T) {
 func TestUnexpectedErlangVMType(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.Validator = &Validator{validator: validator.New()}
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "atom": 1270065,

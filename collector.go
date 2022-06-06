@@ -12,14 +12,13 @@ func (s *Server) collector(c echo.Context) error {
 	t := c.Request().Header.Get("x-sora-stats-exporter-type")
 	switch t {
 	case "connection.user-agent":
-		// TODO(v): validator 処理
 		stats := new(soraConnectionStats)
 		if err := c.Bind(stats); err != nil {
 			zlog.Debug().Str("type", t).Err(err).Send()
 			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 		}
 		if err := c.Validate(stats); err != nil {
-			return echo.NewHTTPError(http.StatusBadRequest, err)
+			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 		}
 		if err := s.collectorUserAgentStats(c, *stats); err != nil {
 			zlog.Warn().Str("type", t).Err(err).Send()
