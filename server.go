@@ -10,7 +10,6 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -21,16 +20,13 @@ import (
 
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
-
-	"github.com/rs/zerolog"
-	zlog "github.com/rs/zerolog/log"
 )
 
 type Server struct {
 	config *KohakuConfig
 	pool   *pgxpool.Pool
 	query  *db.Queries
-	echo   *echo.Echo
+	// echo   *echo.Echo
 	http.Server
 }
 
@@ -132,38 +128,38 @@ func validateHTTPVersion(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-func httpLogger() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Next()
+// func httpLogger() gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		c.Next()
+//
+// 		event := logEvent(c.Writer.Status())
+//
+// 		req := c.Request
+//
+// 		event.
+// 			Int("status", c.Writer.Status()).
+// 			Str("address", req.RemoteAddr).
+// 			Str("method", req.Method).
+// 			Str("path", req.URL.Path).
+// 			Int64("len", req.ContentLength).
+// 			Msg("")
+// 	}
+// }
 
-		event := logEvent(c.Writer.Status())
-
-		req := c.Request
-
-		event.
-			Int("status", c.Writer.Status()).
-			Str("address", req.RemoteAddr).
-			Str("method", req.Method).
-			Str("path", req.URL.Path).
-			Int64("len", req.ContentLength).
-			Msg("")
-	}
-}
-
-func logEvent(status int) *zerolog.Event {
-	var event *zerolog.Event
-
-	switch status / 100 {
-	case 5:
-		event = zlog.Error()
-	case 4:
-		event = zlog.Warn()
-	default:
-		event = zlog.Info()
-	}
-
-	return event
-}
+// func logEvent(status int) *zerolog.Event {
+// 	var event *zerolog.Event
+//
+// 	switch status / 100 {
+// 	case 5:
+// 		event = zlog.Error()
+// 	case 4:
+// 		event = zlog.Warn()
+// 	default:
+// 		event = zlog.Info()
+// 	}
+//
+// 	return event
+// }
 
 func appendCerts(clientCAPath string) (*x509.CertPool, error) {
 	certPool := x509.NewCertPool()
