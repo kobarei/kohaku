@@ -18,6 +18,9 @@ func (s *Server) collector(c echo.Context) error {
 			zlog.Debug().Str("type", t).Err(err).Send()
 			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 		}
+		if err := c.Validate(stats); err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, err)
+		}
 		if err := s.collectorUserAgentStats(c, *stats); err != nil {
 			zlog.Warn().Str("type", t).Err(err).Send()
 			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -30,6 +33,10 @@ func (s *Server) collector(c echo.Context) error {
 			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 		}
 
+		if err := c.Validate(stats); err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, err)
+		}
+
 		if err := s.collectorSoraNodeErlangVMStats(c, *stats); err != nil {
 			zlog.Warn().Str("type", t).Err(err).Send()
 			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -37,6 +44,6 @@ func (s *Server) collector(c echo.Context) error {
 		return c.NoContent(http.StatusNoContent)
 	default:
 		zlog.Warn().Str("type", t).Msgf("UNEXPECTED-TYPE")
-		return c.NoContent(http.StatusBadRequest)
+		return echo.NewHTTPError(http.StatusBadRequest)
 	}
 }
