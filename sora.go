@@ -2,10 +2,7 @@ package kohaku
 
 import (
 	"encoding/json"
-	"strconv"
 	"time"
-
-	"github.com/go-playground/validator/v10"
 )
 
 // TODO: validator 処理の追加
@@ -43,14 +40,15 @@ type soraNodeErlangVMStats struct {
 	Stats []json.RawMessage `json:"stats" binding:"required"`
 }
 
-func maximumNumberOfBytesFunc(fl validator.FieldLevel) bool {
-	param := fl.Param()
-
-	// 255 バイトまで指定可能
-	length, err := strconv.ParseUint(param, 10, 8)
-	if err != nil {
-		panic(err)
-	}
-
-	return uint64(fl.Field().Len()) <= length
-}
+// TODO: どうやって登録するか後で調べる
+// func maximumNumberOfBytesFunc(fl validator.FieldLevel) bool {
+// 	param := fl.Param()
+//
+// 	// 255 バイトまで指定可能
+// 	length, err := strconv.ParseUint(param, 10, 8)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+//
+// 	return uint64(fl.Field().Len()) <= length
+// }
