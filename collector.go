@@ -3,7 +3,6 @@ package kohaku
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/labstack/echo/v4"
 	zlog "github.com/rs/zerolog/log"
 )
@@ -16,24 +15,24 @@ func (s *Server) collector(c echo.Context) error {
 		// TODO(v): validator 処理
 		stats := new(soraConnectionStats)
 		if err := c.Bind(stats); err != nil {
-			zlog.Debug().Str("type", t).Err(err).Msg("")
-			return c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			zlog.Debug().Str("type", t).Err(err).Send()
+			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 		}
 		if err := s.collectorUserAgentStats(c, *stats); err != nil {
-			zlog.Warn().Str("type", t).Err(err).Msg("")
-			return c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			zlog.Warn().Str("type", t).Err(err).Send()
+			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 		}
 		return c.NoContent(http.StatusNoContent)
 	case "node.erlang-vm":
 		stats := new(soraNodeErlangVMStats)
 		if err := c.Bind(stats); err != nil {
-			zlog.Debug().Str("type", t).Err(err).Msg("")
-			return c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			zlog.Debug().Str("type", t).Err(err).Send()
+			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 		}
 
 		if err := s.collectorSoraNodeErlangVMStats(c, *stats); err != nil {
-			zlog.Warn().Str("type", t).Err(err).Msg("")
-			return c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			zlog.Warn().Str("type", t).Err(err).Send()
+			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 		}
 		return c.NoContent(http.StatusNoContent)
 	default:

@@ -11,10 +11,8 @@ import (
 // TODO: ログレベル、ログメッセージを変更する
 func (s *Server) health(c echo.Context) error {
 	if err := s.pool.Ping(context.Background()); err != nil {
-		zlog.Error().Err(err).Msg("")
-		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
-			"error": err.Error(),
-		})
+		zlog.Error().Err(err).Send()
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	return c.NoContent(http.StatusNoContent)

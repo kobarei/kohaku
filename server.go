@@ -18,7 +18,6 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
-	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -32,6 +31,8 @@ type Server struct {
 
 func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	e := echo.New()
+
+	e.Validator = &Validator{validator: validator.New()}
 
 	// e.Use(httpLogger())
 	e.Use(middleware.Recover())
@@ -75,12 +76,6 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	e.POST("/collector", s.collector, validateHTTPVersion)
 	// ヘルスチェック
 	e.POST("/health", s.health)
-
-	// Custom Validation Functions の登録
-	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		// TODO: タグ名を変更する
-		v.RegisterValidation("maxb", maximumNumberOfBytesFunc)
-	}
 
 	return s
 }
@@ -193,4 +188,15 @@ func appendCerts(clientCAPath string) (*x509.CertPool, error) {
 		}
 	}
 	return certPool, nil
+}
+
+type Validator struct {
+	validator *validator.Validate
+}
+
+func (v *Validator) Validate(i interface{}) error {
+	if err := v.validator.Struct(i); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return nil
 }
