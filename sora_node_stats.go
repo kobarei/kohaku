@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgtype"
+	"github.com/labstack/echo/v4"
 	db "github.com/shiguredo/kohaku/gen/sqlc"
 )
 
@@ -15,7 +15,7 @@ func toNumeric(n uint64) pgtype.Numeric {
 	return num
 }
 
-func (s *Server) collectorSoraNodeErlangVMStats(c *gin.Context, stats soraNodeErlangVMStats) error {
+func (s *Server) collectorSoraNodeErlangVMStats(c echo.Context, stats soraNodeErlangVMStats) error {
 	if err := s.InsertSoraNode(c, stats); err != nil {
 		return err
 	}
@@ -34,7 +34,7 @@ func (s *Server) collectorSoraNodeErlangVMStats(c *gin.Context, stats soraNodeEr
 				return err
 			}
 
-			if err := s.query.InsertErlangVMMemoryStats(c, db.InsertErlangVMMemoryStatsParams{
+			if err := s.query.InsertErlangVMMemoryStats(c.Request().Context(), db.InsertErlangVMMemoryStatsParams{
 				Time:              stats.Timestamp,
 				SoraVersion:       stats.Version,
 				SoraLabel:         stats.Label,
@@ -59,8 +59,8 @@ func (s *Server) collectorSoraNodeErlangVMStats(c *gin.Context, stats soraNodeEr
 	return nil
 }
 
-func (s *Server) InsertSoraNode(c *gin.Context, stats soraNodeErlangVMStats) error {
-	if err := s.query.InsertSoraNode(c, db.InsertSoraNodeParams{
+func (s *Server) InsertSoraNode(c echo.Context, stats soraNodeErlangVMStats) error {
+	if err := s.query.InsertSoraNode(c.Request().Context(), db.InsertSoraNodeParams{
 		Timestamp: stats.Timestamp,
 		Label:     stats.Label,
 		Version:   stats.Version,

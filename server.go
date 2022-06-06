@@ -12,6 +12,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	db "github.com/shiguredo/kohaku/gen/sqlc"
 
 	"golang.org/x/net/http2"
@@ -28,14 +30,15 @@ type Server struct {
 	config *KohakuConfig
 	pool   *pgxpool.Pool
 	query  *db.Queries
+	echo   *echo.Echo
 	http.Server
 }
 
-func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
-	r := gin.New()
+func NewServer2(c *KohakuConfig, pool *pgxpool.Pool) *Server {
+	e := echo.New()
 
-	r.Use(httpLogger())
-	r.Use(gin.Recovery())
+	// e.Use(httpLogger())
+	e.Use(middleware.Recover())
 
 	// TODO(v): こいつ自身の統計情報を /stats でとれた方がいい
 
@@ -51,7 +54,7 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 		query:  db.New(pool),
 		Server: http.Server{
 			Addr:    fmt.Sprintf(":%d", c.CollectorPort),
-			Handler: h2c.NewHandler(r, h2s),
+			Handler: h2c.NewHandler(e, h2s),
 		},
 	}
 
@@ -73,9 +76,9 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	}
 
 	// 統計情報を突っ込むところ
-	r.POST("/collector", validateHTTPVersion(), s.collector)
+	e.POST("/collector", s.collector, validateHTTPVersion)
 	// ヘルスチェック
-	r.POST("/health", s.health)
+	e.POST("/health", s.health)
 
 	// Custom Validation Functions の登録
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
@@ -113,18 +116,19 @@ func (s *Server) Start(c *KohakuConfig) error {
 	return nil
 }
 
-func validateHTTPVersion() gin.HandlerFunc {
-	return func(c *gin.Context) {
+func validateHTTPVersion(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
 		// prior knowledge ではない場合
-		if upgrade, ok := c.Request.Header["Upgrade"]; ok && upgrade[0] == "h2c" {
-			c.AbortWithStatus(http.StatusBadRequest)
-			return
+		if upgrade, ok := c.Request().Header["Upgrade"]; ok && upgrade[0] == "h2c" {
+			return echo.NewHTTPError(http.StatusBadRequest)
 		}
 
-		if c.Request.Proto != "HTTP/2.0" {
-			err := fmt.Errorf("http version not supported: %s", c.Request.Proto)
-			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		if c.Request().Proto != "HTTP/2.0" {
+			err := fmt.Errorf("http version not supported: %s", c.Request().Proto)
+			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 		}
+
+		return next(c)
 	}
 }
 
