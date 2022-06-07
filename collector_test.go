@@ -145,7 +145,7 @@ func TestMain(m *testing.M) {
 
 	resource, err := pool.RunWithOptions(&dockertest.RunOptions{
 		Repository: "timescale/timescaledb",
-		Tag:        "2.5.1-pg14",
+		Tag:        "latest-pg14",
 		Env: []string{
 			"POSTGRES_PASSWORD=" + postgresPassword,
 			"POSTGRES_USER=" + postgresUser,
