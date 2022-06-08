@@ -11,6 +11,8 @@
 
 ## develop
 
+## 2021.2.0
+
 - [UPDATE] Github Actions go のバージョンを v3 にあげる
     - バージョンを `^1.18` にする
     - @Hexa
