@@ -22,6 +22,10 @@
     - @voluntas
 - [CHANGE] sqlc のコード生成を gen/sqlc 以下へ移動
     - @voluntas
+- [CHANGE] echo 化
+    - @Hexa @voluntas
+- [UPDATE] テスト用 TimescaleDB を latest:pg14 に変更する
+    - @Hexa
 
 ## 2021.1.0
 
