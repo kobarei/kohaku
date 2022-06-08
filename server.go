@@ -197,7 +197,10 @@ type Validator struct {
 }
 
 func (v *Validator) Validate(i interface{}) error {
-	v.validator.RegisterValidation("maxb", maximumNumberOfBytesFunc)
+	if err := v.validator.RegisterValidation("maxb", maximumNumberOfBytesFunc); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
 	if err := v.validator.Struct(i); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
