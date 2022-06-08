@@ -26,14 +26,20 @@ type Server struct {
 	config *KohakuConfig
 	pool   *pgxpool.Pool
 	query  *db.Queries
-	// echo   *echo.Echo
+	echo   *echo.Echo
 	http.Server
 }
 
 func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 	e := echo.New()
 
-	e.Validator = &Validator{validator: validator.New()}
+	validator := validator.New()
+	if err := validator.RegisterValidation("maxb", maximumNumberOfBytesFunc); err != nil {
+		zlog.Error().Err(err).Send()
+		panic(err)
+	}
+
+	e.Validator = &Validator{validator: validator}
 
 	// e.Use(httpLogger())
 	e.Use(middleware.Recover())
@@ -54,6 +60,7 @@ func NewServer(c *KohakuConfig, pool *pgxpool.Pool) *Server {
 			Addr:    fmt.Sprintf(":%d", c.CollectorPort),
 			Handler: h2c.NewHandler(e, h2s),
 		},
+		echo: e,
 	}
 
 	http2H2c := c.HTTP2H2c
@@ -197,10 +204,6 @@ type Validator struct {
 }
 
 func (v *Validator) Validate(i interface{}) error {
-	if err := v.validator.RegisterValidation("maxb", maximumNumberOfBytesFunc); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-	}
-
 	if err := v.validator.Struct(i); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}

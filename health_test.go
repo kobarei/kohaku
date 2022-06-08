@@ -6,13 +6,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestHealth(t *testing.T) {
 	// Setup
-	e := echo.New()
+	e := server.echo
 	req := httptest.NewRequest(http.MethodPost, "/health", strings.NewReader(""))
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
