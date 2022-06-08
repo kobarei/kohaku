@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -255,14 +254,15 @@ func TestTypeOutboundRTPCollector(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, rec.Code)
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	statsType, err := getStatsType("rtc_outbound_rtp_stream_stats", connectionID)
-	if err != nil {
-		panic(err)
+		statsType, err := getStatsType("rtc_outbound_rtp_stream_stats", connectionID)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(t, "outbound-rtp", *statsType)
 	}
-	assert.Equal(t, "outbound-rtp", *statsType)
 }
 
 func TestTypeCodecCollector(t *testing.T) {
@@ -296,14 +296,15 @@ func TestTypeCodecCollector(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, rec.Code)
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	statsType, err := getStatsType("rtc_codec_stats", connectionID)
-	if err != nil {
-		panic(err)
+		statsType, err := getStatsType("rtc_codec_stats", connectionID)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(t, "codec", *statsType)
 	}
-	assert.Equal(t, "codec", *statsType)
 }
 
 func TestTypeMediaSourceCollector(t *testing.T) {
@@ -349,14 +350,15 @@ func TestTypeMediaSourceCollector(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, rec.Code)
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	statsType, err := getStatsType("rtc_audio_source_stats", connectionID)
-	if err != nil {
-		panic(err)
+		statsType, err := getStatsType("rtc_audio_source_stats", connectionID)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(t, "media-source", *statsType)
 	}
-	assert.Equal(t, "media-source", *statsType)
 }
 
 func TestTypeDataChannelCollector(t *testing.T) {
@@ -431,14 +433,15 @@ func TestTypeDataChannelCollector(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, rec.Code)
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	statsType, err := getStatsType("rtc_data_channel_stats", connectionID)
-	if err != nil {
-		panic(err)
+		statsType, err := getStatsType("rtc_data_channel_stats", connectionID)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(t, "data-channel", *statsType)
 	}
-	assert.Equal(t, "data-channel", *statsType)
 }
 
 func TestTypeCandidatePairCollector(t *testing.T) {
@@ -487,14 +490,15 @@ func TestTypeCandidatePairCollector(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, rec.Code)
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	statsType, err := getStatsType("rtc_ice_candidate_pair_stats", connectionID)
-	if err != nil {
-		panic(err)
+		statsType, err := getStatsType("rtc_ice_candidate_pair_stats", connectionID)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(t, "candidate-pair", *statsType)
 	}
-	assert.Equal(t, "candidate-pair", *statsType)
 }
 
 func TestTypeRemoteInboundRTPCollector(t *testing.T) {
@@ -549,14 +553,15 @@ func TestTypeRemoteInboundRTPCollector(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, rec.Code)
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	statsType, err := getStatsType("rtc_remote_inbound_rtp_stream_stats", connectionID)
-	if err != nil {
-		panic(err)
+		statsType, err := getStatsType("rtc_remote_inbound_rtp_stream_stats", connectionID)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(t, "remote-inbound-rtp", *statsType)
 	}
-	assert.Equal(t, "remote-inbound-rtp", *statsType)
 }
 
 func TestTypeTransportCollector(t *testing.T) {
@@ -596,20 +601,27 @@ func TestTypeTransportCollector(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, rec.Code)
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	statsType, err := getStatsType("rtc_transport_stats", connectionID)
-	if err != nil {
-		panic(err)
+		statsType, err := getStatsType("rtc_transport_stats", connectionID)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(t, "transport", *statsType)
 	}
-	assert.Equal(t, "transport", *statsType)
 }
 
 func TestInvalidConnectionIDLength(t *testing.T) {
 	// Setup
 	e := echo.New()
-	e.Validator = &Validator{validator: validator.New()}
+
+	validator := validator.New()
+	if err := validator.RegisterValidation("maxb", maximumNumberOfBytesFunc); err != nil {
+		t.Fatal(err)
+	}
+
+	e.Validator = &Validator{validator: validator}
 
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
@@ -637,17 +649,13 @@ func TestInvalidConnectionIDLength(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	// Assertions
-	server.collector(c)
-	resp := rec.Result()
+	httpErr := server.collector(c)
 
-	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
-
-	body, err = io.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
+	if assert.Error(t, httpErr) {
+		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
+		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
+		assert.Equal(t, `code=400, message=Key: 'soraConnectionStats.ConnectionID' Error:Field validation for 'ConnectionID' failed on the 'len' tag`, httpErr.(*echo.HTTPError).Message)
 	}
-	assert.NotEmpty(t, body)
 }
 
 func TestUnexpectedType(t *testing.T) {
@@ -682,16 +690,14 @@ func TestUnexpectedType(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	resp := rec.Result()
+	httpErr := server.collector(c)
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
-
-	body, err = io.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
+	if assert.Error(t, httpErr) {
+		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
+		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
+		// TODO: エラーメッセージの内容の確認
+		assert.Equal(t, `Bad Request`, httpErr.(*echo.HTTPError).Message)
 	}
-	assert.Empty(t, body)
 }
 
 func TestMissingTimestamp(t *testing.T) {
@@ -707,16 +713,12 @@ func TestMissingTimestamp(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	resp := rec.Result()
-
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
+	httpErr := server.collector(c)
+	if assert.Error(t, httpErr) {
+		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
+		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
+		assert.Equal(t, `code=400, message=Key: 'soraConnectionStats.soraStats.Timestamp' Error:Field validation for 'Timestamp' failed on the 'required' tag`, httpErr.(*echo.HTTPError).Message)
 	}
-	assert.Equal(t, `{"error":"Key: 'soraConnectionStats.soraStats.Timestamp' Error:Field validation for 'Timestamp' failed on the 'required' tag"}`, string(body))
 }
 
 func TestInvalidChannelIDLength(t *testing.T) {
@@ -751,16 +753,12 @@ func TestInvalidChannelIDLength(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	resp := rec.Result()
-
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
-
-	body, err = io.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
+	httpErr := server.collector(c)
+	if assert.Error(t, httpErr) {
+		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
+		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
+		assert.Equal(t, `code=400, message=Key: 'soraConnectionStats.ChannelID' Error:Field validation for 'ChannelID' failed on the 'maxb' tag`, httpErr.(*echo.HTTPError).Message)
 	}
-	assert.Equal(t, `{"error":"Key: 'soraConnectionStats.ChannelID' Error:Field validation for 'ChannelID' failed on the 'maxb' tag"}`, string(body))
 }
 
 func TestMissingMultistream(t *testing.T) {
@@ -795,16 +793,12 @@ func TestMissingMultistream(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	resp := rec.Result()
-
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
-
-	body, err = io.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
+	httpErr := server.collector(c)
+	if assert.Error(t, httpErr) {
+		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
+		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
+		assert.Equal(t, `code=400, message=Key: 'soraConnectionStats.Multistream' Error:Field validation for 'Multistream' failed on the 'required' tag`, httpErr.(*echo.HTTPError).Message)
 	}
-	assert.Equal(t, `{"error":"Key: 'soraConnectionStats.Multistream' Error:Field validation for 'Multistream' failed on the 'required' tag"}`, string(body))
 }
 
 func TestUnexpectedStatsType(t *testing.T) {
@@ -838,16 +832,12 @@ func TestUnexpectedStatsType(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	resp := rec.Result()
-
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
-
-	body, err = io.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
+	httpErr := server.collector(c)
+	if assert.Error(t, httpErr) {
+		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
+		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
+		assert.Equal(t, `unexpected rtcStats.Type: unexpected_type`, httpErr.(*echo.HTTPError).Message)
 	}
-	assert.Equal(t, `{"error":"unexpected rtcStats.Type: unexpected_type"}`, string(body))
 }
 
 func TestTypeErlangVMMemoryCollector(t *testing.T) {
@@ -867,18 +857,19 @@ func TestTypeErlangVMMemoryCollector(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, rec.Code)
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	// TODO: 関数化
-	selectSQL := "SELECT stats_type FROM erlang_vm_memory_stats WHERE sora_label=$1"
-	row := pgPool.QueryRow(context.Background(), selectSQL, "WebRTC SFU Sora")
-	var statsType string
-	if err := row.Scan(&statsType); err != nil {
-		panic(err)
+		// TODO: 関数化
+		selectSQL := "SELECT stats_type FROM erlang_vm_memory_stats WHERE sora_label=$1"
+		row := pgPool.QueryRow(context.Background(), selectSQL, "WebRTC SFU Sora")
+		var statsType string
+		if err := row.Scan(&statsType); err != nil {
+			panic(err)
+		}
+
+		assert.Equal(t, "erlang-vm-memory", statsType)
 	}
-
-	assert.Equal(t, "erlang-vm-memory", statsType)
 }
 
 func TestUnexpectedErlangVMType(t *testing.T) {
@@ -913,6 +904,10 @@ func TestUnexpectedErlangVMType(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	httpErr := server.collector(c)
+	if assert.Error(t, httpErr) {
+		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
+		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
+		assert.Equal(t, `unexpected erlangVMStats.Type: unexpected_type`, httpErr.(*echo.HTTPError).Message)
+	}
 }
