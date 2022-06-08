@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -13,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/ory/dockertest/v3"
@@ -144,7 +143,7 @@ func TestMain(m *testing.M) {
 
 	resource, err := pool.RunWithOptions(&dockertest.RunOptions{
 		Repository: "timescale/timescaledb",
-		Tag:        "2.5.1-pg14",
+		Tag:        "latest-pg14",
 		Env: []string{
 			"POSTGRES_PASSWORD=" + postgresPassword,
 			"POSTGRES_USER=" + postgresUser,
@@ -195,6 +194,8 @@ func TestMain(m *testing.M) {
 
 func TestTypeOutboundRTPCollector(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "framesEncoded": 892,
@@ -248,22 +249,24 @@ func TestTypeOutboundRTPCollector(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	statsType, err := getStatsType("rtc_outbound_rtp_stream_stats", connectionID)
-	if err != nil {
-		panic(err)
+		statsType, err := getStatsType("rtc_outbound_rtp_stream_stats", connectionID)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(t, "outbound-rtp", *statsType)
 	}
-	assert.Equal(t, "outbound-rtp", *statsType)
 }
 
 func TestTypeCodecCollector(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "channels": 2,
@@ -287,22 +290,24 @@ func TestTypeCodecCollector(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	statsType, err := getStatsType("rtc_codec_stats", connectionID)
-	if err != nil {
-		panic(err)
+		statsType, err := getStatsType("rtc_codec_stats", connectionID)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(t, "codec", *statsType)
 	}
-	assert.Equal(t, "codec", *statsType)
 }
 
 func TestTypeMediaSourceCollector(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	stats := make([]json.RawMessage, 0, 2)
 	stats = append(stats, json.RawMessage(`{
         "id": "RTCAudioSource_9",
@@ -336,22 +341,25 @@ func TestTypeMediaSourceCollector(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+
+	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	statsType, err := getStatsType("rtc_audio_source_stats", connectionID)
-	if err != nil {
-		panic(err)
+		statsType, err := getStatsType("rtc_audio_source_stats", connectionID)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(t, "media-source", *statsType)
 	}
-	assert.Equal(t, "media-source", *statsType)
 }
 
 func TestTypeDataChannelCollector(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	stats := make([]json.RawMessage, 0, 4)
 	stats = append(stats, json.RawMessage(`{
         "id": "RTCDataChannel_17",
@@ -416,22 +424,24 @@ func TestTypeDataChannelCollector(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	statsType, err := getStatsType("rtc_data_channel_stats", connectionID)
-	if err != nil {
-		panic(err)
+		statsType, err := getStatsType("rtc_data_channel_stats", connectionID)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(t, "data-channel", *statsType)
 	}
-	assert.Equal(t, "data-channel", *statsType)
 }
 
 func TestTypeCandidatePairCollector(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "id": "RTCIceCandidatePair_eRplCBvi_JXPaEzOA",
@@ -470,22 +480,24 @@ func TestTypeCandidatePairCollector(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	statsType, err := getStatsType("rtc_ice_candidate_pair_stats", connectionID)
-	if err != nil {
-		panic(err)
+		statsType, err := getStatsType("rtc_ice_candidate_pair_stats", connectionID)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(t, "candidate-pair", *statsType)
 	}
-	assert.Equal(t, "candidate-pair", *statsType)
 }
 
 func TestTypeRemoteInboundRTPCollector(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	stats := make([]json.RawMessage, 0, 2)
 	stats = append(stats, json.RawMessage(`{
         "fractionLost": 0,
@@ -530,22 +542,24 @@ func TestTypeRemoteInboundRTPCollector(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	statsType, err := getStatsType("rtc_remote_inbound_rtp_stream_stats", connectionID)
-	if err != nil {
-		panic(err)
+		statsType, err := getStatsType("rtc_remote_inbound_rtp_stream_stats", connectionID)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(t, "remote-inbound-rtp", *statsType)
 	}
-	assert.Equal(t, "remote-inbound-rtp", *statsType)
 }
 
 func TestTypeTransportCollector(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "id": "RTCTransport_data_1",
@@ -575,22 +589,24 @@ func TestTypeTransportCollector(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	statsType, err := getStatsType("rtc_transport_stats", connectionID)
-	if err != nil {
-		panic(err)
+		statsType, err := getStatsType("rtc_transport_stats", connectionID)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(t, "transport", *statsType)
 	}
-	assert.Equal(t, "transport", *statsType)
 }
 
 func TestInvalidConnectionIDLength(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "channels": 2,
@@ -615,24 +631,21 @@ func TestInvalidConnectionIDLength(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+	c := e.NewContext(req, rec)
 
-	// Assertions
-	server.collector(c)
-	resp := rec.Result()
+	httpErr := server.collector(c)
 
-	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
-
-	body, err = io.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
+	if assert.Error(t, httpErr) {
+		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
+		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
+		assert.Equal(t, `code=400, message=Key: 'soraConnectionStats.ConnectionID' Error:Field validation for 'ConnectionID' failed on the 'len' tag`, httpErr.(*echo.HTTPError).Message)
 	}
-	assert.NotEmpty(t, body)
 }
 
 func TestUnexpectedType(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "channels": 2,
@@ -657,47 +670,43 @@ func TestUnexpectedType(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "connection.unexpected_type")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	resp := rec.Result()
+	httpErr := server.collector(c)
 
-	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
-
-	body, err = io.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
+	if assert.Error(t, httpErr) {
+		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
+		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
+		// TODO: エラーメッセージの内容の確認
+		assert.Equal(t, `Bad Request`, httpErr.(*echo.HTTPError).Message)
 	}
-	assert.Empty(t, body)
 }
 
 func TestMissingTimestamp(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	req := httptest.NewRequest(http.MethodPost, "/collector", strings.NewReader(missingTimestampJSON))
 	req.Header.Set("content-type", "application/json")
 	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	resp := rec.Result()
-
-	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
+	httpErr := server.collector(c)
+	if assert.Error(t, httpErr) {
+		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
+		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
+		assert.Equal(t, `code=400, message=Key: 'soraConnectionStats.soraStats.Timestamp' Error:Field validation for 'Timestamp' failed on the 'required' tag`, httpErr.(*echo.HTTPError).Message)
 	}
-	assert.Equal(t, `{"error":"Key: 'soraConnectionStats.soraStats.Timestamp' Error:Field validation for 'Timestamp' failed on the 'required' tag"}`, string(body))
 }
 
 func TestInvalidChannelIDLength(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "channels": 2,
@@ -722,24 +731,21 @@ func TestInvalidChannelIDLength(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	resp := rec.Result()
-
-	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
-
-	body, err = io.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
+	httpErr := server.collector(c)
+	if assert.Error(t, httpErr) {
+		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
+		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
+		assert.Equal(t, `code=400, message=Key: 'soraConnectionStats.ChannelID' Error:Field validation for 'ChannelID' failed on the 'maxb' tag`, httpErr.(*echo.HTTPError).Message)
 	}
-	assert.Equal(t, `{"error":"Key: 'soraConnectionStats.ChannelID' Error:Field validation for 'ChannelID' failed on the 'maxb' tag"}`, string(body))
 }
 
 func TestMissingMultistream(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "channels": 2,
@@ -764,24 +770,21 @@ func TestMissingMultistream(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	resp := rec.Result()
-
-	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
-
-	body, err = io.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
+	httpErr := server.collector(c)
+	if assert.Error(t, httpErr) {
+		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
+		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
+		assert.Equal(t, `code=400, message=Key: 'soraConnectionStats.Multistream' Error:Field validation for 'Multistream' failed on the 'required' tag`, httpErr.(*echo.HTTPError).Message)
 	}
-	assert.Equal(t, `{"error":"Key: 'soraConnectionStats.Multistream' Error:Field validation for 'Multistream' failed on the 'required' tag"}`, string(body))
 }
 
 func TestUnexpectedStatsType(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "channels": 2,
@@ -805,24 +808,21 @@ func TestUnexpectedStatsType(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "connection.user-agent")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	resp := rec.Result()
-
-	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
-
-	body, err = io.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
+	httpErr := server.collector(c)
+	if assert.Error(t, httpErr) {
+		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
+		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
+		assert.Equal(t, `unexpected rtcStats.Type: unexpected_type`, httpErr.(*echo.HTTPError).Message)
 	}
-	assert.Equal(t, `{"error":"unexpected rtcStats.Type: unexpected_type"}`, string(body))
 }
 
 func TestTypeErlangVMMemoryCollector(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	body, err := json.Marshal(collectorErlangVMMemoryJSON)
 	if err != nil {
 		panic(err)
@@ -832,26 +832,28 @@ func TestTypeErlangVMMemoryCollector(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "node.erlang-vm")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusNoContent, c.Writer.Status())
+	if assert.NoError(t, server.collector(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 
-	// TODO: 関数化
-	selectSQL := "SELECT stats_type FROM erlang_vm_memory_stats WHERE sora_label=$1"
-	row := pgPool.QueryRow(context.Background(), selectSQL, "WebRTC SFU Sora")
-	var statsType string
-	if err := row.Scan(&statsType); err != nil {
-		panic(err)
+		// TODO: 関数化
+		selectSQL := "SELECT stats_type FROM erlang_vm_memory_stats WHERE sora_label=$1"
+		row := pgPool.QueryRow(context.Background(), selectSQL, "WebRTC SFU Sora")
+		var statsType string
+		if err := row.Scan(&statsType); err != nil {
+			panic(err)
+		}
+
+		assert.Equal(t, "erlang-vm-memory", statsType)
 	}
-
-	assert.Equal(t, "erlang-vm-memory", statsType)
 }
 
 func TestUnexpectedErlangVMType(t *testing.T) {
 	// Setup
+	e := server.echo
+
 	stats := make([]json.RawMessage, 0, 1)
 	stats = append(stats, json.RawMessage(`{
         "atom": 1270065,
@@ -876,10 +878,13 @@ func TestUnexpectedErlangVMType(t *testing.T) {
 	req.Header.Set("x-sora-stats-exporter-type", "node.erlang-vm")
 	req.Proto = "HTTP/2.0"
 	rec := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(rec)
-	c.Request = req
+	c := e.NewContext(req, rec)
 
 	// Assertions
-	server.collector(c)
-	assert.Equal(t, http.StatusBadRequest, c.Writer.Status())
+	httpErr := server.collector(c)
+	if assert.Error(t, httpErr) {
+		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
+		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
+		assert.Equal(t, `unexpected erlangVMStats.Type: unexpected_type`, httpErr.(*echo.HTTPError).Message)
+	}
 }
