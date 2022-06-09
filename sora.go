@@ -38,12 +38,6 @@ type soraConnectionStats struct {
 	Stats []json.RawMessage `json:"stats" validate:"required"`
 }
 
-type soraNodeErlangVMStats struct {
-	soraStats
-
-	Stats []json.RawMessage `json:"stats" validate:"required"`
-}
-
 func maximumNumberOfBytesFunc(fl validator.FieldLevel) bool {
 	param := fl.Param()
 
