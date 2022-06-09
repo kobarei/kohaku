@@ -25,22 +25,6 @@ func (s *Server) collector(c echo.Context) error {
 			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 		}
 		return c.NoContent(http.StatusNoContent)
-	case "node.erlang-vm":
-		stats := new(soraNodeErlangVMStats)
-		if err := c.Bind(stats); err != nil {
-			zlog.Debug().Str("type", t).Err(err).Send()
-			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-		}
-
-		if err := c.Validate(stats); err != nil {
-			return echo.NewHTTPError(http.StatusBadRequest, err)
-		}
-
-		if err := s.collectorSoraNodeErlangVMStats(c, *stats); err != nil {
-			zlog.Warn().Str("type", t).Err(err).Send()
-			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-		}
-		return c.NoContent(http.StatusNoContent)
 	default:
 		zlog.Warn().Str("type", t).Msgf("UNEXPECTED-TYPE")
 		return echo.NewHTTPError(http.StatusBadRequest)

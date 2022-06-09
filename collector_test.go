@@ -33,7 +33,7 @@ var (
 			Label:     "WebRTC SFU Sora",
 			NodeName:  "sora@127.0.0.1",
 			Timestamp: timestamp,
-			Type:      "node.erlang-vm",
+			Type:      "connection.user-agent",
 			Version:   "2021.2.0",
 		},
 		Stats: []json.RawMessage{
@@ -47,30 +47,6 @@ var (
 		SessionID:    "JTYG1KGGPH2DKF86Y5B0GMWFSM",
 		Simulcast:    &simulcast,
 		Spotlight:    &spotlight,
-	}
-
-	collectorErlangVMMemoryJSON = soraNodeErlangVMStats{
-		soraStats: soraStats{
-			Label:     "WebRTC SFU Sora",
-			NodeName:  "sora@127.0.0.1",
-			Timestamp: timestamp,
-			Type:      "node.erlang-vm",
-			Version:   "2021.2.0",
-		},
-		Stats: []json.RawMessage{
-			json.RawMessage(`{
-        "atom": 1270065,
-        "atom_used": 1243247,
-        "binary": 340376,
-        "code": 33580550,
-        "ets": 2661680,
-        "processes": 18702696,
-        "processes_used": 18702696,
-        "system": 51684512,
-        "total": 70387208,
-        "type": "erlang-vm-memory"
-      }`),
-		},
 	}
 )
 
@@ -816,75 +792,5 @@ func TestUnexpectedStatsType(t *testing.T) {
 		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
 		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
 		assert.Equal(t, `unexpected rtcStats.Type: unexpected_type`, httpErr.(*echo.HTTPError).Message)
-	}
-}
-
-func TestTypeErlangVMMemoryCollector(t *testing.T) {
-	// Setup
-	e := server.echo
-
-	body, err := json.Marshal(collectorErlangVMMemoryJSON)
-	if err != nil {
-		panic(err)
-	}
-	req := httptest.NewRequest(http.MethodPost, "/collector", bytes.NewReader(body))
-	req.Header.Set("content-type", "application/json")
-	req.Header.Set("x-sora-stats-exporter-type", "node.erlang-vm")
-	req.Proto = "HTTP/2.0"
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-
-	// Assertions
-	if assert.NoError(t, server.collector(c)) {
-		assert.Equal(t, http.StatusNoContent, rec.Code)
-
-		// TODO: 関数化
-		selectSQL := "SELECT stats_type FROM erlang_vm_memory_stats WHERE sora_label=$1"
-		row := pgPool.QueryRow(context.Background(), selectSQL, "WebRTC SFU Sora")
-		var statsType string
-		if err := row.Scan(&statsType); err != nil {
-			panic(err)
-		}
-
-		assert.Equal(t, "erlang-vm-memory", statsType)
-	}
-}
-
-func TestUnexpectedErlangVMType(t *testing.T) {
-	// Setup
-	e := server.echo
-
-	stats := make([]json.RawMessage, 0, 1)
-	stats = append(stats, json.RawMessage(`{
-        "atom": 1270065,
-        "atom_used": 1243247,
-        "binary": 340376,
-        "code": 33580550,
-        "ets": 2661680,
-        "processes": 18702696,
-        "processes_used": 18702696,
-        "system": 51684512,
-        "total": 70387208,
-        "type": "unexpected_type"
-      }`))
-	erlangVMMemoryJSON := collectorErlangVMMemoryJSON
-	erlangVMMemoryJSON.Stats = stats
-	body, err := json.Marshal(erlangVMMemoryJSON)
-	if err != nil {
-		panic(err)
-	}
-	req := httptest.NewRequest(http.MethodPost, "/collector", bytes.NewReader(body))
-	req.Header.Set("content-type", "application/json")
-	req.Header.Set("x-sora-stats-exporter-type", "node.erlang-vm")
-	req.Proto = "HTTP/2.0"
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-
-	// Assertions
-	httpErr := server.collector(c)
-	if assert.Error(t, httpErr) {
-		assert.Equal(t, http.StatusBadRequest, httpErr.(*echo.HTTPError).Code)
-		assert.NotEmpty(t, httpErr.(*echo.HTTPError).Message)
-		assert.Equal(t, `unexpected erlangVMStats.Type: unexpected_type`, httpErr.(*echo.HTTPError).Message)
 	}
 }
