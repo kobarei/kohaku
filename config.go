@@ -3,7 +3,7 @@ package kohaku
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	"github.com/goccy/go-yaml"
 	"github.com/rs/zerolog/log"
@@ -53,7 +53,7 @@ func LoadConfigFromFlags(configPath *string) error {
 
 // LoadConfig 設定ファイルのパスからファイルを読み込み、設定値をバインドした KohakuConfig を返します
 func LoadConfig(configPath string) (*KohakuConfig, error) {
-	buf, err := ioutil.ReadFile(configPath)
+	buf, err := os.ReadFile(configPath)
 	if err != nil {
 		return nil, err
 	}

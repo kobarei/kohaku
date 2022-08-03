@@ -4,7 +4,6 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -172,12 +171,12 @@ func appendCerts(clientCAPath string) (*x509.CertPool, error) {
 		return nil, err
 	}
 	if fi.IsDir() {
-		files, err := ioutil.ReadDir(clientCAPath)
+		files, err := os.ReadDir(clientCAPath)
 		if err != nil {
 			return nil, err
 		}
 		for _, f := range files {
-			clientCA, err := ioutil.ReadFile(filepath.Join(clientCAPath, f.Name()))
+			clientCA, err := os.ReadFile(filepath.Join(clientCAPath, f.Name()))
 			if err != nil {
 				return nil, err
 			}
@@ -187,7 +186,7 @@ func appendCerts(clientCAPath string) (*x509.CertPool, error) {
 			}
 		}
 	} else {
-		clientCA, err := ioutil.ReadFile(clientCAPath)
+		clientCA, err := os.ReadFile(clientCAPath)
 		if err != nil {
 			return nil, err
 		}
