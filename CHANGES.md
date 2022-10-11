@@ -11,6 +11,11 @@
 
 ## develop
 
+- [CHANGE] ログ出力を JSON 形式に変更する
+    - @voluntas
+- [CHANGE] 設定例のログ出力ファイル名の拡張子を `jsonl` にする
+    - @voluntas
+
 ## 2021.2.0
 
 - [CHANGE] kohaku の設定ファイルのパス指定のデフォルトを ../config.yaml から ./config.yaml に変更する

@@ -16,6 +16,6 @@ http2_max_read_frame_size: 1048576
 http2_idle_timeout: 60
 
 log_dir: .
-log_name: kohaku.log
+log_name: kohaku.jsonl
 log_debug: true
 log_stdout: true
