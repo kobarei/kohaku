@@ -45,8 +45,8 @@ func InitLogger(logDir string, logName string, debug bool, isStdout bool) error 
 	zerolog.TimeFieldFormat = time.RFC3339Nano
 
 	var writers io.Writer
-	output := zerolog.ConsoleWriter{Out: writer, NoColor: true, TimeFormat: "2006-01-02 15:04:05.000000Z"}
-	format(&output)
+	writers = zerolog.MultiLevelWriter(writer)
+
 	if debug {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	} else {
@@ -54,13 +54,13 @@ func InitLogger(logDir string, logName string, debug bool, isStdout bool) error 
 	}
 	// log_stdout: true の時はコンソールにもだす
 	if isStdout {
-		stdout := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: "2006-01-02 15:04:05.000000Z"}
-		format(&stdout)
-		writers = io.MultiWriter(stdout, output)
-	} else {
-		writers = output
+		consoleWriter := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: "2006-01-02 15:04:05.000000Z"}
+		format(&consoleWriter)
+		writers = zerolog.MultiLevelWriter(writers, consoleWriter)
 	}
-	log.Logger = zerolog.New(writers).With().Timestamp().Logger()
+
+	log.Logger = zerolog.New(writers).With().Caller().Timestamp().Logger()
+
 	return nil
 }
 
