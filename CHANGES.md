@@ -11,6 +11,8 @@
 
 ## develop
 
+- [CHANGE] 設定ファイル形式を YAML から TOML に変更する
+    - @voluntas
 - [CHANGE] ログ出力を JSON 形式に変更する
     - @voluntas
 - [CHANGE] 設定例のログ出力ファイル名の拡張子を `jsonl` にする
