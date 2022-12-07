@@ -9,19 +9,19 @@ $ make
 
 ### 設定
 
-config.example.yaml をコピーして、接続先の DB の URL（timescale_url） や各証明書等を設定します。
+config.example.toml をコピーして、接続先の DB の URL（timescale_url） や各証明書等を設定します。
 
 ```
-$ cp config.example.yaml config.yaml
+$ cp config.example.toml config.toml
 ```
 
 
 ### 起動
 
-上記で用意した config.yaml を指定して kohaku サーバを立ち上げます。
+上記で用意した config.toml を指定して kohaku サーバを立ち上げます。
 
 ```
-$ ./bin/kohaku -c config.yaml
+$ ./bin/kohaku -c config.toml
 ```
 
 ## TimescaleDB のスキーマ
