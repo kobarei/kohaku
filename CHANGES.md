@@ -17,6 +17,10 @@
     - @voluntas
 - [CHANGE] 設定例のログ出力ファイル名の拡張子を `jsonl` にする
     - @voluntas
+- [UPDATE] go.mod, Github Actions で使用する Go のバージョンを 1.20 にあげる
+    - @Hexa
+- [UPDATE] Github Actions で使用する staticcheck のバージョンを 2023.1.2 にあげる
+    - @Hexa
 
 ## 2021.2.0
 
