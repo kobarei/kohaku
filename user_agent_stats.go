@@ -315,6 +315,9 @@ func (s *Server) collectorUserAgentStats(c echo.Context, stats soraConnectionSta
 			if err := json.Unmarshal(v, &stats); err != nil {
 				return err
 			}
+		case "media-playout":
+			// not implemented yet
+			return nil
 		default:
 			return fmt.Errorf("unexpected rtcStats.Type: %s", *rtcStats.Type)
 		}
